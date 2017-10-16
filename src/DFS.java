@@ -6,10 +6,10 @@ public class DFS {
     static ArrayList nodes = new ArrayList();
 
     static class Node {
-        int data;
+        String data;
         boolean visited;
 
-        Node(int data) {
+        Node(String data) {
             this.data = data;
 
         }
@@ -85,42 +85,42 @@ public class DFS {
 
     public static void main(String arg[]) {
 
-        Node node40 = new Node(40);
-        Node node10 = new Node(10);
-        Node node20 = new Node(20);
-        Node node30 = new Node(30);
-        Node node60 = new Node(60);
-        Node node50 = new Node(50);
-        Node node70 = new Node(70);
-
-        nodes.add(node40);
-        nodes.add(node10);
-        nodes.add(node20);
-        nodes.add(node30);
-        nodes.add(node60);
-        nodes.add(node50);
-        nodes.add(node70);
-        int adjacency_matrix[][] = {
-                {0, 1, 1, 0, 0, 0, 0},  // Node 1: 40
-                {0, 0, 0, 1, 0, 0, 0},  // Node 2 :10
-                {0, 1, 0, 1, 1, 1, 0},  // Node 3: 20
-                {0, 0, 0, 0, 1, 0, 0},  // Node 4: 30
-                {0, 0, 0, 0, 0, 0, 1},  // Node 5: 60
-                {0, 0, 0, 0, 0, 0, 1},  // Node 6: 50
-                {0, 0, 0, 0, 0, 0, 0},  // Node 7: 70
-        };
-
-        DFS dfsExample = new DFS();
-
-        System.out.println("The DFS traversal of the graph using stack ");
-        dfsExample.dfsUsingStack(adjacency_matrix, node40);
-
-        System.out.println();
-
-        clearVisitedFlags();
-
-        System.out.println("The DFS traversal of the graph using recursion ");
-        dfsExample.dfs(adjacency_matrix, node40);
+//        Node node40 = new Node(40);
+//        Node node10 = new Node(10);
+//        Node node20 = new Node(20);
+//        Node node30 = new Node(30);
+//        Node node60 = new Node(60);
+//        Node node50 = new Node(50);
+//        Node node70 = new Node(70);
+//
+//        nodes.add(node40);
+//        nodes.add(node10);
+//        nodes.add(node20);
+//        nodes.add(node30);
+//        nodes.add(node60);
+//        nodes.add(node50);
+//        nodes.add(node70);
+//        int adjacency_matrix[][] = {
+//                {0, 1, 1, 0, 0, 0, 0},  // Node 1: 40
+//                {0, 0, 0, 1, 0, 0, 0},  // Node 2 :10
+//                {0, 1, 0, 1, 1, 1, 0},  // Node 3: 20
+//                {0, 0, 0, 0, 1, 0, 0},  // Node 4: 30
+//                {0, 0, 0, 0, 0, 0, 1},  // Node 5: 60
+//                {0, 0, 0, 0, 0, 0, 1},  // Node 6: 50
+//                {0, 0, 0, 0, 0, 0, 0},  // Node 7: 70
+//        };
+//
+//        DFS dfsExample = new DFS();
+//
+//        System.out.println("The DFS traversal of the graph using stack ");
+//        dfsExample.dfsUsingStack(adjacency_matrix, node40);
+//
+//        System.out.println();
+//
+//        clearVisitedFlags();
+//
+//        System.out.println("The DFS traversal of the graph using recursion ");
+//        dfsExample.dfs(adjacency_matrix, node40);
 
     }
 }

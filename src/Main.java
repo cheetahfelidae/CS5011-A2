@@ -83,7 +83,7 @@ public class Main {
 
     public static void main(String[] args) {
 //        ArrayList<int[][]> vertices = new ArrayList<>();
-//        int matrix_high = map1.length, matrix_wide = map1[0].length;
+        int map_high = map1.length, map_wide = map1[0].length;
 //        for(int i = 0; i < matrix_high; i++) {
 //            int[][] neighbors = new int[matrix_high * matrix_wide][2];
 //
@@ -102,23 +102,38 @@ public class Main {
 //            System.out.println();
 //        }
 
-        int[][] adj
-        for(int i = 0; i < matrix_high; i++) {
-            int[][] neighbors = new int[matrix_high * matrix_wide][2];
+        int matrix_wide = map_high * map_wide;
+        int[][] adjacency_matrix = new int[matrix_wide][matrix_wide];
 
-            for(int j = 0; j < matrix_high * matrix_wide; j++) {
-                neighbors[j][0] = j / matrix_high;
-            }
-            for(int j = 0; j < matrix_high * matrix_wide; j++) {
-                neighbors[j][1] = j % matrix_wide;
-            }
-            vertices.add(neighbors);
+        for (int i = 0; i < matrix_wide; i++) {
+            int x_node = i / map_high, y_node = i % map_wide;
 
-            for (int[] n : neighbors) {
-                System.out.print(Arrays.toString(n) + " ");
+            for (int j = 0; j < matrix_wide; j++) {
+                int x_neighbor = j / map_high, y_neighbor = j % map_wide;
+
+                if (((x_node == x_neighbor + 1 || x_node == x_neighbor - 1) && y_node == y_neighbor)
+                        || (x_node == x_neighbor && (y_node == y_neighbor + 1 || y_node == y_neighbor - 1))) {
+                    adjacency_matrix[i][j] = 1;
+                } else {
+                    adjacency_matrix[i][j] = 0;
+                }
+
             }
-            System.out.println();
-            System.out.println();
         }
+
+        DFS dfsExample = new DFS();
+
+        for (int i = 0; i < matrix_wide * matrix_wide; i++) {
+            DFS.nodes.add(new DFS.Node("(" + i / map_high + "," + i % map_wide + ")"));
+        }
+
+        System.out.println("The DFS traversal of the graph using stack ");
+        dfsExample.dfsUsingStack(adjacency_matrix, (DFS.Node)DFS.nodes.get(0));
+
+        System.out.println();
+
+//        for (int[] n : adjacency_matrix) {
+//            System.out.println(Arrays.toString(n) + " ");
+//        }
     }
 }
