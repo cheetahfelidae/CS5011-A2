@@ -12,7 +12,6 @@ public class Main {
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'G'},
     };
 
-
     char[][] map2 = new char[][]{
             {'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
             {'O', 'X', 'O', 'X', 'O', 'O', 'B', 'O', 'O', 'X'},
@@ -25,7 +24,6 @@ public class Main {
             {'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'G', 'O', 'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
     };
-
 
     char[][] map3 = new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -81,6 +79,6 @@ public class Main {
 
 
     public static void main(String[] args) {
-        // write your code here
+
     }
 }
