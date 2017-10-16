@@ -1,5 +1,7 @@
+import Algorithms.DFS;
+import Algorithms.Vertex;
+
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
     private static char[][] map1 = new char[][]{
@@ -82,26 +84,7 @@ public class Main {
 
 
     public static void main(String[] args) {
-//        ArrayList<int[][]> vertices = new ArrayList<>();
         int map_high = map1.length, map_wide = map1[0].length;
-//        for(int i = 0; i < matrix_high; i++) {
-//            int[][] neighbors = new int[matrix_high * matrix_wide][2];
-//
-//            for(int j = 0; j < matrix_high * matrix_wide; j++) {
-//                neighbors[j][0] = j / matrix_high;
-//            }
-//            for(int j = 0; j < matrix_high * matrix_wide; j++) {
-//                neighbors[j][1] = j % matrix_wide;
-//            }
-//            vertices.add(neighbors);
-//
-//            for (int[] n : neighbors) {
-//                System.out.print(Arrays.toString(n) + " ");
-//            }
-//            System.out.println();
-//            System.out.println();
-//        }
-
         int matrix_wide = map_high * map_wide;
         int[][] adjacency_matrix = new int[matrix_wide][matrix_wide];
 
@@ -121,19 +104,35 @@ public class Main {
             }
         }
 
-        DFS dfsExample = new DFS();
 
+        ArrayList vertices = new ArrayList();
         for (int i = 0; i < matrix_wide * matrix_wide; i++) {
-            DFS.nodes.add(new DFS.Node("(" + i / map_high + "," + i % map_wide + ")"));
+            vertices.add(new Vertex(i / map_high, i % map_wide));
         }
 
-        System.out.println("The DFS traversal of the graph using stack ");
-        dfsExample.dfsUsingStack(adjacency_matrix, (DFS.Node)DFS.nodes.get(0));
+        DFS dfs = new DFS(vertices);
+        ArrayList<int[]> travel_vertices = dfs.travel(adjacency_matrix, (Vertex) vertices.get(0));
 
-        System.out.println();
+        char[][] new_map = new char[map_high][map_wide];
+        for (int i = 0; i < map_high; i++) {
+            for (int j = 0; j < map_wide; j++) {
+                new_map[i][j] = 'X';
+            }
+        }
 
-//        for (int[] n : adjacency_matrix) {
-//            System.out.println(Arrays.toString(n) + " ");
-//        }
+        for (int i = 0; i < travel_vertices.size(); i++) {
+            int x = travel_vertices.get(i)[0], y = travel_vertices.get(i)[1];
+            new_map[x][y] = '-';
+            if (x == 7 && y == 8) {
+                break;
+            }
+        }
+
+        for (int i = 0; i < map_high; i++) {
+            for (int j = 0; j < map_wide; j++) {
+                System.out.print(new_map[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
