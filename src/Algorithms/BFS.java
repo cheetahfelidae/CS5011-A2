@@ -5,13 +5,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class BFS {
-
-    private Queue<Vertex> queue= new LinkedList<>();
-    private ArrayList<Vertex> vertices = new ArrayList<>();
+    private Queue<Vertex> queue = new LinkedList<>();
+    private ArrayList<Vertex> vertices;
 
     /**
      * find neighbors of node using adjacency matrix.
      * if adjacency_matrix[i][j]==1, then vertices at index i and index j are connected.
+     *
      * @param adjacency_matrix
      * @param x
      * @return
@@ -59,4 +59,7 @@ public class BFS {
         return vertices;
     }
 
+    public BFS(ArrayList vertices) {
+        this.vertices = vertices;
+    }
 }
