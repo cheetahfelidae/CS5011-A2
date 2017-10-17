@@ -4,135 +4,84 @@ import Algorithms.Vertex;
 import java.util.ArrayList;
 
 public class Main {
-    private static char[][] map1 = new char[][]{
-            {'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'X', 'O'},
-            {'O', 'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'X', 'X', 'O', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'B', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'G'},
-    };
-
-    private static char[][] map2 = new char[][]{
-            {'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
-            {'O', 'X', 'O', 'X', 'O', 'O', 'B', 'O', 'O', 'X'},
-            {'O', 'X', 'X', 'X', 'X', 'X', 'X', 'X', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'X', 'X', 'X', 'X', 'O', 'O', 'O'},
-            {'O', 'O', 'X', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'G', 'O', 'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-    };
-
-    private static char[][] map3 = new char[][]{
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-            {'O', 'I', 'O', 'O', 'O', 'X', 'X', 'O', 'B', 'O'},
-            {'O', 'O', 'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'X', 'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'G', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
-    };
-
-    private static char[][] map4 = new char[][]{
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'X', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-            {'O', 'I', 'O', 'O', 'O', 'X', 'X', 'O', 'B', 'O'},
-            {'O', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'X', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'X', 'O', 'O', 'X'},
-            {'O', 'O', 'X', 'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'G', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
-    };
-
-    private static char[][] map5 = new char[][]{
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'B', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'X', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'X', 'O', 'O', 'X'},
-            {'O', 'O', 'X', 'X', 'X', 'X', 'O', 'O', 'O', 'O'},
-            {'O', 'X', 'O', 'O', 'G', 'O', 'X', 'O', 'I', 'O'},
-            {'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O'}
-    };
-
-    private static char[][] map6 = new char[][]{
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
-            {'O', 'O', 'B', 'O', 'O', 'X', 'X', 'O', 'O', 'O'},
-            {'O', 'X', 'X', 'X', 'O', 'O', 'X', 'O', 'O', 'I'},
-            {'O', 'X', 'X', 'X', 'O', 'O', 'X', 'X', 'O', 'O'},
-            {'O', 'O', 'O', 'O', 'O', 'X', 'X', 'X', 'X', 'O'},
-            {'X', 'O', 'O', 'X', 'X', 'X', 'X', 'O', 'O', 'O'},
-            {'X', 'X', 'O', 'O', 'O', 'X', 'X', 'O', 'X', 'X'},
-            {'O', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'X'},
-            {'O', 'X', 'X', 'X', 'G', 'O', 'X', 'X', 'O', 'X'},
-            {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O'}
-    };
+    private final char OBSTACLE_POSTION = 'X';
+    private final char ROBOT__POSITION = 'I';
+    private final char BOB_POSITION = 'B';
+    private final char GOAL_POSITION = 'G';
+    private final char UNSELECTED_PATH = '#';
+    private final char SELECTED_POSITION = '-';
 
 
-    public static void main(String[] args) {
-        int map_high = map1.length, map_wide = map1[0].length;
-        int matrix_wide = map_high * map_wide;
-        int[][] adjacency_matrix = new int[matrix_wide][matrix_wide];
-
-        for (int i = 0; i < matrix_wide; i++) {
-            int x_node = i / map_high, y_node = i % map_wide;
-
-            for (int j = 0; j < matrix_wide; j++) {
-                int x_neighbor = j / map_high, y_neighbor = j % map_wide;
-
-                if (((x_node == x_neighbor + 1 || x_node == x_neighbor - 1) && y_node == y_neighbor)
-                        || (x_node == x_neighbor && (y_node == y_neighbor + 1 || y_node == y_neighbor - 1))) {
-                    adjacency_matrix[i][j] = 1;
-                } else {
-                    adjacency_matrix[i][j] = 0;
-                }
-
-            }
-        }
-
-
+    public ArrayList<int[]> find_shortest_path(char[][] map, int[][] adj_matrix, int[] start) {
         ArrayList vertices = new ArrayList();
-        for (int i = 0; i < matrix_wide * matrix_wide; i++) {
-            vertices.add(new Vertex(i / map_high, i % map_wide));
-        }
-
-        DFS dfs = new DFS(vertices);
-        ArrayList<int[]> travel_vertices = dfs.travel(adjacency_matrix, (Vertex) vertices.get(0));
-
-        char[][] new_map = new char[map_high][map_wide];
-        for (int i = 0; i < map_high; i++) {
-            for (int j = 0; j < map_wide; j++) {
-                new_map[i][j] = 'X';
+        Vertex start_vertex = null;
+        for (int i = 0; i < adj_matrix.length; i++) {
+            int x = i / map.length, y = i % map.length;
+            vertices.add(new Vertex(x, y));
+            if (start[0] == x && start[1] == y) {
+                start_vertex = (Vertex) vertices.get(vertices.size() - 1);
             }
         }
 
-        for (int i = 0; i < travel_vertices.size(); i++) {
-            int x = travel_vertices.get(i)[0], y = travel_vertices.get(i)[1];
-            new_map[x][y] = '-';
-            if (x == 7 && y == 8) {
+        if (start_vertex == null) {
+            return null;
+        }
+
+        return new DFS(vertices).travel(adj_matrix, start_vertex);
+    }
+
+    public void draw_selected_path(char[][] map, ArrayList<int[]> trvl_vertices, int[] dest) {
+        char[][] new_map = new char[map.length][map.length];
+        for (int i = 0; i < new_map.length; i++) {
+            for (int j = 0; j < new_map.length; j++) {
+                new_map[i][j] = map[i][j] == OBSTACLE_POSTION ? OBSTACLE_POSTION : UNSELECTED_PATH;
+            }
+        }
+
+        for (int i = 0; i < trvl_vertices.size(); i++) {
+            int x = trvl_vertices.get(i)[0], y = trvl_vertices.get(i)[1];
+
+            switch (map[x][y]) {
+                case ROBOT__POSITION:
+                    new_map[x][y] = ROBOT__POSITION;
+                    break;
+                case BOB_POSITION:
+                    new_map[x][y] = BOB_POSITION;
+                    break;
+                case GOAL_POSITION:
+                    new_map[x][y] = GOAL_POSITION;
+                    break;
+                default:
+                    new_map[x][y] = SELECTED_POSITION;
+            }
+
+            if (x == dest[0] && y == dest[1]) {
                 break;
             }
         }
 
-        for (int i = 0; i < map_high; i++) {
-            for (int j = 0; j < map_wide; j++) {
+        for (int i = 0; i < new_map.length; i++) {
+            for (int j = 0; j < new_map.length; j++) {
                 System.out.print(new_map[i][j] + " ");
             }
             System.out.println();
         }
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+        ArrayList<int[]> trvl_vertices;
+        System.out.println("Depth First Search..");
+        System.out.println("Position: The robot -> Bob");
+        trvl_vertices = main.find_shortest_path(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{0, 0});
+        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{7, 8});
+        System.out.println();
+
+        System.out.println("Position: Bob -> The safe goal");
+        trvl_vertices = main.find_shortest_path(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{7, 8});
+        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{9, 9});
+        System.out.println();
+
+
     }
 }

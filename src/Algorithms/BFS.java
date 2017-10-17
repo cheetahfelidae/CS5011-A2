@@ -16,7 +16,7 @@ public class BFS {
      * @param x
      * @return
      */
-    private ArrayList<Vertex> findNeighbours(int adjacency_matrix[][], Vertex x) {
+    private ArrayList<Vertex> find_neighbours(int adjacency_matrix[][], Vertex x) {
         int nodeIndex = -1;
 
         ArrayList<Vertex> neighbours = new ArrayList<Vertex>();
@@ -45,7 +45,7 @@ public class BFS {
 
             Vertex element = queue.remove();
             vertices.add(new int[]{element.x, element.y});
-            ArrayList<Vertex> neighbours = findNeighbours(adjacency_matrix, element);
+            ArrayList<Vertex> neighbours = find_neighbours(adjacency_matrix, element);
             for (int i = 0; i < neighbours.size(); i++) {
                 Vertex n = neighbours.get(i);
                 if (n != null && !n.visited) {
