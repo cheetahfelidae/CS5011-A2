@@ -5,14 +5,7 @@ import Algorithms.Vertex;
 import java.util.ArrayList;
 
 public class Main {
-    private final char OBSTACLE_POSITION = 'X';
-    private final char ROBOT__POSITION = 'I';
-    private final char BOB_POSITION = 'B';
-    private final char GOAL_POSITION = 'G';
-    private final char UNSELECTED_PATH = '#';
-    private final char SELECTED_POSITION = '-';
-
-    public ArrayList<int[]> find_shortest_path_BFS(char[][] map, int[][] adj_matrix, int[] start) {
+    private ArrayList<int[]> find_shortest_path_BFS(char[][] map, int[][] adj_matrix, int[] start) {
         ArrayList vertices = new ArrayList();
         Vertex start_vertex = null;
         for (int i = 0; i < adj_matrix.length; i++) {
@@ -30,7 +23,7 @@ public class Main {
         return new BFS(vertices).travel(adj_matrix, start_vertex);
     }
 
-    public ArrayList<int[]> find_shortest_path_DFS(char[][] map, int[][] adj_matrix, int[] start) {
+    private ArrayList<int[]> find_shortest_path_DFS(char[][] map, int[][] adj_matrix, int[] start) {
         ArrayList vertices = new ArrayList();
         Vertex start_vertex = null;
         for (int i = 0; i < adj_matrix.length; i++) {
@@ -48,32 +41,35 @@ public class Main {
         return new DFS(vertices).travel(adj_matrix, start_vertex);
     }
 
-    public void draw_selected_path(char[][] map, ArrayList<int[]> trvl_vertices, int[] dest) {
-        char[][] new_map = new char[map.length][map.length];
+    private void draw_selected_path(char[][] map, ArrayList<int[]> trvl_vertices, int[] dest) {
+        final char OBSTACLE_POSITION = 'X';
+        final char ROBOT__POSITION = 'I';
+        final char BOB_POSITION = 'B';
+        final char GOAL_POSITION = 'G';
+        final char UNSELECTED_PATH = '#';
+        int selected_position = 1;
+        String space = " ";
+
+        String[][] new_map = new String[map.length][map.length];
         for (int i = 0; i < new_map.length; i++) {
             for (int j = 0; j < new_map.length; j++) {
-                new_map[i][j] = map[i][j] == OBSTACLE_POSITION ? OBSTACLE_POSITION : UNSELECTED_PATH;
+                new_map[i][j] = map[i][j] == OBSTACLE_POSITION ? OBSTACLE_POSITION + space : UNSELECTED_PATH + space;
             }
         }
 
+        boolean dest_exist = false;
         for (int i = 0; i < trvl_vertices.size(); i++) {
             int x = trvl_vertices.get(i)[0], y = trvl_vertices.get(i)[1];
 
-            switch (map[x][y]) {
-                case ROBOT__POSITION:
-                    new_map[x][y] = ROBOT__POSITION;
-                    break;
-                case BOB_POSITION:
-                    new_map[x][y] = BOB_POSITION;
-                    break;
-                case GOAL_POSITION:
-                    new_map[x][y] = GOAL_POSITION;
-                    break;
-                default:
-                    new_map[x][y] = SELECTED_POSITION;
+            if (i == 0) {
+                new_map[x][y] = ROBOT__POSITION + space;
+            } else {
+                new_map[x][y] = selected_position > 9 ? selected_position++ + "" : selected_position++ + space;
             }
 
             if (x == dest[0] && y == dest[1]) {
+                new_map[x][y] = map[x][y] == GOAL_POSITION ? GOAL_POSITION + space : BOB_POSITION + space;
+                dest_exist = true;
                 break;
             }
         }
@@ -84,31 +80,57 @@ public class Main {
             }
             System.out.println();
         }
+
+        if (!dest_exist) {
+            System.out.println("The destination does not exist!!");
+        }
     }
 
-    public static void main(String[] args) {
-        Main main = new Main();
+    public void process(char[][] map, int[][] adj_matrix, int[] start, int[] bob, int[] goal) {
         ArrayList<int[]> trvl_vertices;
         System.out.println("Depth First Search..");
         System.out.println("Position: The robot -> Bob");
-        trvl_vertices = main.find_shortest_path_DFS(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{0, 0});
-        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{7, 8});
+        trvl_vertices = find_shortest_path_DFS(map, adj_matrix, start);
+        draw_selected_path(map, trvl_vertices, bob);
         System.out.println();
 
         System.out.println("Position: Bob -> The safe goal");
-        trvl_vertices = main.find_shortest_path_DFS(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{7, 8});
-        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{9, 9});
+        trvl_vertices = find_shortest_path_DFS(map, adj_matrix, bob);
+        draw_selected_path(map, trvl_vertices, goal);
         System.out.println();
 
         System.out.println("Breadth First Search..");
         System.out.println("Position: The robot -> Bob");
-        trvl_vertices = main.find_shortest_path_BFS(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{0, 0});
-        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{7, 8});
+        trvl_vertices = find_shortest_path_BFS(map, adj_matrix, start);
+        draw_selected_path(map, trvl_vertices, bob);
         System.out.println();
 
         System.out.println("Position: Bob -> The safe goal");
-        trvl_vertices = main.find_shortest_path_BFS(SquareMap.MAP1.value(), SquareMap.MAP1.formatted_value(), new int[]{7, 8});
-        main.draw_selected_path(SquareMap.MAP1.value(), trvl_vertices, new int[]{9, 9});
+        trvl_vertices = find_shortest_path_BFS(map, adj_matrix, start);
+        draw_selected_path(map, trvl_vertices, goal);
         System.out.println();
+    }
+
+    public static void main(String[] args) {
+        Main main = new Main();
+
+        System.out.println("********************************* MAP 1 ***************************************************");
+        main.process(SquareMap.MAP1.map_value(), SquareMap.MAP1.formatted_value(), SquareMap.START_MAP1.position_value(), SquareMap.BOB_MAP1.position_value(), SquareMap.GOAL_MAP1.position_value());
+
+        System.out.println("********************************* MAP 2 ***************************************************");
+
+        main.process(SquareMap.MAP2.map_value(), SquareMap.MAP2.formatted_value(), SquareMap.START_MAP2.position_value(), SquareMap.BOB_MAP2.position_value(), SquareMap.GOAL_MAP2.position_value());
+
+        System.out.println("********************************* MAP 3 ***************************************************");
+
+        main.process(SquareMap.MAP3.map_value(), SquareMap.MAP3.formatted_value(), SquareMap.START_MAP3.position_value(), SquareMap.BOB_MAP3.position_value(), SquareMap.GOAL_MAP3.position_value());
+
+        System.out.println("********************************* MAP 4 ***************************************************");
+
+        main.process(SquareMap.MAP4.map_value(), SquareMap.MAP4.formatted_value(), SquareMap.START_MAP4.position_value(), SquareMap.BOB_MAP4.position_value(), SquareMap.GOAL_MAP4.position_value());
+
+        System.out.println("********************************* MAP 5 ***************************************************");
+
+        main.process(SquareMap.MAP5.map_value(), SquareMap.MAP5.formatted_value(), SquareMap.START_MAP5.position_value(), SquareMap.BOB_MAP5.position_value(), SquareMap.GOAL_MAP5.position_value());
     }
 }

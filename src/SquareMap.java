@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public enum SquareMap {
     MAP1(new char[][]{
             {'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -13,6 +11,9 @@ public enum SquareMap {
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'G'},
     }),
+    START_MAP1(new int[]{0, 0}),
+    BOB_MAP1(new int[]{7, 8}),
+    GOAL_MAP1(new int[]{9, 9}),
     MAP2(new char[][]{
             {'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
             {'O', 'X', 'O', 'X', 'O', 'O', 'B', 'O', 'O', 'X'},
@@ -25,6 +26,9 @@ public enum SquareMap {
             {'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'G', 'O', 'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
     }),
+    START_MAP2(new int[]{9, 2}),
+    BOB_MAP2(new int[]{1, 6}),
+    GOAL_MAP2(new int[]{9, 0}),
     MAP3(new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -37,6 +41,9 @@ public enum SquareMap {
             {'O', 'O', 'O', 'O', 'G', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
     }),
+    START_MAP3(new int[]{4, 1}),
+    BOB_MAP3(new int[]{4, 8}),
+    GOAL_MAP3(new int[]{8, 4}),
     MAP4(new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O'},
@@ -49,6 +56,9 @@ public enum SquareMap {
             {'O', 'O', 'O', 'O', 'G', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
     }),
+    START_MAP4(new int[]{4, 0}),
+    BOB_MAP4(new int[]{4, 8}),
+    GOAL_MAP4(new int[]{8, 4}),
     MAP5(new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'B', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -61,6 +71,9 @@ public enum SquareMap {
             {'O', 'X', 'O', 'O', 'G', 'O', 'X', 'O', 'I', 'O'},
             {'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O'}
     }),
+    START_MAP5(new int[]{8, 8}),
+    BOB_MAP5(new int[]{1, 2}),
+    GOAL_MAP5(new int[]{8, 4}),
     MAP6(new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
             {'O', 'O', 'B', 'O', 'O', 'X', 'X', 'O', 'O', 'O'},
@@ -72,17 +85,36 @@ public enum SquareMap {
             {'O', 'O', 'O', 'X', 'X', 'X', 'O', 'X', 'O', 'X'},
             {'O', 'X', 'X', 'X', 'G', 'O', 'X', 'X', 'O', 'X'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O'}
-    });
+    }),
+    START_MAP6(new int[]{2, 9}),
+    BOB_MAP6(new int[]{1, 2}),
+    GOAL_MAP6(new int[]{8, 4});
+
     private char[][] map;
+    private int[] position;
 
     SquareMap(char[][] map) {
         this.map = map;
     }
 
-    public char[][] value() {
+
+    SquareMap(int[] position) {
+        this.position = position;
+    }
+
+    public char[][] map_value() {
         return map;
     }
 
+    public int[] position_value() {
+        return position;
+    }
+
+    /**
+     * Converts from assignment-given variable to accepted-format input.
+     *
+     * @return
+     */
     public int[][] formatted_value() {
         int map_wide = map.length;
         int[][] adjacency_matrix = new int[map_wide * map_wide][map_wide * map_wide];
