@@ -1,25 +1,21 @@
 package Algorithms;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.Stack;
 
-public class BFS {
-    private Queue<Vertex> queue = new LinkedList<>();
-    private ArrayList<Vertex> vertices;
-
+public class DepthFirstSearch {
+    private ArrayList vertices;
     /**
      * find neighbors of node using adjacency matrix.
      * if adjacency_matrix[i][j]==1, then vertices at index i and index j are connected.
-     *
      * @param adjacency_matrix
      * @param x
      * @return
      */
-    private ArrayList<Vertex> find_neighbours(int adjacency_matrix[][], Vertex x) {
+    private ArrayList find_neighbours(int adjacency_matrix[][], NonWeightedVertex x) {
         int nodeIndex = -1;
+        ArrayList neighbours = new ArrayList();
 
-        ArrayList<Vertex> neighbours = new ArrayList<Vertex>();
         for (int i = 0; i < vertices.size(); i++) {
             if (vertices.get(i).equals(x)) {
                 nodeIndex = i;
@@ -37,29 +33,31 @@ public class BFS {
         return neighbours;
     }
 
-    public ArrayList<int[]> travel(int adjacency_matrix[][], Vertex vertex) {
-        ArrayList<int[]> vertices = new ArrayList<>();
-        queue.add(vertex);
-        vertex.visited = true;
-        while (!queue.isEmpty()) {
+    public ArrayList<int[]> travel(int adjacency_matrix[][], NonWeightedVertex nonWeightedVertex) {
+        ArrayList<int[]> travel_vertices = new ArrayList<>();
+        Stack stack = new Stack();
+        stack.add(nonWeightedVertex);
+        nonWeightedVertex.visited = true;
 
-            Vertex element = queue.remove();
-            vertices.add(new int[]{element.x, element.y});
-            ArrayList<Vertex> neighbours = find_neighbours(adjacency_matrix, element);
+        while (!stack.isEmpty()) {
+            NonWeightedVertex element = (NonWeightedVertex) stack.pop();
+            travel_vertices.add(new int[]{element.x, element.y});
+
+            ArrayList neighbours = find_neighbours(adjacency_matrix, element);
             for (int i = 0; i < neighbours.size(); i++) {
-                Vertex n = neighbours.get(i);
+                NonWeightedVertex n = (NonWeightedVertex) neighbours.get(i);
                 if (n != null && !n.visited) {
-                    queue.add(n);
+                    stack.add(n);
                     n.visited = true;
 
                 }
             }
-
         }
-        return vertices;
+
+        return travel_vertices;
     }
 
-    public BFS(ArrayList vertices) {
+    public DepthFirstSearch(ArrayList vertices) {
         this.vertices = vertices;
     }
 }

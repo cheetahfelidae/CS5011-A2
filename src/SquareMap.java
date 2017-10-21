@@ -115,35 +115,35 @@ public enum SquareMap {
      *
      * @return
      */
-    public int[][] formatted_value() {
+    public int[][] to_adj_matrix() {
         int map_wide = map.length;
-        int[][] adjacency_matrix = new int[map_wide * map_wide][map_wide * map_wide];
+        int[][] adj_matrix = new int[map_wide * map_wide][map_wide * map_wide];
 
-        for (int i = 0; i < adjacency_matrix.length; i++) {
+        for (int i = 0; i < adj_matrix.length; i++) {
             int x_node = i / map_wide, y_node = i % map_wide;
 
             if (map[x_node][y_node] != 'X') {
 
-                for (int j = 0; j < adjacency_matrix.length; j++) {
+                for (int j = 0; j < adj_matrix.length; j++) {
                     int x_neighbor = j / map_wide, y_neighbor = j % map_wide;
                     boolean cond_1 = (x_node == x_neighbor + 1 || x_node == x_neighbor - 1) && y_node == y_neighbor || (x_node == x_neighbor && (y_node == y_neighbor + 1 || y_node == y_neighbor - 1)),
                             cond_2 = map[x_neighbor][y_neighbor] != 'X';
 
                     if (cond_1 && cond_2) {
-                        adjacency_matrix[i][j] = 1;
+                        adj_matrix[i][j] = 1;
                     } else {
-                        adjacency_matrix[i][j] = 0;
+                        adj_matrix[i][j] = 0;
                     }
                 }
 
             } else {
-                for (int j = 0; j < adjacency_matrix.length; j++) {
-                    adjacency_matrix[i][j] = 0;
+                for (int j = 0; j < adj_matrix.length; j++) {
+                    adj_matrix[i][j] = 0;
                 }
             }
         }
 
-        return adjacency_matrix;
+        return adj_matrix;
     }
 
 }

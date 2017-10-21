@@ -1,11 +1,11 @@
 package Algorithms;
 
-public class Vertex {
+public class NonWeightedVertex {
     public int x;
     public int y;
     public boolean visited;
 
-    public Vertex(int x, int y) {
+    public NonWeightedVertex(int x, int y) {
         this.x = x;
         this.y = y;
     }
