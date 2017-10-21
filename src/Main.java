@@ -117,32 +117,32 @@ public class Main {
     }
 
     public void process(char[][] map, int[][] adj_matrix, int[] start, int[] bob, int[] goal) {
-        ArrayList<int[]> trvl_vertices;
-        print_hyphens(map.length * 3);
-        System.out.println("Depth First Search..");
-        System.out.println("Position: The robot -> Bob");
-        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, start);
-        draw_selected_path(map, trvl_vertices, bob);
-        System.out.println();
-
-        print_hyphens(map.length * 3);
-        System.out.println("Position: Bob -> The safe goal");
-        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, bob);
-        draw_selected_path(map, trvl_vertices, goal);
-        System.out.println();
-
-        print_hyphens(map.length * 3);
-        System.out.println("Breadth First Search..");
-        System.out.println("Position: The robot -> Bob");
-        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
-        draw_selected_path(map, trvl_vertices, bob);
-        System.out.println();
-
-        print_hyphens(map.length * 3);
-        System.out.println("Position: Bob -> The safe goal");
-        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
-        draw_selected_path(map, trvl_vertices, goal);
-        System.out.println();
+//        ArrayList<int[]> trvl_vertices;
+//        print_hyphens(map.length * 3);
+//        System.out.println("Depth First Search..");
+//        System.out.println("Position: The robot -> Bob");
+//        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, start);
+//        draw_selected_path(map, trvl_vertices, bob);
+//        System.out.println();
+//
+//        print_hyphens(map.length * 3);
+//        System.out.println("Position: Bob -> The safe goal");
+//        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, bob);
+//        draw_selected_path(map, trvl_vertices, goal);
+//        System.out.println();
+//
+//        print_hyphens(map.length * 3);
+//        System.out.println("Breadth First Search..");
+//        System.out.println("Position: The robot -> Bob");
+//        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
+//        draw_selected_path(map, trvl_vertices, bob);
+//        System.out.println();
+//
+//        print_hyphens(map.length * 3);
+//        System.out.println("Position: Bob -> The safe goal");
+//        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
+//        draw_selected_path(map, trvl_vertices, goal);
+//        System.out.println();
 
         find_shortest_path_BestFS(map, adj_matrix, start);
     }
