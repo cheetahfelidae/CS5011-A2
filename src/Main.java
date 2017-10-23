@@ -1,7 +1,6 @@
-import Algorithms.BreadthFirstSearch;
-import Algorithms.BestFirstSearch;
-import Algorithms.DepthFirstSearch;
-import Algorithms.NonWeightedVertex;
+import algorithms.BreadthFirstSearch;
+import algorithms.DepthFirstSearch;
+import algorithms.NonWeightedVertex;
 
 import java.util.ArrayList;
 
@@ -42,7 +41,7 @@ public class Main {
         return new DepthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
     }
 
-    private void find_shortest_path_BestFS(char[][] map, int[][] adj_matrix, int[] start) {
+    private void find_shortest_path_BestFS(char[][] map, int[][] adj_matrix, int[] start, int dest[]) {
         int index = 0;
         while (index < adj_matrix.length) {
             int x = index / map.length, y = index % map.length;
@@ -52,12 +51,15 @@ public class Main {
             index++;
         }
 
-        int[] heuristicvalues = new int[adj_matrix.length];
+        double[] heuristicvalues = new double[adj_matrix.length];
         for (int i = 0; i < heuristicvalues.length; i++) {
-            heuristicvalues[i] = 1;
+            int x = i / map.length, y = i % map.length;
+            heuristicvalues[i] = Math.sqrt(Math.pow(x - dest[0], 2) + Math.pow(y - dest[1], 2));
+            System.out.print(heuristicvalues[i] + " ");
         }
+        System.out.println();
 
-        new BestFirstSearch(adj_matrix.length).bestFirstSearch(adj_matrix, heuristicvalues, index);
+        new BestFirstSearch(adj_matrix.length).travel(adj_matrix, heuristicvalues, index);
     }
 
     private void print_hyphens(int num) {
@@ -144,7 +146,7 @@ public class Main {
 //        draw_selected_path(map, trvl_vertices, goal);
 //        System.out.println();
 
-        find_shortest_path_BestFS(map, adj_matrix, start);
+        find_shortest_path_BestFS(map, adj_matrix, start, bob);
     }
 
     public static void main(String[] args) {
