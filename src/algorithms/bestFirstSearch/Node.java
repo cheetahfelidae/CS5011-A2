@@ -1,15 +1,16 @@
 package algorithms.bestFirstSearch;
+
 import java.util.*;
 
 public class Node {
 
-    double cost;
-    int type;
-    int x;
-    int y;
-    ArrayList<Node> neighbors = new ArrayList<>();
-    Node parent = null;
-    boolean inPath = false;
+    private double cost;
+    private int type;
+    private int x;
+    private int y;
+    private ArrayList<Node> neighbors = new ArrayList<>();
+    private Node parent = null;
+    private boolean inPath = false;
 
 
     public Node(int x, int y, int type) {

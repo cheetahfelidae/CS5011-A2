@@ -1,29 +1,13 @@
 package algorithms.bestFirstSearch;
 
-import java.io.*;
+public class MapConverter {
 
-public class FileParser {
-
-    //    File inFile = null;
     int gridSize;
-    //    int lineCount;
     Node[][] grid;
     Node initial;
     Node goal;
 
-//    public FileParser(String[] input) {
-//        if (0 < input.length) {
-//            inFile = new File(input[0]);
-//        } else {
-//            System.exit(1);
-//        }
-//    }
-
-    public void parse(char[][] map) throws IOException {
-
-//        BufferedReader br = new BufferedReader(new FileReader(inFile));
-//        String line;
-//        gridSize = Integer.parseInt(br.readLine());
+    public void read(char[][] map) {
         gridSize = map.length;
         grid = new Node[gridSize][gridSize];
 
@@ -49,9 +33,7 @@ public class FileParser {
                     System.out.println("Err" + map[i][j]);
                 }
             }
-//            lineCount++;
         }
-//        br.close();
 
         for (int i = 0; i < gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
