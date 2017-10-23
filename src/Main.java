@@ -43,8 +43,10 @@ public class Main {
         return new DepthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
     }
 
-    private void find_shortest_path_BestFS() {
-
+    private ArrayList<int[]> find_shortest_path_BestFS(char[][] map, int[] goal) {
+        MapConverter fp = new MapConverter();
+        fp.read(map);
+        return new Strategy(fp.get_initial(), fp.get_goal(), fp.get_grid()).travel();
     }
 
     private void print_hyphens(int num) {
@@ -59,14 +61,13 @@ public class Main {
         final char ROBOT__POSITION = 'I';
         final char BOB_POSITION = 'B';
         final char GOAL_POSITION = 'G';
-        final char UNSELECTED_PATH = '#';
-        int selected_position = 1;
-        String space = " ";
+        final char UNSELECTED_PATH = '-';
+        final char SELECTED_PATH = 'O';
 
-        String[][] new_map = new String[map.length][map.length];
+        char[][] new_map = new char[map.length][map.length];
         for (int i = 0; i < new_map.length; i++) {
             for (int j = 0; j < new_map.length; j++) {
-                new_map[i][j] = map[i][j] == OBSTACLE_POSITION ? OBSTACLE_POSITION + space : UNSELECTED_PATH + space;
+                new_map[i][j] = map[i][j] == OBSTACLE_POSITION ? OBSTACLE_POSITION : UNSELECTED_PATH;
             }
         }
 
@@ -75,67 +76,61 @@ public class Main {
             int x = path_vertices.get(i)[0], y = path_vertices.get(i)[1];
 
             if (i == 0) {
-                new_map[x][y] = ROBOT__POSITION + space;
-            } else {
-                new_map[x][y] = selected_position > 9 ? selected_position++ + "" : selected_position++ + space;
-            }
-
-            if (x == dest[0] && y == dest[1]) {
-                new_map[x][y] = map[x][y] == GOAL_POSITION ? GOAL_POSITION + space : BOB_POSITION + space;
+                new_map[x][y] = ROBOT__POSITION;
+            } else if (x == dest[0] && y == dest[1]) {
+                new_map[x][y] = map[x][y] == GOAL_POSITION ? GOAL_POSITION : BOB_POSITION;
                 dest_exist = true;
                 break;
+            } else {
+                new_map[x][y] = SELECTED_PATH;
             }
         }
 
-        print_hyphens(new_map.length * 3);
+        print_hyphens(new_map.length * 2);
         for (int i = 0; i < new_map.length; i++) {
             for (int j = 0; j < new_map.length; j++) {
                 System.out.print(new_map[i][j] + " ");
             }
             System.out.println();
         }
-        print_hyphens(new_map.length * 3);
+        print_hyphens(new_map.length * 2);
 
         if (!dest_exist) {
             System.out.println("The destination does not exist!!");
-            print_hyphens(new_map.length * 3);
+            print_hyphens(new_map.length * 2);
         }
 
     }
 
     public void process(char[][] map, int[][] adj_matrix, int[] start, int[] bob, int[] goal) {
         ArrayList<int[]> path_vertices;
-//        print_hyphens(map.length * 3);
+//        print_hyphens(map.length * 2);
 //        System.out.println("Depth First Search..");
 //        System.out.println("Position: The robot -> Bob");
 //        path_vertices = find_shortest_path_DepthFS(map, adj_matrix, start);
 //        draw_selected_path(map, path_vertices, bob);
 //        System.out.println();
 //
-//        print_hyphens(map.length * 3);
+//        print_hyphens(map.length * 2);
 //        System.out.println("Position: Bob -> The safe goal");
 //        path_vertices = find_shortest_path_DepthFS(map, adj_matrix, bob);
 //        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 //
-//        print_hyphens(map.length * 3);
+//        print_hyphens(map.length * 2);
 //        System.out.println("Breadth First Search..");
 //        System.out.println("Position: The robot -> Bob");
 //        path_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
 //        draw_selected_path(map, path_vertices, bob);
 //        System.out.println();
 //
-//        print_hyphens(map.length * 3);
+//        print_hyphens(map.length * 2);
 //        System.out.println("Position: Bob -> The safe goal");
 //        path_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
 //        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 
-        MapConverter fp = new MapConverter();
-        fp.read(map);
-        Strategy strat = new Strategy(fp.getInitial(), fp.getGoal(), fp.getGrid());
-        strat.search();
-        path_vertices = strat.printGrid();
+        path_vertices = find_shortest_path_BestFS(map, goal);
         draw_selected_path(map, path_vertices, goal);
     }
 

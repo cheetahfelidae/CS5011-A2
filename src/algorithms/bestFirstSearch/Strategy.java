@@ -8,8 +8,6 @@ import java.util.PriorityQueue;
 // https://codereview.stackexchange.com/questions/122525/shortest-path-navigation-across-a-grid-using-best-first-search
 
 public class Strategy {
-
-    private Node initial;
     private Node goal;
     private Node[][] map;
     private ArrayList<Node> closed = new ArrayList<>();
@@ -18,7 +16,6 @@ public class Strategy {
     private boolean pathFound = false;
 
     public Strategy(Node initial, Node goal, Node[][] map) {
-        this.initial = initial;
         this.goal = goal;
         this.map = map;
         open.add(initial);
@@ -46,7 +43,23 @@ public class Strategy {
         }
     }
 
-    public ArrayList<int[]> printGrid() {
+    private void search() {
+        while (!open.isEmpty()) {
+            Node current = open.poll();
+            closed.add(current);
+
+            if (goal.isEqual(current)) {
+                pathFound = true;
+                getPath(current);
+            } else {
+                getSuccessors(current);
+            }
+        }
+    }
+
+    public ArrayList<int[]> travel() {
+        search();
+
         ArrayList<int[]> path_vertices = new ArrayList<>();
         if (!pathFound) {
             System.out.println("No path found");
@@ -64,24 +77,7 @@ public class Strategy {
                     } else if (map[i][j].getPath()) {
                         path_vertices.add(new int[]{i, j});
                     }
-//                    if (map[i][j].getType() == 0) {
-//                        if (map[i][j].getPath()) {//boolean tracker of what nodes are in the path
-//                            System.out.print(count++ + " ");
-//
-//                        } else {
-//                            System.out.print(". ");
-//                        }
-//                    } else if (map[i][j].getType() == 1) {//initial
-//                        System.out.print("I ");
-//                    } else if (map[i][j].getType() == 2) {//goal
-//                        System.out.print("G ");
-//                    } else if (map[i][j].getType() == 4) {
-//                        System.out.print("B ");
-//                    } else {
-//                        System.out.print("X ");
-//                    }
                 }
-//                System.out.println();
             }
 
             // check if the initial is on the below or right from the goal
@@ -89,22 +85,7 @@ public class Strategy {
                 Collections.reverse(path_vertices);
             }
         }
-//        System.out.println();
 
         return path_vertices;
-    }
-
-    public void search() {
-        while (!open.isEmpty()) {
-            Node current = open.poll();
-            closed.add(current);
-
-            if (goal.isEqual(current)) {
-                pathFound = true;
-                getPath(current);
-            } else {
-                getSuccessors(current);
-            }
-        }
     }
 }

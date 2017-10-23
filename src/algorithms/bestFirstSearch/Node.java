@@ -6,8 +6,7 @@ public class Node {
 
     private double cost;
     private int type;
-    private int x;
-    private int y;
+    private int x, y;
     private ArrayList<Node> neighbors = new ArrayList<>();
     private Node parent = null;
     private boolean inPath = false;

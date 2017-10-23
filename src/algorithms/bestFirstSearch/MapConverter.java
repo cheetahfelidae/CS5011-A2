@@ -1,50 +1,25 @@
 package algorithms.bestFirstSearch;
 
 public class MapConverter {
+    private int gridSize;
+    private Node[][] grid;
+    private Node initial, goal;
 
-    int gridSize;
-    Node[][] grid;
-    Node initial;
-    Node goal;
+    public Node get_initial() {
+        return initial;
+    }
 
-    public void read(char[][] map) {
-        gridSize = map.length;
-        grid = new Node[gridSize][gridSize];
+    public Node get_goal() {
+        return goal;
+    }
 
-        /*Create integer matrix for the given input. Nodes are given integer values corresponding to types*/
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[0].length; j++) {
-                if (map[i][j] == 'O') {
-                    grid[i][j] = new Node(i, j, 0);//open
-                } else if (map[i][j] == 'X') {
-                    grid[i][j] = new Node(i, j, 3);//wall
-                } else if (map[i][j] == 'I') {
-                    Node temp = new Node(i, j, 1);//initial
-                    grid[i][j] = temp;
-                    initial = temp;
-                } else if (map[i][j] == 'G') {
-                    Node temp = new Node(i, j, 2);//goal
-                    grid[i][j] = temp;
-                    goal = temp;
-                } else if (map[i][j] == 'B') {
-                    Node temp = new Node(i, j, 4);//Bob
-                    grid[i][j] = temp;
-                } else {
-                    System.out.println("Err" + map[i][j]);
-                }
-            }
-        }
-
-        for (int i = 0; i < gridSize; i++) {
-            for (int j = 0; j < gridSize; j++) {
-                buildNeighbors(grid[i][j], i, j);
-            }
-        }
+    public Node[][] get_grid() {
+        return grid;
     }
 
     /*For each node that is not a wall represented as a 3, the corresponding up, down, left, and right neighbors will be
-    added to a list*/
-    public void buildNeighbors(Node n, int row, int col) {
+   added to a list*/
+    private void buildNeighbors(Node n, int row, int col) {
         if (n.getType() != 3) {
             if (row == 0) {//Check for edge cases where neighbor amount will vary
                 if (col == 0) {
@@ -87,15 +62,40 @@ public class MapConverter {
         }
     }
 
-    public Node getInitial() {
-        return initial;
-    }
+    public void read(char[][] map) {
+        gridSize = map.length;
+        grid = new Node[gridSize][gridSize];
 
-    public Node getGoal() {
-        return goal;
-    }
+        /*Create integer matrix for the given input. Nodes are given integer values corresponding to types*/
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                switch (map[i][j]) {
+                    case 'O':
+                        grid[i][j] = new Node(i, j, 0);
+                        break;
+                    case 'I':
+                        grid[i][j] = new Node(i, j, 1);
+                        initial = grid[i][j];
+                        break;
+                    case 'G':
+                        grid[i][j] = new Node(i, j, 2);
+                        goal = grid[i][j];
+                        break;
+                    case 'B':
+                        grid[i][j] = new Node(i, j, 4);
+                    case 'X':
+                        grid[i][j] = new Node(i, j, 3);
+                        break;
+                    default:
+                        System.out.println("Error " + map[i][j]);
+                }
+            }
+        }
 
-    public Node[][] getGrid() {
-        return grid;
+        for (int i = 0; i < gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                buildNeighbors(grid[i][j], i, j);
+            }
+        }
     }
 }
