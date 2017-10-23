@@ -1,7 +1,7 @@
-import Algorithms.BreadthFirstSearch;
-import Algorithms.BestFirstSearch;
-import Algorithms.DepthFirstSearch;
-import Algorithms.NonWeightedVertex;
+import algorithms.BreadthFirstSearch;
+import algorithms.BestFirstSearch;
+import algorithms.DepthFirstSearch;
+import algorithms.NonWeightedVertex;
 
 import java.util.ArrayList;
 
