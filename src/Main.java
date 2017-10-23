@@ -1,7 +1,8 @@
 import algorithms.BreadthFirstSearch;
-import algorithms.BestFirstSearch;
 import algorithms.DepthFirstSearch;
 import algorithms.NonWeightedVertex;
+import algorithms.bestFirstSearch.MapConverter;
+import algorithms.bestFirstSearch.Strategy;
 
 import java.util.ArrayList;
 
@@ -42,22 +43,8 @@ public class Main {
         return new DepthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
     }
 
-    private void find_shortest_path_BestFS(char[][] map, int[][] adj_matrix, int[] start) {
-        int index = 0;
-        while (index < adj_matrix.length) {
-            int x = index / map.length, y = index % map.length;
-            if (start[0] == x && start[1] == y) {
-                break;
-            }
-            index++;
-        }
+    private void find_shortest_path_BestFS() {
 
-        int[] heuristicvalues = new int[adj_matrix.length];
-        for (int i = 0; i < heuristicvalues.length; i++) {
-            heuristicvalues[i] = 1;
-        }
-
-        new BestFirstSearch(adj_matrix.length).bestFirstSearch(adj_matrix, heuristicvalues, index);
     }
 
     private void print_hyphens(int num) {
@@ -67,7 +54,7 @@ public class Main {
         System.out.println();
     }
 
-    private void draw_selected_path(char[][] map, ArrayList<int[]> trvl_vertices, int[] dest) {
+    private void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] dest) {
         final char OBSTACLE_POSITION = 'X';
         final char ROBOT__POSITION = 'I';
         final char BOB_POSITION = 'B';
@@ -84,8 +71,8 @@ public class Main {
         }
 
         boolean dest_exist = false;
-        for (int i = 0; i < trvl_vertices.size(); i++) {
-            int x = trvl_vertices.get(i)[0], y = trvl_vertices.get(i)[1];
+        for (int i = 0; i < path_vertices.size(); i++) {
+            int x = path_vertices.get(i)[0], y = path_vertices.get(i)[1];
 
             if (i == 0) {
                 new_map[x][y] = ROBOT__POSITION + space;
@@ -117,34 +104,39 @@ public class Main {
     }
 
     public void process(char[][] map, int[][] adj_matrix, int[] start, int[] bob, int[] goal) {
-//        ArrayList<int[]> trvl_vertices;
+        ArrayList<int[]> path_vertices;
 //        print_hyphens(map.length * 3);
 //        System.out.println("Depth First Search..");
 //        System.out.println("Position: The robot -> Bob");
-//        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, start);
-//        draw_selected_path(map, trvl_vertices, bob);
+//        path_vertices = find_shortest_path_DepthFS(map, adj_matrix, start);
+//        draw_selected_path(map, path_vertices, bob);
 //        System.out.println();
 //
 //        print_hyphens(map.length * 3);
 //        System.out.println("Position: Bob -> The safe goal");
-//        trvl_vertices = find_shortest_path_DepthFS(map, adj_matrix, bob);
-//        draw_selected_path(map, trvl_vertices, goal);
+//        path_vertices = find_shortest_path_DepthFS(map, adj_matrix, bob);
+//        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 //
 //        print_hyphens(map.length * 3);
 //        System.out.println("Breadth First Search..");
 //        System.out.println("Position: The robot -> Bob");
-//        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
-//        draw_selected_path(map, trvl_vertices, bob);
+//        path_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
+//        draw_selected_path(map, path_vertices, bob);
 //        System.out.println();
 //
 //        print_hyphens(map.length * 3);
 //        System.out.println("Position: Bob -> The safe goal");
-//        trvl_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
-//        draw_selected_path(map, trvl_vertices, goal);
+//        path_vertices = find_shortest_path_BreadthFS(map, adj_matrix, start);
+//        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 
-        find_shortest_path_BestFS(map, adj_matrix, start);
+        MapConverter fp = new MapConverter();
+        fp.read(map);
+        Strategy strat = new Strategy(fp.getInitial(), fp.getGoal(), fp.getGrid());
+        strat.search();
+        path_vertices = strat.printGrid();
+        draw_selected_path(map, path_vertices, goal);
     }
 
     public static void main(String[] args) {
