@@ -1,7 +1,10 @@
 import algorithms.BreadthFirstSearch;
 import algorithms.DepthFirstSearch;
 import algorithms.NonWeightedVertex;
+import algorithms.bestFirstSearch.FileParser;
+import algorithms.bestFirstSearch.Strategy;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Main {
@@ -59,7 +62,7 @@ public class Main {
         }
         System.out.println();
 
-        new BestFirstSearch(adj_matrix.length).travel(adj_matrix, heuristicvalues, index);
+//        new BestFirstSearch(adj_matrix.length).travel(adj_matrix, heuristicvalues, index);
     }
 
     private void print_hyphens(int num) {
@@ -150,26 +153,38 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Main main = new Main();
+//        Main main = new Main();
+//
+//        System.out.println("********************************* MAP 1 ***************************************************");
+//        main.process(SquareMap.MAP1.map_value(), SquareMap.MAP1.to_adj_matrix(), SquareMap.START_MAP1.position_value(), SquareMap.BOB_MAP1.position_value(), SquareMap.GOAL_MAP1.position_value());
+//
+//        System.out.println("********************************* MAP 2 ***************************************************");
+//
+//        main.process(SquareMap.MAP2.map_value(), SquareMap.MAP2.to_adj_matrix(), SquareMap.START_MAP2.position_value(), SquareMap.BOB_MAP2.position_value(), SquareMap.GOAL_MAP2.position_value());
+//
+//        System.out.println("********************************* MAP 3 ***************************************************");
+//
+//        main.process(SquareMap.MAP3.map_value(), SquareMap.MAP3.to_adj_matrix(), SquareMap.START_MAP3.position_value(), SquareMap.BOB_MAP3.position_value(), SquareMap.GOAL_MAP3.position_value());
+//
+//        System.out.println("********************************* MAP 4 ***************************************************");
+//
+//        main.process(SquareMap.MAP4.map_value(), SquareMap.MAP4.to_adj_matrix(), SquareMap.START_MAP4.position_value(), SquareMap.BOB_MAP4.position_value(), SquareMap.GOAL_MAP4.position_value());
+//
+//        System.out.println("********************************* MAP 5 ***************************************************");
+//
+//        main.process(SquareMap.MAP5.map_value(), SquareMap.MAP5.to_adj_matrix(), SquareMap.START_MAP5.position_value(), SquareMap.BOB_MAP5.position_value(), SquareMap.GOAL_MAP5.position_value());
+        FileParser fp = new FileParser();
+        try {
+            fp.parse(SquareMap.MAP1.map_value());
 
-        System.out.println("********************************* MAP 1 ***************************************************");
-        main.process(SquareMap.MAP1.map_value(), SquareMap.MAP1.to_adj_matrix(), SquareMap.START_MAP1.position_value(), SquareMap.BOB_MAP1.position_value(), SquareMap.GOAL_MAP1.position_value());
-
-        System.out.println("********************************* MAP 2 ***************************************************");
-
-        main.process(SquareMap.MAP2.map_value(), SquareMap.MAP2.to_adj_matrix(), SquareMap.START_MAP2.position_value(), SquareMap.BOB_MAP2.position_value(), SquareMap.GOAL_MAP2.position_value());
-
-        System.out.println("********************************* MAP 3 ***************************************************");
-
-        main.process(SquareMap.MAP3.map_value(), SquareMap.MAP3.to_adj_matrix(), SquareMap.START_MAP3.position_value(), SquareMap.BOB_MAP3.position_value(), SquareMap.GOAL_MAP3.position_value());
-
-        System.out.println("********************************* MAP 4 ***************************************************");
-
-        main.process(SquareMap.MAP4.map_value(), SquareMap.MAP4.to_adj_matrix(), SquareMap.START_MAP4.position_value(), SquareMap.BOB_MAP4.position_value(), SquareMap.GOAL_MAP4.position_value());
-
-        System.out.println("********************************* MAP 5 ***************************************************");
-
-        main.process(SquareMap.MAP5.map_value(), SquareMap.MAP5.to_adj_matrix(), SquareMap.START_MAP5.position_value(), SquareMap.BOB_MAP5.position_value(), SquareMap.GOAL_MAP5.position_value());
+            System.out.println("The shortest path to the goal is: ");
+            System.out.println("");
+            Strategy strat = new Strategy(fp.getInitial(), fp.getGoal(), fp.getGrid());
+            strat.search();
+            strat.printGrid();
+        } catch (IOException ex) {
+            System.err.println(ex);
+        }
     }
 }
 

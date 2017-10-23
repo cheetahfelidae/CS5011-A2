@@ -22,9 +22,9 @@ public class FileParser {
     public void parse(char[][] map) throws IOException {
 
 //        BufferedReader br = new BufferedReader(new FileReader(inFile));
-        String line;
+//        String line;
 //        gridSize = Integer.parseInt(br.readLine());
-        gridSize = 10;
+        gridSize = map.length;
         grid = new Node[gridSize][gridSize];
 
         /*Create integer matrix for the given input. Nodes are given integer values corresponding to types*/
@@ -42,6 +42,11 @@ public class FileParser {
                     Node temp = new Node(i, j, 2);//goal
                     grid[i][j] = temp;
                     goal = temp;
+                } else if (map[i][j] == 'B') {
+                    Node temp = new Node(i, j, 4);//Bob
+                    grid[i][j] = temp;
+                } else {
+                    System.out.println("Err" + map[i][j]);
                 }
             }
 //            lineCount++;

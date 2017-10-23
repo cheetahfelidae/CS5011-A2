@@ -58,7 +58,10 @@ public class Strategy {
                         System.out.print("I ");
                     } else if (grid[i][j].getType() == 2) {//goal
                         System.out.print("G ");
-                    } else {
+                     } else if (grid[i][j].getType() == 4) {
+                        System.out.print("B ");
+                    }
+                    else {
                         System.out.print("X ");
                     }
                 }
