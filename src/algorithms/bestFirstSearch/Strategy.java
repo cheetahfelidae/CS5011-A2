@@ -22,7 +22,7 @@ public class Strategy {
     }
 
     private void evaluate(Node current) {
-        current.setCost(Math.sqrt(Math.pow((current.getX() - goal.getX()), 2) + Math.pow((current.getY() - goal.getY()), 2)));
+        current.setCost(Math.sqrt(Math.pow(current.getX() - goal.getX(), 2) + Math.pow(current.getY() - goal.getY(), 2)));
     }
 
     private void getSuccessors(Node n) {

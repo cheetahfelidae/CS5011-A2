@@ -1,3 +1,4 @@
+import algorithms.AStar;
 import algorithms.BreadthFirstSearch;
 import algorithms.DepthFirstSearch;
 import algorithms.NonWeightedVertex;
@@ -7,6 +8,13 @@ import algorithms.bestFirstSearch.Strategy;
 import java.util.ArrayList;
 
 public class Main {
+    private final char OBSTACLE_POSITION = 'X';
+    private final char ROBOT__POSITION = 'I';
+    private final char BOB_POSITION = 'B';
+    private final char GOAL_POSITION = 'G';
+    private final char UNSELECTED_PATH = '-';
+    private final char SELECTED_PATH = 'O';
+
     private ArrayList<int[]> find_shortest_path_BreadthFS(char[][] map, int[][] adj_matrix, int[] start) {
         ArrayList vertices = new ArrayList();
         NonWeightedVertex start_nonWeightedVertex = null;
@@ -49,6 +57,19 @@ public class Main {
         return new Strategy(fp.get_initial(), fp.get_goal(), fp.get_grid()).travel();
     }
 
+    private void find_shortest_path_AstartFS(char[][] map, int[] start, int[] goal) {
+        ArrayList<int[]> block_positions = new ArrayList<>();
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[0].length; j++) {
+                if (map[i][j] == OBSTACLE_POSITION) {
+                    block_positions.add(new int[]{i, j});
+                }
+            }
+        }
+
+        new AStar().test(map.length, map.length, start, goal, block_positions);
+    }
+
     private void print_hyphens(int num) {
         for (int i = 0; i < num; i++) {
             System.out.print("-");
@@ -57,12 +78,6 @@ public class Main {
     }
 
     private void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] dest) {
-        final char OBSTACLE_POSITION = 'X';
-        final char ROBOT__POSITION = 'I';
-        final char BOB_POSITION = 'B';
-        final char GOAL_POSITION = 'G';
-        final char UNSELECTED_PATH = '-';
-        final char SELECTED_PATH = 'O';
 
         char[][] new_map = new char[map.length][map.length];
         for (int i = 0; i < new_map.length; i++) {
@@ -130,8 +145,10 @@ public class Main {
 //        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 
-        path_vertices = find_shortest_path_BestFS(map, goal);
-        draw_selected_path(map, path_vertices, goal);
+//        path_vertices = find_shortest_path_BestFS(map, goal);
+//        draw_selected_path(map, path_vertices, goal);
+
+        find_shortest_path_AstartFS(map, start, goal);
     }
 
     public static void main(String[] args) {
