@@ -6,6 +6,7 @@ import algorithms.bestFirstSearch.MapConverter;
 import algorithms.bestFirstSearch.Strategy;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Main {
     private final char OBSTACLE_POSITION = 'X';
@@ -57,7 +58,7 @@ public class Main {
         return new Strategy(fp.get_initial(), fp.get_goal(), fp.get_grid()).travel();
     }
 
-    private void find_shortest_path_AstartFS(char[][] map, int[] start, int[] goal) {
+    private ArrayList<int[]> find_shortest_path_AstartFS(char[][] map, int[] start, int[] goal) {
         ArrayList<int[]> block_positions = new ArrayList<>();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[0].length; j++) {
@@ -67,7 +68,7 @@ public class Main {
             }
         }
 
-        new AStar().test(map.length, map.length, start, goal, block_positions);
+        return new AStar().travel(map.length, map.length, start, goal, block_positions);
     }
 
     private void print_hyphens(int num) {
@@ -148,7 +149,8 @@ public class Main {
 //        path_vertices = find_shortest_path_BestFS(map, goal);
 //        draw_selected_path(map, path_vertices, goal);
 
-        find_shortest_path_AstartFS(map, start, goal);
+        path_vertices = find_shortest_path_AstartFS(map, start, goal);
+        draw_selected_path(map, path_vertices, goal);
     }
 
     public static void main(String[] args) {

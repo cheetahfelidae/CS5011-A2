@@ -118,13 +118,13 @@ public class AStar {
 
     /*
     Params :
-    tCase = test case No.
+    tCase = travel case No.
     x, y = Board's dimensions
     si, sj = start location's x and y coordinates
     ei, ej = end location's x and y coordinates
     int[][] blocked = array containing inaccessible cell coordinates
     */
-    public void test(int x, int y, int[] start, int[] dest, ArrayList<int[]> block_positions) {
+    public ArrayList<int[]> travel(int x, int y, int[] start, int[] dest, ArrayList<int[]> block_positions) {
         // reset
         grid = new Cell[x][y];
         closed = new boolean[x][y];
@@ -159,47 +159,56 @@ public class AStar {
         }
 
         //Display initial map
-        System.out.println("Grid: ");
-        for (int i = 0; i < x; ++i) {
-            for (int j = 0; j < y; ++j) {
-                if (i == start[0] && j == start[1]) System.out.print("SO  "); //Source
-                else if (i == dest[0] && j == dest[1]) System.out.print("DE  ");  //Destination
-                else if (grid[i][j] != null) System.out.printf("%-3d ", 0);
-                else System.out.print("BL  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
+//        System.out.println("Grid: ");
+//        for (int i = 0; i < x; ++i) {
+//            for (int j = 0; j < y; ++j) {
+//                if (i == start[0] && j == start[1]) System.out.print("SO  "); //Source
+//                else if (i == dest[0] && j == dest[1]) System.out.print("DE  ");  //Destination
+//                else if (grid[i][j] != null) System.out.printf("%-3d ", 0);
+//                else System.out.print("BL  ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
 
         AStar();
-        System.out.println("\nScores for cells: ");
-        for (int i = 0; i < x; ++i) {
-            for (int j = 0; j < x; ++j) {
-                if (grid[i][j] != null) System.out.printf("%-3d ", grid[i][j].finalCost);
-                else System.out.print("BL  ");
-            }
-            System.out.println();
-        }
-        System.out.println();
+//        System.out.println("\nScores for cells: ");
+//        for (int i = 0; i < x; ++i) {
+//            for (int j = 0; j < x; ++j) {
+//                if (grid[i][j] != null) System.out.printf("%-3d ", grid[i][j].finalCost);
+//                else System.out.print("BL  ");
+//            }
+//            System.out.println();
+//        }
+//        System.out.println();
 
+
+        ArrayList<int[]> path_vertices = new ArrayList<>();
         if (closed[endI][endJ]) {
             //Trace back the path
-            System.out.println("Path: ");
+//            System.out.println("Path: ");
             Cell current = grid[endI][endJ];
-            System.out.print(current);
+//            System.out.print(current);
+            path_vertices.add(new int[]{current.i, current.j});
             while (current.parent != null) {
-                System.out.print(" -> " + current.parent);
+//                System.out.print(" -> " + current.parent);
+                path_vertices.add(new int[]{current.i, current.j});
                 current = current.parent;
             }
-            System.out.println();
+//            System.out.println();
         } else System.out.println("No possible path");
+
+        path_vertices.add(start);
+        Collections.reverse(path_vertices);
+
+        return path_vertices;
     }
 
 //    public static void main(String[] args) throws Exception {
-//        test(1, 5, 5, 0, 0, 3, 2, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
-//        test(2, 5, 5, 0, 0, 4, 4, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
-//        test(3, 7, 7, 2, 1, 5, 4, new int[][]{{4, 1}, {4, 3}, {5, 3}, {2, 3}});
+//        travel(1, 5, 5, 0, 0, 3, 2, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
+//        travel(2, 5, 5, 0, 0, 4, 4, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
+//        travel(3, 7, 7, 2, 1, 5, 4, new int[][]{{4, 1}, {4, 3}, {5, 3}, {2, 3}});
 //
-//        test(1, 5, 5, 0, 0, 4, 4, new int[][]{{3, 4}, {3, 3}, {4, 3}});
+//        travel(1, 5, 5, 0, 0, 4, 4, new int[][]{{3, 4}, {3, 3}, {4, 3}});
 //    }
 }
