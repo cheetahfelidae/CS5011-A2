@@ -174,6 +174,10 @@ public class Main {
         System.out.println("********************************* MAP 5 ***************************************************");
 
         main.process(SquareMap.MAP5.map_value(), SquareMap.MAP5.to_adj_matrix(), SquareMap.START_MAP5.position_value(), SquareMap.BOB_MAP5.position_value(), SquareMap.GOAL_MAP5.position_value());
+
+        System.out.println("********************************* MAP 6 ***************************************************");
+
+        main.process(SquareMap.MAP6.map_value(), SquareMap.MAP6.to_adj_matrix(), SquareMap.START_MAP6.position_value(), SquareMap.BOB_MAP6.position_value(), SquareMap.GOAL_MAP6.position_value());
     }
 }
 
