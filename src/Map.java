@@ -1,4 +1,4 @@
-public enum SquareMap {
+public enum Map {
     MAP1(new char[][]{
             {'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -93,12 +93,12 @@ public enum SquareMap {
     private char[][] map;
     private int[] position;
 
-    SquareMap(char[][] map) {
+    Map(char[][] map) {
         this.map = map;
     }
 
 
-    SquareMap(int[] position) {
+    Map(int[] position) {
         this.position = position;
     }
 

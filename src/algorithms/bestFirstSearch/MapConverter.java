@@ -62,7 +62,7 @@ public class MapConverter {
         }
     }
 
-    public void read(char[][] map, int[] start) {
+    public void read(char[][] map, int[] start, int[] dest) {
         gridSize = map.length;
         grid = new Node[gridSize][gridSize];
 
@@ -75,16 +75,16 @@ public class MapConverter {
                         break;
                     case 'I':
                     case 'B':
+                    case 'G':
                         if (i == start[0] && j == start[1]) {
                             grid[i][j] = new Node(i, j, 1);
                             initial = grid[i][j];
+                        } else if (i == dest[0] && j == dest[1]) {
+                            grid[i][j] = new Node(i, j, 2);
+                            goal = grid[i][j];
                         } else {
                             grid[i][j] = new Node(i, j, 0);
                         }
-                        break;
-                    case 'G':
-                        grid[i][j] = new Node(i, j, 2);
-                        goal = grid[i][j];
                         break;
                     case 'X':
                         grid[i][j] = new Node(i, j, 3);
