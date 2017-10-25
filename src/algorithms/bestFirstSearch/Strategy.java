@@ -23,6 +23,7 @@ public class Strategy {
 
     private void evaluate(Node current) {
         current.setCost(Math.sqrt(Math.pow(current.getX() - goal.getX(), 2) + Math.pow(current.getY() - goal.getY(), 2)));
+//        current.setCost(Math.abs(current.getX() - goal.getX()) + Math.abs(current.getY() - goal.getY()));
     }
 
     private void getSuccessors(Node n) {
@@ -61,9 +62,8 @@ public class Strategy {
         search();
 
         ArrayList<int[]> path_vertices = new ArrayList<>();
-        if (!pathFound) {
-            System.out.println("No path found");
-        } else {
+        if (pathFound) {
+            // not in order of the path
             int[] i_position = new int[]{0, 0};
             int[] g_position = new int[]{0, 0};
             for (int i = 0; i < map.length; i++) {
@@ -81,7 +81,7 @@ public class Strategy {
             }
 
             // check if the initial is on the below or right from the goal
-            if (i_position[0] > g_position[0] || i_position[1] > g_position[1]) {
+            if (i_position[0] >= g_position[0] && i_position[1] >= g_position[1]) {
                 Collections.reverse(path_vertices);
             }
         }

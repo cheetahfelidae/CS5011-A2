@@ -56,7 +56,7 @@ public enum SquareMap {
             {'O', 'O', 'O', 'O', 'G', 'O', 'O', 'O', 'O', 'O'},
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'}
     }),
-    START_MAP4(new int[]{4, 0}),
+    START_MAP4(new int[]{4, 1}),
     BOB_MAP4(new int[]{4, 8}),
     GOAL_MAP4(new int[]{8, 4}),
     MAP5(new char[][]{

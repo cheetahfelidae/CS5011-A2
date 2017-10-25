@@ -5,9 +5,6 @@ import java.util.*;
 // http://www.codebytes.in/2015/02/a-shortest-path-finding-algorithm.html
 
 public class AStar {
-    private final int DIAGONAL_COST = 14;
-    private final int V_H_COST = 10;
-
     private class Cell {
         private int heuristicCost = 0; //Heuristic cost
         private int finalCost = 0; //G+H
@@ -26,7 +23,7 @@ public class AStar {
     }
 
     //Blocked cells are just null Cell values in grid
-    private Cell[][] grid = new Cell[5][5];
+    private Cell[][] grid;
     private PriorityQueue<Cell> open;
     private boolean closed[][];
     private int startI, startJ;
@@ -46,9 +43,11 @@ public class AStar {
         endJ = position[1];
     }
 
-    private void checkAndUpdateCost(Cell current, Cell t, int cost) {
+    private void checkAndUpdateCost(Cell current, Cell t) {
+        final int V_H_COST = 10;
+
         if (t == null || closed[t.i][t.j]) return;
-        int t_final_cost = t.heuristicCost + cost;
+        int t_final_cost = t.heuristicCost + (current.finalCost + V_H_COST);
 
         boolean inOpen = open.contains(t);
         if (!inOpen || t_final_cost < t.finalCost) {
@@ -77,49 +76,22 @@ public class AStar {
             // up
             if (current.i - 1 >= 0) {
                 t = grid[current.i - 1][current.j];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
-
-//                // left
-//                if (current.j - 1 >= 0) {
-//                    t = grid[current.i - 1][current.j - 1];
-//                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-//                }
-//
-//                // right
-//                if (current.j + 1 < grid[0].length) {
-//                    t = grid[current.i - 1][current.j + 1];
-//                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-//                }
+                checkAndUpdateCost(current, t);
             }
-
             // left
             if (current.j - 1 >= 0) {
                 t = grid[current.i][current.j - 1];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
+                checkAndUpdateCost(current, t);
             }
-
             // right
             if (current.j + 1 < grid[0].length) {
                 t = grid[current.i][current.j + 1];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
+                checkAndUpdateCost(current, t);
             }
-
             // down
             if (current.i + 1 < grid.length) {
                 t = grid[current.i + 1][current.j];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
-//
-//                // left
-//                if (current.j - 1 >= 0) {
-//                    t = grid[current.i + 1][current.j - 1];
-//                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-//                }
-//
-//                // right
-//                if (current.j + 1 < grid[0].length) {
-//                    t = grid[current.i + 1][current.j + 1];
-//                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-//                }
+                checkAndUpdateCost(current, t);
             }
         }
     }
@@ -151,10 +123,12 @@ public class AStar {
         for (int i = 0; i < x; ++i) {
             for (int j = 0; j < y; ++j) {
                 grid[i][j] = new Cell(i, j);
+                /**
+                 * Manhattan Distance
+                 * Use this method because we are allowed to move only in four directions only (right, left, top, bottom).
+                  */
                 grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
-//                  System.out.print(grid[i][j].heuristicCost+" ");
             }
-//              System.out.println();
         }
         grid[start[0]][start[1]].finalCost = 0;
 
@@ -166,57 +140,21 @@ public class AStar {
             setBlocked(b);
         }
 
-        //Display initial map
-//        System.out.println("Grid: ");
-//        for (int i = 0; i < x; ++i) {
-//            for (int j = 0; j < y; ++j) {
-//                if (i == start[0] && j == start[1]) System.out.print("SO  "); //Source
-//                else if (i == dest[0] && j == dest[1]) System.out.print("DE  ");  //Destination
-//                else if (grid[i][j] != null) System.out.printf("%-3d ", 0);
-//                else System.out.print("BL  ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
-
         AStar();
-//        System.out.println("\nScores for cells: ");
-//        for (int i = 0; i < x; ++i) {
-//            for (int j = 0; j < x; ++j) {
-//                if (grid[i][j] != null) System.out.printf("%-3d ", grid[i][j].finalCost);
-//                else System.out.print("BL  ");
-//            }
-//            System.out.println();
-//        }
-//        System.out.println();
-
 
         ArrayList<int[]> path_vertices = new ArrayList<>();
         if (closed[endI][endJ]) {
             //Trace back the path
-//            System.out.println("Path: ");
             Cell current = grid[endI][endJ];
-//            System.out.print(current);
-            path_vertices.add(new int[]{current.i, current.j});
+//            path_vertices.add(new int[]{current.i, current.j});
             while (current.parent != null) {
-//                System.out.print(" -> " + current.parent);
                 path_vertices.add(new int[]{current.i, current.j});
                 current = current.parent;
             }
-//            System.out.println();
+            path_vertices.add(start);
+            Collections.reverse(path_vertices);
         } else System.out.println("No possible path");
-
-        path_vertices.add(start);
-        Collections.reverse(path_vertices);
 
         return path_vertices;
     }
-
-//    public static void main(String[] args) throws Exception {
-//        travel(1, 5, 5, 0, 0, 3, 2, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
-//        travel(2, 5, 5, 0, 0, 4, 4, new int[][]{{0, 4}, {2, 2}, {3, 1}, {3, 3}});
-//        travel(3, 7, 7, 2, 1, 5, 4, new int[][]{{4, 1}, {4, 3}, {5, 3}, {2, 3}});
-//
-//        travel(1, 5, 5, 0, 0, 4, 4, new int[][]{{3, 4}, {3, 3}, {4, 3}});
-//    }
 }

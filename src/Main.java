@@ -6,15 +6,14 @@ import algorithms.bestFirstSearch.MapConverter;
 import algorithms.bestFirstSearch.Strategy;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Main {
     private final char OBSTACLE_POSITION = 'X';
     private final char ROBOT__POSITION = 'I';
     private final char BOB_POSITION = 'B';
     private final char GOAL_POSITION = 'G';
-    private final char UNSELECTED_PATH = '-';
-    private final char SELECTED_PATH = 'O';
+    private final char UNSELECTED_POSITION = 'O';
+    private final char SELECTED_PATH = ' ';
 
     private ArrayList<int[]> find_shortest_path_BreadthFS(char[][] map, int[][] adj_matrix, int[] start) {
         ArrayList vertices = new ArrayList();
@@ -52,10 +51,10 @@ public class Main {
         return new DepthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
     }
 
-    private ArrayList<int[]> find_shortest_path_BestFS(char[][] map, int[] goal) {
-        MapConverter fp = new MapConverter();
-        fp.read(map);
-        return new Strategy(fp.get_initial(), fp.get_goal(), fp.get_grid()).travel();
+    private ArrayList<int[]> find_shortest_path_BestFS(char[][] map, int[] start, int[] goal) {
+        MapConverter m_con = new MapConverter();
+        m_con.read(map, start);
+        return new Strategy(m_con.get_initial(), m_con.get_goal(), m_con.get_grid()).travel();
     }
 
     private ArrayList<int[]> find_shortest_path_AstartFS(char[][] map, int[] start, int[] goal) {
@@ -78,30 +77,46 @@ public class Main {
         System.out.println();
     }
 
-    private void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] dest) {
+    private void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] start, int[] dest, boolean dest_break) {
 
         char[][] new_map = new char[map.length][map.length];
         for (int i = 0; i < new_map.length; i++) {
             for (int j = 0; j < new_map.length; j++) {
-                new_map[i][j] = map[i][j] == OBSTACLE_POSITION ? OBSTACLE_POSITION : UNSELECTED_PATH;
+                switch (map[i][j]) {
+                    case 'O':
+                        new_map[i][j] = UNSELECTED_POSITION;
+                        break;
+                    case 'I':
+                        new_map[i][j] = ROBOT__POSITION;
+                        break;
+                    case 'G':
+                        new_map[i][j] = GOAL_POSITION;
+                        break;
+                    case 'B':
+                        new_map[i][j] = BOB_POSITION;
+                        break;
+                    case 'X':
+                        new_map[i][j] = OBSTACLE_POSITION;
+                }
+
             }
         }
 
         boolean dest_exist = false;
         for (int i = 0; i < path_vertices.size(); i++) {
             int x = path_vertices.get(i)[0], y = path_vertices.get(i)[1];
-
-            if (i == 0) {
-                new_map[x][y] = ROBOT__POSITION;
-            } else if (x == dest[0] && y == dest[1]) {
+            if (x == dest[0] && y == dest[1]) {
                 new_map[x][y] = map[x][y] == GOAL_POSITION ? GOAL_POSITION : BOB_POSITION;
                 dest_exist = true;
-                break;
-            } else {
+                if (dest_break) {
+                    break;
+                }
+            } else if(x != start[0] || y != start[1]) {
                 new_map[x][y] = SELECTED_PATH;
             }
         }
 
+        System.out.println(path_vertices.size() + " STEPS");
         print_hyphens(new_map.length * 2);
         for (int i = 0; i < new_map.length; i++) {
             for (int j = 0; j < new_map.length; j++) {
@@ -112,7 +127,7 @@ public class Main {
         print_hyphens(new_map.length * 2);
 
         if (!dest_exist) {
-            System.out.println("The destination does not exist!!");
+            System.out.println("THE DESTINATION IS UNREACHABLE");
             print_hyphens(new_map.length * 2);
         }
 
@@ -146,11 +161,15 @@ public class Main {
 //        draw_selected_path(map, path_vertices, goal);
 //        System.out.println();
 
-//        path_vertices = find_shortest_path_BestFS(map, goal);
-//        draw_selected_path(map, path_vertices, goal);
+//        print_hyphens(map.length * 2);
+//        path_vertices = find_shortest_path_BestFS(map, start, goal);
+//        draw_selected_path(map, path_vertices, start, goal, false);
+//        System.out.println();
 
-        path_vertices = find_shortest_path_AstartFS(map, start, goal);
-        draw_selected_path(map, path_vertices, goal);
+//        print_hyphens(map.length * 2);
+//        path_vertices = find_shortest_path_AstartFS(map, bob, goal);
+//        draw_selected_path(map, path_vertices, bob, goal, false);
+//        System.out.println();
     }
 
     public static void main(String[] args) {
