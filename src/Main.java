@@ -8,14 +8,14 @@ public class Main {
         Printer.print_hyphens(map.length * 2);
         System.out.println("DEPTH FIRST SEARCH");
         System.out.println("ROBOT -> BOB");
-        path_vertices = Printer.find_shortest_path_DepthFS(map, adj_matrix, robot);
-        Printer.draw_selected_path(map, path_vertices, bob, goal, true);
+        path_vertices = Printer.find_shortest_path_DepthFS(map, adj_matrix, robot, bob);
+        Printer.draw_selected_path(map, path_vertices, robot, bob);
         System.out.println();
 
         Printer.print_hyphens(map.length * 2);
         System.out.println("BOB -> GOAL");
-        path_vertices = Printer.find_shortest_path_DepthFS(map, adj_matrix, bob);
-        Printer.draw_selected_path(map, path_vertices, bob, goal, true);
+        path_vertices = Printer.find_shortest_path_DepthFS(map, adj_matrix, bob, goal);
+        Printer.draw_selected_path(map, path_vertices, bob, goal);
         System.out.println();
     }
 
@@ -25,14 +25,14 @@ public class Main {
         Printer.print_hyphens(map.length * 2);
         System.out.println("BREADTH FIRST SEARCH");
         System.out.println("ROBOT -> BOB");
-        path_vertices = Printer.find_shortest_path_BreadthFS(map, adj_matrix, robot);
-        Printer.draw_selected_path(map, path_vertices, robot, bob, true);
+        path_vertices = Printer.find_shortest_path_BreadthFS(map, adj_matrix, robot, bob);
+        Printer.draw_selected_path(map, path_vertices, robot, bob);
         System.out.println();
 
         Printer.print_hyphens(map.length * 2);
         System.out.println("BOB -> GOAL");
-        path_vertices = Printer.find_shortest_path_BreadthFS(map, adj_matrix, robot);
-        Printer.draw_selected_path(map, path_vertices, bob, goal, true);
+        path_vertices = Printer.find_shortest_path_BreadthFS(map, adj_matrix, bob, goal);
+        Printer.draw_selected_path(map, path_vertices, bob, goal);
         System.out.println();
     }
 
@@ -44,13 +44,13 @@ public class Main {
         System.out.println("ROBOT -> BOB");
         Printer.print_hyphens(map.length * 2);
         path_vertices = Printer.find_shortest_path_BestFS(map, robot, bob);
-        Printer.draw_selected_path(map, path_vertices, robot, bob, false);
+        Printer.draw_selected_path(map, path_vertices, robot, bob);
         System.out.println();
 
         Printer.print_hyphens(map.length * 2);
         System.out.println("BOB -> GOAL");
         path_vertices = Printer.find_shortest_path_BestFS(map, bob, goal);
-        Printer.draw_selected_path(map, path_vertices, bob, goal, false);
+        Printer.draw_selected_path(map, path_vertices, bob, goal);
         System.out.println();
     }
 
@@ -61,24 +61,24 @@ public class Main {
         System.out.println("A STAR SEARCH");
         System.out.println("ROBOT -> BOB");
         path_vertices = Printer.find_shortest_path_AstartFS(map, robot, bob);
-        Printer.draw_selected_path(map, path_vertices, robot, bob, false);
+        Printer.draw_selected_path(map, path_vertices, robot, bob);
         System.out.println();
 
         Printer.print_hyphens(map.length * 2);
         System.out.println("BOB -> GOAL");
         path_vertices = Printer.find_shortest_path_AstartFS(map, bob, goal);
-        Printer.draw_selected_path(map, path_vertices, bob, goal, false);
+        Printer.draw_selected_path(map, path_vertices, bob, goal);
         System.out.println();
     }
 
     private void process(char[][] map, int[][] adj_matrix, int[] robot, int[] bob, int[] goal) {
-//        depth_first_search(map, adj_matrix, robot, bob, goal);
+        depth_first_search(map, adj_matrix, robot, bob, goal);
 //
 //        breadth_first_search(map, adj_matrix, robot, bob, goal);
 //
 //        best_first_search(map, robot, bob, goal);
 
-        a_star_search(map, robot, bob, goal);
+//        a_star_search(map, robot, bob, goal);
     }
 
     public static void main(String[] args) {

@@ -98,7 +98,7 @@ public class AStar {
 
     /*
     Params :
-    tCase = travel case No.
+    tCase = search_DFS case No.
     x, y = Board's dimensions
     si, sj = start location's x and y coordinates
     ei, ej = end location's x and y coordinates

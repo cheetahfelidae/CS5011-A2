@@ -1,7 +1,4 @@
-import algorithms.AStar;
-import algorithms.BreadthFirstSearch;
-import algorithms.DepthFirstSearch;
-import algorithms.NonWeightedVertex;
+import algorithms.*;
 import algorithms.bestFirstSearch.MapConverter;
 import algorithms.bestFirstSearch.Strategy;
 
@@ -16,40 +13,54 @@ public class Printer {
     private static final char UNSELECTED_POSITION = 'O';
     private static final char SELECTED_PATH = ' ';
 
-    public static ArrayList<int[]> find_shortest_path_BreadthFS(char[][] map, int[][] adj_matrix, int[] start) {
-        ArrayList vertices = new ArrayList();
-        NonWeightedVertex start_nonWeightedVertex = null;
+    public static ArrayList<int[]> find_shortest_path_BreadthFS(char[][] map, int[][] adj_matrix, int[] start_pos, int[] dest_pos) {
+        ArrayList<Vertex> vertices = new ArrayList<>();
+        Vertex start = null, dest = null;
+
         for (int i = 0; i < adj_matrix.length; i++) {
             int x = i / map.length, y = i % map.length;
-            vertices.add(new NonWeightedVertex(x, y));
-            if (start[0] == x && start[1] == y) {
-                start_nonWeightedVertex = (NonWeightedVertex) vertices.get(vertices.size() - 1);
+
+            Vertex v = new Vertex(x, y);
+            if (start_pos[0] == x && start_pos[1] == y) {
+                start = v;
             }
+            if (dest_pos[0] == x && dest_pos[1] == y) {
+                dest = v;
+            }
+
+            vertices.add(v);
         }
 
-        if (start_nonWeightedVertex == null) {
+        if (start == null) {
             return null;
         }
 
-        return new BreadthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
+        return new BreadthFirstSearch(vertices).search(adj_matrix, start, dest);
     }
 
-    public static ArrayList<int[]> find_shortest_path_DepthFS(char[][] map, int[][] adj_matrix, int[] start) {
-        ArrayList vertices = new ArrayList();
-        NonWeightedVertex start_nonWeightedVertex = null;
+    public static ArrayList<int[]> find_shortest_path_DepthFS(char[][] map, int[][] adj_matrix, int[] start_pos, int[] dest_pos) {
+        ArrayList<Vertex> vertices = new ArrayList<>();
+        Vertex start = null, dest = null;
+
         for (int i = 0; i < adj_matrix.length; i++) {
             int x = i / map.length, y = i % map.length;
-            vertices.add(new NonWeightedVertex(x, y));
-            if (start[0] == x && start[1] == y) {
-                start_nonWeightedVertex = (NonWeightedVertex) vertices.get(vertices.size() - 1);
+
+            Vertex v = new Vertex(x, y);
+            if (start_pos[0] == x && start_pos[1] == y) {
+                start = v;
             }
+            if (dest_pos[0] == x && dest_pos[1] == y) {
+                dest = v;
+            }
+
+            vertices.add(v);
         }
 
-        if (start_nonWeightedVertex == null) {
+        if (start == null) {
             return null;
         }
 
-        return new DepthFirstSearch(vertices).travel(adj_matrix, start_nonWeightedVertex);
+        return new DepthFirstSearch(vertices).search(adj_matrix, start, dest);
     }
 
     public static ArrayList<int[]> find_shortest_path_BestFS(char[][] map, int[] start, int[] dest) {
@@ -78,7 +89,7 @@ public class Printer {
         System.out.println();
     }
 
-    public static void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] start, int[] dest, boolean dest_break) {
+    public static void draw_selected_path(char[][] map, ArrayList<int[]> path_vertices, int[] start, int[] dest) {
 
         char[][] new_map = new char[map.length][map.length];
         for (int i = 0; i < new_map.length; i++) {
@@ -109,9 +120,6 @@ public class Printer {
             if (x == dest[0] && y == dest[1]) {
                 new_map[x][y] = map[x][y] == GOAL_POSITION ? GOAL_POSITION : BOB_POSITION;
                 dest_exist = true;
-                if (dest_break) {
-                    break;
-                }
             } else if(x != start[0] || y != start[1]) {
                 new_map[x][y] = SELECTED_PATH;
             }
