@@ -76,7 +76,7 @@ public class Main {
 //
 //        breadth_first_search(map, adj_matrix, robot, bob, goal);
 //
-//        best_first_search(map, robot, bob, goal);
+        best_first_search(map, robot, bob, goal);
 
 //        a_star_search(map, robot, bob, goal);
     }
