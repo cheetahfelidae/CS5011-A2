@@ -10,8 +10,8 @@ public class Printer {
     private static final char ROBOT__POSITION = 'I';
     private static final char BOB_POSITION = 'B';
     private static final char GOAL_POSITION = 'G';
-    private static final char UNSELECTED_POSITION = 'O';
-    private static final char SELECTED_PATH = ' ';
+    private static final char UNSELECTED_POSITION = '-';
+    private static final char SELECTED_PATH = 'O';
 
     public static ArrayList<int[]> find_shortest_path_BreadthFS(char[][] map, int[][] adj_matrix, int[] start_pos, int[] dest_pos) {
         ArrayList<Vertex> vertices = new ArrayList<>();

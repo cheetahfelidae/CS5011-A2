@@ -1,12 +1,28 @@
 package algorithms;
 
 public class Vertex {
-    public int x;
-    public int y;
-    public boolean visited;
+    private int x;
+    private int y;
+    private boolean visit;
 
     public Vertex(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setVisit(boolean visit) {
+        this.visit = visit;
+    }
+
+    public boolean isVisit() {
+        return visit;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

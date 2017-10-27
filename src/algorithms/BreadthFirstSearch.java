@@ -14,13 +14,13 @@ public class BreadthFirstSearch extends UninformedSearch {
         ArrayList<int[]> explored = new ArrayList<>();
         Queue<Vertex> frontier = new LinkedList<>();
 
-        start.visited = true;
+        start.setVisit(true);
         frontier.add(start);
 
         while (!frontier.isEmpty()) {
 
             Vertex v = frontier.remove();
-            explored.add(new int[]{v.x, v.y});
+            explored.add(new int[]{v.getX(), v.getY()});
 
             if (goal_test(v, dest)) {
                 break;
@@ -34,8 +34,8 @@ public class BreadthFirstSearch extends UninformedSearch {
     private void insert_all(Queue<Vertex> frontier, int adj_matrix[][], Vertex vertex){
         ArrayList<Vertex> successors = expand(adj_matrix, vertex);
         for (Vertex v : successors) {
-            if (v != null && !v.visited) {
-                v.visited = true;
+            if (v != null && !v.isVisit()) {
+                v.setVisit(true);
                 frontier.add(v);
             }
         }

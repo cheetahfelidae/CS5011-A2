@@ -13,13 +13,13 @@ public class DepthFirstSearch extends UninformedSearch {
         ArrayList<int[]> explored = new ArrayList<>();
         Stack<Vertex> frontier = new Stack<>();
 
-        start.visited = true;
+        start.setVisit(true);
         frontier.add(start);
 
         while (!frontier.isEmpty()) {
 
             Vertex v = frontier.pop();
-            explored.add(new int[]{v.x, v.y});
+            explored.add(new int[]{v.getX(), v.getY()});
 
             if (goal_test(v, dest)) {
                 break;
@@ -34,8 +34,8 @@ public class DepthFirstSearch extends UninformedSearch {
     private void insert_all(Stack frontier, int adj_matrix[][], Vertex vertex) {
         ArrayList<Vertex> successors = expand(adj_matrix, vertex);
         for (Vertex v : successors) {
-            if (v != null && !v.visited) {
-                v.visited = true;
+            if (v != null && !v.isVisit()) {
+                v.setVisit(true);
                 frontier.add(v);
             }
         }
