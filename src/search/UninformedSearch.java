@@ -5,18 +5,21 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.Map;
 
+import static search.Printer.*;
+
 public class UninformedSearch extends Search {
 	private Deque<Node> frontier = new ArrayDeque<Node>();
 	private ArrayList<Node> directionBob = new ArrayList<Node>();
 	private ArrayList<Node> directionGoal = new ArrayList<Node>();
 	private String algorithm;
+
 	public UninformedSearch(String algorithm, char[][] map, int mapNumber) {
 		super(map, mapNumber);
 		this.algorithm = algorithm;
 	}
 	
 	public void search(char goal) {
-		clearData();
+		clearData(frontier);
 		Map<Node, Node> prev = this.getPrev();
 		ArrayList<Node> successors = this.getSuccessors();
 		ArrayList<Node> explored = this.getExplored();
@@ -26,7 +29,7 @@ public class UninformedSearch extends Search {
 		// BFS uses Deque to store frontier
 		frontier.add(startNode);
 		Node currentNode = startNode;
-		printStatus(goal, currentNode, explored);
+		printStatus(goal, currentNode, explored, getMap(), frontier);
 		
 		// Perform search
 		while(!frontier.isEmpty()) {
@@ -44,7 +47,7 @@ public class UninformedSearch extends Search {
 				break;
 			}
 			// expand the nodes
-			successors = Expand(currentNode, frontier, explored);
+			successors = expand(currentNode, frontier, explored);
 			for(Node node : successors) {
 				prev.put(node, currentNode);
 				if (algorithm.equals("BFS")) {
@@ -53,7 +56,7 @@ public class UninformedSearch extends Search {
 					frontier.addFirst(node);
 				}
 			}
-			printStatus(goal, currentNode, explored);
+			printStatus(goal, currentNode, explored, getMap(), frontier);
 			checkFailure(goal);
 			// keep track of states explored
 			if (!currentNode.equals(startNode)) {
@@ -72,12 +75,12 @@ public class UninformedSearch extends Search {
 			if (directionBob.isEmpty()) {
 				System.out.println("Cannot get to Bob");
 			} else {
-				printPath("Find Bob", this.getMap(), directionBob);
+				printPath("Find Bob", this.getMap(), getMapNumber(), directionBob, algorithm);
 				System.out.println("Cannot get Bob to safety");
 			}
 		} else {
-			printPath("Find Bob", this.getMap(), directionBob);
-			printPath("Find safe zone", this.getMap(), directionGoal);
+			printPath("Find Bob", this.getMap(), getMapNumber(), directionBob, algorithm);
+			printPath("Find safe zone", this.getMap(), getMapNumber(), directionGoal, algorithm);
 			System.out.println("Path cost: " + pathCost);
 		}
 		System.out.println("State explored: " + this.getStatesExplored() + "\n");
@@ -108,21 +111,7 @@ public class UninformedSearch extends Search {
 		}
 	}
 	
-	private void clearData () {
-		// clear everything in order to prepare for new search operation
-		Map<Node, Node> prev = this.getPrev();
-		ArrayList<Node> directions =  this.getDirections();
-		ArrayList<Node> successors = this.getSuccessors();
-		ArrayList<Node> explored = this.getExplored();
-		frontier.clear();
-		explored.clear();
-		directions.clear();
-		prev.clear();
-		successors.clear();
-	}
-	
-	private ArrayList<Node> Expand(Node node, Deque<Node> frontier, 
-			ArrayList<Node> explored) {
+	private ArrayList<Node> expand(Node node, Deque<Node> frontier, ArrayList<Node> explored) {
 		// expand the nodes and return list of successor nodes
 		ArrayList<Node> nextStates = getNextStates(node);
 		ArrayList<Node> successors = new ArrayList<Node>();
@@ -144,71 +133,5 @@ public class UninformedSearch extends Search {
 		else {
 			System.out.println("Arrived at safe zone");
 		}
-	}
-	
-	private void printStatus(char goal, Node currentNode, ArrayList<Node> explored) {
-		// print the current node, frontier, explored 
-		System.out.println("--------------------------------------");
-		String printOut = "";
-		Node node;
-		char[][] map = this.getMap();
-		for(int i = 0; i < map.length; i++) {
-			for(int j = 0; j < map[i].length; j++) {
-				node = new Node(i, j);
-				if (node.equals(currentNode)) {
-					printOut = "C";
-				} else if (frontier.contains(node)) {
-					printOut = "F";
-				} else if (explored.contains(node)) {
-					printOut = "E";
-				} else {
-					printOut = Character.toString(map[i][j]);
-				}
-				System.out.printf("%-4s", printOut);
-			}
-			System.out.println("");
-			printOut = "";
-		}
-		System.out.println("--------------------------------------");
-		
-	}
-	
-	private void printPath(String objective, char[][] map, ArrayList<Node> directions) {
-		// print path from initial position to goal
-		System.out.println("--------------------------------------");
-		if (algorithm.equals("BFS")) {
-			System.out.println("Breadth First Search");
-		} else {
-			System.out.println("Depth First Search");
-		}
-		System.out.println("Map " + this.getMapNumber());
-		System.out.println("Objective: " + objective);
-		System.out.println("--------------------------------------");
-		String line = "";
-		Node node;
-		for(int i = 0; i < map.length; i++) {
-			for(int j = 0; j < map[i].length; j++) {
-				node = new Node(i, j);
-				if (directions.contains(node) && directions.indexOf(node) == 0) {
-					line = "I";
-				} else if (directions.contains(node) && map[i][j] == 'G' && 
-						directions.indexOf(node) == directions.size()-1) {
-					line = "G";
-				} else if (directions.contains(node) && map[i][j] == 'B' && 
-						directions.indexOf(node) == directions.size()-1) {
-					line = "B";
-				}else if (directions.contains(node)) {
-					line = Integer.toString(directions.indexOf(node));
-				}else if (!directions.contains(node) && map[i][j] == 'I') {
-					line = "O";
-				}else {
-					line = map[i][j] + " ";
-				}
-				System.out.printf("%-4s", line);
-			}
-			System.out.println("");
-			line = "";
-		}
-		System.out.println("--------------------------------------");
 	}
 }

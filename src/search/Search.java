@@ -1,9 +1,6 @@
 package search;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Search {
 	private Map<Node, Node> prev = new HashMap<Node, Node>();
@@ -14,6 +11,7 @@ public class Search {
 	private Node goalNode;
 	private char[][] map;
 	private int mapNumber, statesExplored;
+
 	public Search(char[][] map, int mapNumber){
 		this.map = map;
 		this.startNode = findStartNode();
@@ -144,5 +142,18 @@ public class Search {
 		// validate if the move is legal or not (out of bound, blocked, etc.)
 		return !(x < 0 || x >= map.length || y < 0 || y >= map[0].length) && 
 				(map[x][y] != 'X');
+	}
+
+	protected void clearData (Deque<Node> frontier) {
+		// clear everything in order to prepare for new search operation
+		Map<Node, Node> prev = this.getPrev();
+		ArrayList<Node> directions =  this.getDirections();
+		ArrayList<Node> successors = this.getSuccessors();
+		ArrayList<Node> explored = this.getExplored();
+		frontier.clear();
+		explored.clear();
+		directions.clear();
+		prev.clear();
+		successors.clear();
 	}
 }
