@@ -13,8 +13,7 @@ public class BidirectionalSearch extends Search {
 	private ArrayList<Node> directionBob = new ArrayList<Node>();
 	private ArrayList<Node> directionGoal = new ArrayList<Node>();
 	private String algorithm;
-	public BidirectionalSearch(char[][] map, int mapNumber, String heuristicType, 
-			String algorithm) {
+	public BidirectionalSearch(String heuristicType, String algorithm, char[][] map, int mapNumber) {
 		super(map, mapNumber);
 		this.heuristicType = heuristicType;
 		this.algorithm = algorithm;

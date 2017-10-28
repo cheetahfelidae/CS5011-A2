@@ -11,8 +11,7 @@ public class InformedSearch extends Search {
 	private ArrayList<Node> directionBob = new ArrayList<Node>();
 	private ArrayList<Node> directionGoal = new ArrayList<Node>();
 	private String algorithm;
-	public InformedSearch(char[][] map, int mapNumber, String heuristicType, 
-			String algorithm) {
+	public InformedSearch(String algorithm, String heuristicType, char[][] map, int mapNumber) {
 		super(map, mapNumber);
 		this.heuristicType = heuristicType;
 		this.algorithm = algorithm;

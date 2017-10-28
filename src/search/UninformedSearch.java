@@ -10,7 +10,7 @@ public class UninformedSearch extends Search {
 	private ArrayList<Node> directionBob = new ArrayList<Node>();
 	private ArrayList<Node> directionGoal = new ArrayList<Node>();
 	private String algorithm;
-	public UninformedSearch(char[][] map, int mapNumber, String algorithm) {
+	public UninformedSearch(String algorithm, char[][] map, int mapNumber) {
 		super(map, mapNumber);
 		this.algorithm = algorithm;
 	}
