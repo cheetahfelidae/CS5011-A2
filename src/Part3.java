@@ -19,18 +19,7 @@ public class Part3 {
             System.out.println("Map " + map_no);
             System.out.println("Algorithm: " + algorithm);
 
-            BidirectionalSearch search = new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no);
-
-            // search for Bob, then search for safe goal position
-            search.search('B');
-
-            // TODO - to be constructed
-            // only search for goal position if the robot managed to find a way to get to Bob
-//			if (!search.getDirectionBob().isEmpty()) {
-//				search.search('G');
-//			}
-//
-//			search.printSummary();
+            new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
 
         } catch (Exception e) {
             Logger.getLogger(Part1.class.getName()).severe("java part3 <algorithm> <heuristic> <map_no>");

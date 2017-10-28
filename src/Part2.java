@@ -19,17 +19,7 @@ public class Part2 {
             System.out.println("Map " + map_no);
             System.out.println("Algorithm: " + algorithm);
 
-            InformedSearch search = new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no);
-
-            // search for Bob, then search for safe goal position
-            search.search('B');
-
-            // only search for goal position if the robot managed to find a way to get to Bob
-            if (!search.getDirectionBob().isEmpty()) {
-                search.search('G');
-            }
-
-            search.printSummary();
+            new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
 
         } catch (Exception e) {
             Logger.getLogger(Part2.class.getName()).warning("java part2 <algorithm> <heuristic> <map_no>");
