@@ -3,7 +3,6 @@ package search;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class UninformedSearch extends Search {
@@ -14,19 +13,18 @@ public class UninformedSearch extends Search {
     }
 
     public void search(char goal) {
-        clearData();
+        clear_data();
 
-        Map<Node, Node> prev = getPrev();
-        ArrayList<Node> successors;
-        ArrayList<Node> explored = getExplored();
-        Node start_node = getInitial_node();
+        ArrayList<Node> explored = get_explored();
+        Node initial_node = get_initial_node();
         set_dest_node(goal);
 
-        System.out.println("Start node: " + start_node + "\n");
+        System.out.println("START NODE: " + initial_node + "\n");
+
         // BFS uses Deque to store frontier
-        frontier.add(start_node);
-        Node cur_node = start_node;
-        Printer.printStatus(cur_node, explored, getMap(), frontier.contains(cur_node));
+        frontier.add(initial_node);
+        Node cur_node = initial_node;
+        Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
 
         // Perform search
         while (!frontier.isEmpty()) {
@@ -39,21 +37,22 @@ public class UninformedSearch extends Search {
             }
 
             // expand the nodes
-            successors = expand(cur_node, frontier, explored);
-            for (Node node : successors) {
-                prev.put(node, cur_node);
-                if (algorithm.equals("BFS")) {
+            for (Node node : expand(cur_node, frontier, explored)) {
+                getPrev().put(node, cur_node);
+                if (algorithm.equals(Algorithm.BREADTH_FIRST_SEARCH.toString())) {
                     frontier.addLast(node);
-                } else {
+                } else if (algorithm.equals(Algorithm.DEPT_FIRST_SEARCH.toString())) {
                     frontier.addFirst(node);
+                } else {
+                    Logger.getLogger(UninformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
                 }
             }
-            Printer.printStatus(cur_node, explored, getMap(), frontier.contains(cur_node));
+            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
             check_failure(goal);
 
             // keep track of states explored
-            if (!cur_node.equals(start_node)) {
-                this.setExplored_state(this.get_explored_state() + 1);
+            if (!cur_node.equals(initial_node)) {
+                set_explored_state(get_explored_state() + 1);
             }
         }
     }
@@ -87,14 +86,14 @@ public class UninformedSearch extends Search {
         return successors;
     }
 
-    protected void clearData() {
+    protected void clear_data() {
         // clear everything in order to prepare for new search operation
         frontier.clear();
-        super.clearData();
+        super.clear_data();
     }
 
     public void process() {
         super.process();
-        Printer.print_summary(algorithm, directionBob, directionGoal, getMap(), getMap_no(), get_explored_state(), "N/A");
+        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), "N/A");
     }
 }

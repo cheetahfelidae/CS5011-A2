@@ -1,6 +1,7 @@
 package search;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Search {
     protected static final char ROBOT_POSITION = 'I';
@@ -15,7 +16,7 @@ public class Search {
     private char[][] map;
     private int map_no, explored_state;
 
-    protected ArrayList<Node> directionBob = new ArrayList<>();
+    protected ArrayList<Node> path_to_bob = new ArrayList<>();
     protected ArrayList<Node> directionGoal = new ArrayList<>();
     protected String algorithm;
 
@@ -23,19 +24,19 @@ public class Search {
         this.algorithm = algorithm;
         this.map = map;
         this.initial_node = find_node(ROBOT_POSITION);
-        this.setMap_no(map_no);
-        this.setExplored_state(0);
+        this.set_map_no(map_no);
+        this.set_explored_state(0);
     }
 
-    public void setExplored_state(int explored_state) {
+    public void set_explored_state(int explored_state) {
         this.explored_state = explored_state;
     }
 
-    public void setInitial_node(Node initial_node) {
+    public void set_initial_node(Node initial_node) {
         this.initial_node = initial_node;
     }
 
-    public void setMap_no(int map_no) {
+    public void set_map_no(int map_no) {
         this.map_no = map_no;
     }
 
@@ -51,18 +52,20 @@ public class Search {
         }
     }
 
-    public Node getInitial_node() {
+    public Node get_initial_node() {
         return initial_node;
     }
 
-    public char[][] getMap() {
+    public char[][] get_map() {
         return map;
     }
 
     public void create_path_to_goal(Node currentNode) {
         // construct path to goal by backtracking from goal to initial position
-        for (Node node = currentNode; node != null; node = prev.get(node)) {
+        Node node = currentNode;
+        while (node != null) {
             path_to_goal.add(node);
+            node = prev.get(node);
         }
 
         Collections.reverse(path_to_goal);
@@ -72,7 +75,7 @@ public class Search {
         return path_to_goal;
     }
 
-    public ArrayList<Node> getExplored() {
+    public ArrayList<Node> get_explored() {
         return explored;
     }
 
@@ -85,7 +88,7 @@ public class Search {
         return dest_node;
     }
 
-    public int getMap_no() {
+    public int get_map_no() {
         // get chosen map number
         return map_no;
     }
@@ -98,7 +101,7 @@ public class Search {
     public void search(char goal) {
     }
 
-    public Node find_node(char name) {
+    private Node find_node(char name) {
         Node node = new Node(0, 0);
 
         // find robot's initial position
@@ -115,27 +118,27 @@ public class Search {
         return node;
     }
 
-    public ArrayList<Node> get_next_states(Node node) {
+    protected ArrayList<Node> get_next_states(Node node) {
         ArrayList<Node> nextStates = new ArrayList<>();
         int x = node.getX(), y = node.getY();
 
         // get the potential next moves (North, South, East, West)
-        // North
+        // Up
         if (is_valid_child(x - 1, y)) {
             nextStates.add(new Node(x - 1, y));
         }
 
-        // West
+        // Left
         if (is_valid_child(x, y - 1)) {
             nextStates.add(new Node(x, y - 1));
         }
 
-        // East
+        // Right
         if (is_valid_child(x, y + 1)) {
             nextStates.add(new Node(x, y + 1));
         }
 
-        // South
+        // Down
         if (is_valid_child(x + 1, y)) {
             nextStates.add(new Node(x + 1, y));
         }
@@ -148,8 +151,8 @@ public class Search {
         return !(x < 0 || x >= map.length || y < 0 || y >= map[0].length) && (map[x][y] != 'X');
     }
 
-    protected void clearData() {
-        getExplored().clear();
+    protected void clear_data() {
+        get_explored().clear();
         getPath_to_goal().clear();
         getPrev().clear();
     }
@@ -157,38 +160,48 @@ public class Search {
     protected boolean reach_goal(Node node, char goal) {
         if (node.equals(get_dest_node())) {
             // assign new initial state
-            setInitial_node(node);
+            set_initial_node(node);
             create_path_to_goal(node);
-            setExplored_state(get_explored_state() + 1);
-            saveObjectivePath(goal);
-            printObjectiveCompleted(goal);
+            set_explored_state(get_explored_state() + 1);
+            save_objective_path(goal);
+            print_objective_completed(goal);
             return true;
         }
         return false;
     }
 
-    protected void saveObjectivePath(char goal) {
+    private void save_objective_path(char dest) {
         // save path to Bob or path to goal
         for (Node node : getPath_to_goal()) {
-            if (goal == BOB_POSITION) {
-                directionBob.add(node);
-            } else {
-                directionGoal.add(node);
+            switch (dest) {
+                case BOB_POSITION:
+                    path_to_bob.add(node);
+                    break;
+                case GOAL_POSITION:
+                    directionGoal.add(node);
+                    break;
+                default:
+                    Logger.getLogger(Search.class.getName()).severe("DESTINATION " + dest + " IS UNRECOGNISED");
             }
         }
     }
 
-    private void printObjectiveCompleted(char goal) {
+    private void print_objective_completed(char dest) {
         // print objective complete message
-        if (goal == BOB_POSITION) {
-            System.out.println("Found Bob!");
-        } else {
-            System.out.println("Arrived at safe zone");
+        switch (dest) {
+            case BOB_POSITION:
+                System.out.println("BOB IS FOUND");
+                break;
+            case GOAL_POSITION:
+                System.out.println("SAFE GOAL IS REACHED");
+                break;
+            default:
+                Logger.getLogger(Search.class.getName()).severe("DESTINATION " + dest + " IS UNRECOGNISED");
         }
     }
 
-    protected ArrayList<Node> getDirectionBob() {
-        return this.directionBob;
+    protected ArrayList<Node> get_path_to_bob() {
+        return this.path_to_bob;
     }
 
     protected void check_failure(char dest) {
@@ -199,7 +212,7 @@ public class Search {
         search(BOB_POSITION);
 
         // only search for goal position if the robot managed to find a way to get to Bob
-        if (!getDirectionBob().isEmpty()) {
+        if (!get_path_to_bob().isEmpty()) {
             search(GOAL_POSITION);
         }
     }

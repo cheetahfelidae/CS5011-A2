@@ -1,12 +1,12 @@
 package search;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
+
 public class InformedSearch extends Search {
-    private PriorityQueue<Node> frontier;
+    protected PriorityQueue<Node> frontier;
     protected String heuristicType;
 
     public InformedSearch(String algorithm, String heuristicType, char[][] map, int mapNumber) {
@@ -16,23 +16,23 @@ public class InformedSearch extends Search {
     }
 
     public void search(char goal) {
-        clearData();
-        Map<Node, Node> prev = this.getPrev();
-        ArrayList<Node> successors;
-        ArrayList<Node> explored = this.getExplored();
-        Node startNode = getInitial_node();
+        clear_data();
+        ArrayList<Node> explored = this.get_explored();
+        Node initial_node = get_initial_node();
 
-        startNode.setPathCost(0);
+        initial_node.setPathCost(0);
         set_dest_node(goal);
-        System.out.println("Start node: " + startNode + "\n");
+
+        System.out.println("START NODE: " + initial_node);
+        System.out.println();
         // BFS uses Deque to store frontier
-        frontier.add(startNode);
+        frontier.add(initial_node);
 
         // Perform search
         while (!frontier.isEmpty()) {
             // remove the the first node from the frontier
             Node cur_node = frontier.poll();
-            Printer.printStatus(cur_node, explored, getMap(), frontier.contains(cur_node));
+            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
             explored.add(cur_node);
 
             if (reach_goal(cur_node, goal)) {
@@ -40,58 +40,54 @@ public class InformedSearch extends Search {
             }
 
             // expand the nodes
-            successors = expand(cur_node, frontier, explored);
+            ArrayList<Node> successors = expand(cur_node, frontier, explored);
             frontier.addAll(successors);
             for (Node node : successors) {
-                prev.put(node, cur_node);
+                getPrev().put(node, cur_node);
             }
 
-            Printer.printStatus(cur_node, explored, getMap(), frontier.contains(cur_node));
+            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
             check_failure(goal);
             // keep track of states explored
-            if (!cur_node.equals(startNode)) {
-                this.setExplored_state(this.get_explored_state() + 1);
+            if (!cur_node.equals(initial_node)) {
+                set_explored_state(this.get_explored_state() + 1);
             }
         }
     }
 
-    public ArrayList<Node> getDirectionBob() {
-        return this.directionBob;
-    }
-
-    private ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier,
-                                   ArrayList<Node> explored) {
+    protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored) {
         // retrieve successors nodes
-        ArrayList<Node> nextStates = get_next_states(node);
-        ArrayList<Node> successors = new ArrayList<Node>();
-        for (int i = 0; i < nextStates.size(); i++) {
-            if (algorithm.equals("BestFS")) {
-                if (!explored.contains(nextStates.get(i)) &&
-                        !frontier.contains(nextStates.get(i))) {
-                    successors.add(nextStates.get(i));
+        ArrayList<Node> next_states = get_next_states(node);
+        ArrayList<Node> successors = new ArrayList<>();
+
+        for (Node state : next_states) {
+            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
+                if (!explored.contains(state) && !frontier.contains(state)) {
+                    successors.add(state);
                 }
             }
             /**
-             * if state is in a node in frontier but with higher PATH-COST then
-             * replace old node with new node (A*)
+             * if state is in a node in frontier but with higher PATH-COST then replace old node with new node (A*)
              */
-            else {
-                if (!explored.contains(nextStates.get(i)) &&
-                        !frontier.contains(nextStates.get(i))) {
-                    successors.add(nextStates.get(i));
-                } else if (frontier.contains(nextStates.get(i))) {
+            else if (algorithm.equals(Algorithm.A_STAR.toString())) {
+                if (!explored.contains(state) && !frontier.contains(state)) {
+                    successors.add(state);
+                } else if (frontier.contains(state)) {
                     Node oldNode = new Node(0, 0);
-                    for (Node n : frontier) {
-                        if (n.equals(nextStates.get(i))) {
+                    for (int i = 0; i < frontier.size(); i++) {
+                        Node n = frontier.peek();
+                        if (n.equals(state)) {
                             oldNode = n;
                             break;
                         }
                     }
-                    if (oldNode.getPathCost() > nextStates.get(i).getPathCost()) {
+                    if (oldNode.getPathCost() > state.getPathCost()) {
                         frontier.remove(oldNode);
-                        frontier.add(nextStates.get(i));
+                        frontier.add(state);
                     }
                 }
+            } else {
+                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
         }
 
@@ -101,8 +97,9 @@ public class InformedSearch extends Search {
     public ArrayList<Node> get_next_states(Node node) {
         int x = node.getX();
         int y = node.getY();
-        Node goalNode = this.get_dest_node();
-        ArrayList<Node> nextStates = new ArrayList<Node>();
+        Node goal_node = get_dest_node();
+        ArrayList<Node> nextStates = new ArrayList<>();
+
         /**
          * BestFS score f(n) = h(n)
          * A* score f(n) = g(n) + h(n)
@@ -110,54 +107,62 @@ public class InformedSearch extends Search {
          * h(n) = estimated cost of the path from the state at node n to the goal
          * g(n) = the cost of the path from the start to the node n
          */
-        // North
+        // Up
         if (is_valid_child(x - 1, y)) {
             Node up = new Node(x - 1, y);
             up.setPathCost(node.getPathCost() + 1);
-            up.setHeuristic(heuristicType, goalNode);
-            if (algorithm.equals("BestFS")) {
+            up.setHeuristic(heuristicType, goal_node);
+            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 up.setScore(up.getHeuristic());
-            } else {
+            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
                 up.setScore(up.getHeuristic() + up.getPathCost());
+            } else {
+                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
             nextStates.add(up);
         }
 
-        // South
+        // Down
         if (is_valid_child(x + 1, y)) {
             Node down = new Node(x + 1, y);
             down.setPathCost(node.getPathCost() + 1);
-            down.setHeuristic(heuristicType, goalNode);
-            if (algorithm.equals("BestFS")) {
+            down.setHeuristic(heuristicType, goal_node);
+            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 down.setScore(down.getHeuristic());
-            } else {
+            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
                 down.setScore(down.getHeuristic() + down.getPathCost());
+            } else {
+                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
             nextStates.add(down);
         }
 
-        // West
+        // Left
         if (is_valid_child(x, y - 1)) {
             Node left = new Node(x, y - 1);
             left.setPathCost(node.getPathCost() + 1);
-            left.setHeuristic(heuristicType, goalNode);
-            if (algorithm.equals("BestFS")) {
+            left.setHeuristic(heuristicType, goal_node);
+            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 left.setScore(left.getHeuristic());
-            } else {
+            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
                 left.setScore(left.getHeuristic() + left.getPathCost());
+            } else {
+                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
             nextStates.add(left);
         }
 
-        // East
+        // Right
         if (is_valid_child(x, y + 1)) {
             Node right = new Node(x, y + 1);
             right.setPathCost(node.getPathCost() + 1);
-            right.setHeuristic(heuristicType, goalNode);
-            if (algorithm.equals("BestFS")) {
+            right.setHeuristic(heuristicType, goal_node);
+            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 right.setScore(right.getHeuristic());
-            } else {
+            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
                 right.setScore(right.getHeuristic() + right.getPathCost());
+            } else {
+                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
             nextStates.add(right);
         }
@@ -181,14 +186,14 @@ public class InformedSearch extends Search {
         }
     }
 
-    protected void clearData() {
+    protected void clear_data() {
         // clear everything in order to prepare for new search operation
         frontier.clear();
-        super.clearData();
+        super.clear_data();
     }
 
     public void process() {
         super.process();
-        Printer.print_summary(algorithm, directionBob, directionGoal, getMap(), getMap_no(), get_explored_state(), heuristicType);
+        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), heuristicType);
     }
 }

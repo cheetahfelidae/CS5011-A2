@@ -17,7 +17,7 @@ public class Part2 {
             int map_no = Integer.parseInt(args[2]);
 
             System.out.println("Map " + map_no);
-            System.out.println("Algorithm: " + algorithm);
+            System.out.println("search.Algorithm: " + algorithm);
 
             new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
 

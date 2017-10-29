@@ -104,7 +104,7 @@ public class Printer {
         System.out.println("\nSummary");
         if (directionBob.isEmpty() || directionGoal.isEmpty()) {
             System.out.println("Unsuccessful search operation");
-            System.out.println("Algorithm: " + algorithm);
+            System.out.println("search.Algorithm: " + algorithm);
             if (directionBob.isEmpty()) {
                 System.out.println("Cannot get to Bob");
             } else {
