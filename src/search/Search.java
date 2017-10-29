@@ -69,7 +69,7 @@ public class Search {
         Collections.reverse(path_to_goal);
     }
 
-    public ArrayList<Node> getPath_to_goal() {
+    public ArrayList<Node> get_path_to_goal() {
         return path_to_goal;
     }
 
@@ -151,7 +151,7 @@ public class Search {
 
     protected void clear_data() {
         get_explored().clear();
-        getPath_to_goal().clear();
+        get_path_to_goal().clear();
         getPrev().clear();
     }
 
@@ -164,7 +164,7 @@ public class Search {
             set_explored_state(get_explored_state() + 1);
             save_objective_path(goal);
             print_objective_completed(goal);
-            
+
             return true;
         }
 
@@ -173,7 +173,7 @@ public class Search {
 
     private void save_objective_path(char dest) {
         // save path to Bob or path to goal
-        for (Node node : getPath_to_goal()) {
+        for (Node node : get_path_to_goal()) {
             switch (Position.convert(dest)) {
                 case BOB_POSITION:
                     path_to_bob.add(node);

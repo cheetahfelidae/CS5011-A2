@@ -12,7 +12,7 @@ import static search.constantVariable.Position.*;
 public class Printer {
     private static final String TWO_SPACES = "  ";
 
-    public static void print_hyphens(int num) {
+    private static void print_hyphens(int num) {
         for (int i = 0; i < num; i++) {
             System.out.print("-");
         }
@@ -43,7 +43,7 @@ public class Printer {
         print_hyphens(map.length * 3);
     }
 
-    public static void print_path(String objective, char[][] map, int map_no, ArrayList<Node> directions, String algorithm, char heuristic) {
+    private static void print_path(String objective, char[][] map, int map_no, ArrayList<Node> directions, String algorithm, char heuristic) {
         // print path from initial position to goal
         print_hyphens(map.length * 3);
         switch (Algorithm.convert(algorithm)) {
