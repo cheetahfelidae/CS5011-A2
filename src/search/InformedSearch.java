@@ -19,7 +19,7 @@ public class InformedSearch extends Search {
         this.heuristic = heuristic;
     }
 
-    public void search() {
+    public ArrayList<Node> search() {
         ArrayList<Node> explored = this.get_explored();
         initial_node.setPathCost(0);
 
@@ -52,6 +52,8 @@ public class InformedSearch extends Search {
                 set_explored_state(this.get_explored_state() + 1);
             }
         }
+
+        return path_to_dest;
     }
 
     protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored) {

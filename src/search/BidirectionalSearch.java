@@ -13,7 +13,7 @@ public class BidirectionalSearch extends InformedSearch {
         frontierEnd = new PriorityQueue<>(new NodeComparator());
     }
 
-    public void search() {
+    public ArrayList<Node> search() {
         // from start
         Map<Node, Node> prev = this.get_prev_path();
         ArrayList<Node> successors;
@@ -55,5 +55,7 @@ public class BidirectionalSearch extends InformedSearch {
                 set_explored_state(get_explored_state() + 1);
             }
         }
+
+        return path_to_dest;
     }
 }
