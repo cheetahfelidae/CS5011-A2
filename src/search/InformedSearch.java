@@ -1,5 +1,8 @@
 package search;
 
+import search.constantVariable.Algorithm;
+import search.constantVariable.Position;
+
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
@@ -7,9 +10,9 @@ import java.util.logging.Logger;
 
 public class InformedSearch extends Search {
     protected PriorityQueue<Node> frontier;
-    protected String heuristicType;
+    protected char heuristicType;
 
-    public InformedSearch(String algorithm, String heuristicType, char[][] map, int mapNumber) {
+    public InformedSearch(String algorithm, char heuristicType, char[][] map, int mapNumber) {
         super(algorithm, map, mapNumber);
         this.heuristicType = heuristicType;
         frontier = new PriorityQueue<>(new NodeComparator());
@@ -173,7 +176,7 @@ public class InformedSearch extends Search {
     protected void check_failure(char dest) {
         // if there's no more nodes to be explored, the search is failed
         if (frontier.isEmpty()) {
-            switch (dest) {
+            switch (Position.convert(dest)) {
                 case BOB_POSITION:
                     Logger.getLogger(InformedSearch.class.getName()).warning("BOB IS NEVER REACHED");
                     break;

@@ -1,5 +1,7 @@
 package search;
 
+import search.constantVariable.Position;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +10,7 @@ import java.util.PriorityQueue;
 public class BidirectionalSearch extends InformedSearch {
     private PriorityQueue<Node> frontierEnd;
 
-    public BidirectionalSearch(String algorithm, String heuristicType, char[][] map, int mapNumber) {
+    public BidirectionalSearch(String algorithm, char heuristicType, char[][] map, int mapNumber) {
         super(algorithm, heuristicType, map, mapNumber);
         frontierEnd = new PriorityQueue<>(new NodeComparator());
     }
@@ -69,7 +71,7 @@ public class BidirectionalSearch extends InformedSearch {
 
     public void process() {
         // search for Bob, then search for safe goal position
-        search(BOB_POSITION);
+        search(Position.BOB_POSITION.value());
 
         // TODO - to be constructed
         // only search for goal position if the robot managed to find a way to get to Bob

@@ -1,4 +1,5 @@
 import search.UninformedSearch;
+import search.constantVariable.Map;
 
 import java.util.logging.Logger;
 
@@ -14,8 +15,8 @@ public class Part1 {
             String algorithm = args[0];
             int map_no = Integer.parseInt(args[1]);
 
-            System.out.println("Map " + map_no);
-            System.out.println("search.Algorithm: " + algorithm);
+            System.out.println("search.constantVariable.Map " + map_no);
+            System.out.println("search.constantVariable.Algorithm: " + algorithm);
 
             new UninformedSearch(algorithm, Map.getMap(map_no), map_no).process();
 

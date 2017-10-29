@@ -1,13 +1,11 @@
 package search;
 
+import search.constantVariable.Position;
+
 import java.util.*;
 import java.util.logging.Logger;
 
 public class Search {
-    protected static final char ROBOT_POSITION = 'I';
-    protected static final char BOB_POSITION = 'B';
-    protected static final char GOAL_POSITION = 'G';
-
     private Map<Node, Node> prev = new HashMap<>();
     private ArrayList<Node> path_to_goal = new ArrayList<>();
     private ArrayList<Node> explored = new ArrayList<>();
@@ -23,7 +21,7 @@ public class Search {
     public Search(String algorithm, char[][] map, int map_no) {
         this.algorithm = algorithm;
         this.map = map;
-        this.initial_node = find_node(ROBOT_POSITION);
+        this.initial_node = find_node(Position.BOB_POSITION.value());
         this.set_map_no(map_no);
         this.set_explored_state(0);
     }
@@ -158,6 +156,7 @@ public class Search {
     }
 
     protected boolean reach_goal(Node node, char goal) {
+
         if (node.equals(get_dest_node())) {
             // assign new initial state
             set_initial_node(node);
@@ -167,13 +166,14 @@ public class Search {
             print_objective_completed(goal);
             return true;
         }
+
         return false;
     }
 
     private void save_objective_path(char dest) {
         // save path to Bob or path to goal
         for (Node node : getPath_to_goal()) {
-            switch (dest) {
+            switch (Position.convert(dest)) {
                 case BOB_POSITION:
                     path_to_bob.add(node);
                     break;
@@ -188,7 +188,7 @@ public class Search {
 
     private void print_objective_completed(char dest) {
         // print objective complete message
-        switch (dest) {
+        switch (Position.convert(dest)) {
             case BOB_POSITION:
                 System.out.println("BOB IS FOUND");
                 break;
@@ -209,11 +209,11 @@ public class Search {
 
     public void process() {
         // search for Bob, then search for safe goal position
-        search(BOB_POSITION);
+        search(Position.BOB_POSITION.value());
 
         // only search for goal position if the robot managed to find a way to get to Bob
         if (!get_path_to_bob().isEmpty()) {
-            search(GOAL_POSITION);
+            search(Position.GOAL_POSITION.value());
         }
     }
 }

@@ -1,5 +1,9 @@
 package search;
 
+import search.constantVariable.Algorithm;
+import search.constantVariable.Heuristic;
+import search.constantVariable.Position;
+
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -19,7 +23,8 @@ public class UninformedSearch extends Search {
         Node initial_node = get_initial_node();
         set_dest_node(goal);
 
-        System.out.println("START NODE: " + initial_node + "\n");
+        System.out.println("START NODE: " + initial_node);
+        System.out.println();
 
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
@@ -39,13 +44,18 @@ public class UninformedSearch extends Search {
             // expand the nodes
             for (Node node : expand(cur_node, frontier, explored)) {
                 getPrev().put(node, cur_node);
-                if (algorithm.equals(Algorithm.BREADTH_FIRST_SEARCH.toString())) {
-                    frontier.addLast(node);
-                } else if (algorithm.equals(Algorithm.DEPT_FIRST_SEARCH.toString())) {
-                    frontier.addFirst(node);
-                } else {
-                    Logger.getLogger(UninformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
+
+                switch (Algorithm.convert(algorithm)) {
+                    case BREADTH_FIRST_SEARCH:
+                        frontier.addLast(node);
+                        break;
+                    case DEPT_FIRST_SEARCH:
+                        frontier.addFirst(node);
+                        break;
+                    default:
+                        Logger.getLogger(UninformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
                 }
+
             }
             Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
             check_failure(goal);
@@ -60,7 +70,7 @@ public class UninformedSearch extends Search {
     protected void check_failure(char dest) {
         // if there's no more nodes to be explored, the search is failed
         if (frontier.isEmpty()) {
-            switch (dest) {
+            switch (Position.convert(dest)) {
                 case BOB_POSITION:
                     Logger.getLogger(UninformedSearch.class.getName()).warning("BOB IS NEVER REACHED");
                     break;
@@ -94,6 +104,6 @@ public class UninformedSearch extends Search {
 
     public void process() {
         super.process();
-        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), "N/A");
+        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), Heuristic.NONE.value());
     }
 }

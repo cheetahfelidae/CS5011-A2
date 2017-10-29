@@ -1,3 +1,5 @@
+package search.constantVariable;
+
 import java.util.logging.Logger;
 
 public class Map {
@@ -14,7 +16,6 @@ public class Map {
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'G'},
     };
 
-
     private static final char[][] MAP2 = new char[][]{
             {'O', 'O', 'X', 'O', 'O', 'O', 'O', 'O', 'O', 'X'},
             {'O', 'X', 'O', 'X', 'O', 'O', 'B', 'O', 'O', 'X'},
@@ -27,7 +28,6 @@ public class Map {
             {'O', 'X', 'X', 'X', 'O', 'O', 'O', 'O', 'O', 'O'},
             {'G', 'O', 'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
     };
-
 
     private static final char[][] MAP3 = new char[][]{
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},
@@ -96,10 +96,11 @@ public class Map {
                 return MAP5;
             case 6:
                 return MAP6;
+            default:
+                Logger.getLogger(Map.class.getName()).severe("MAP NUMBER " + num + " IS UNRECOGNISED");
+                System.exit(0);
+                return null;
         }
 
-        Logger.getLogger(Map.class.getName()).severe("NONEXISTENT MAP NUMBER");
-        System.exit(0);
-        return null;
     }
 }

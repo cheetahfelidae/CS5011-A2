@@ -1,4 +1,5 @@
 import search.InformedSearch;
+import search.constantVariable.Map;
 
 import java.util.logging.Logger;
 
@@ -13,14 +14,13 @@ public class Part2 {
     public static void main(String[] args) {
         try {
             String algorithm = args[0];
-            String heuristic = args[1];
+            char heuristic = args[1].charAt(0);
             int map_no = Integer.parseInt(args[2]);
 
-            System.out.println("Map " + map_no);
-            System.out.println("search.Algorithm: " + algorithm);
+            System.out.println("search.constantVariable.Map " + map_no);
+            System.out.println("search.constantVariable.Algorithm: " + algorithm);
 
             new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
-
         } catch (Exception e) {
             Logger.getLogger(Part2.class.getName()).warning("java part2 <algorithm> <heuristic> <map_no>");
         }
