@@ -4,7 +4,12 @@ public enum Position {
     ROBOT_POSITION('I'),
     BOB_POSITION('B'),
     GOAL_POSITION('G'),
-    OBSTACLE_POSITION('X');
+    OBSTACLE_POSITION('X'),
+    AVAILABLE_POSITION('O'),
+    UNSELECTED_POSITION('-'),
+    CURRENT_POSITION('C'),
+    FRONTIER_POSITION('F'),
+    EXPLORED_POSITION('E');
 
     private char position;
 
@@ -18,6 +23,7 @@ public enum Position {
 
     /**
      * To handle with switch case
+     *
      * @param position
      * @return
      */

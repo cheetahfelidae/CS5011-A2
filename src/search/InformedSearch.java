@@ -35,7 +35,7 @@ public class InformedSearch extends Search {
         while (!frontier.isEmpty()) {
             // remove the the first node from the frontier
             Node cur_node = frontier.poll();
-            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
+            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
             explored.add(cur_node);
 
             if (reach_goal(cur_node, goal)) {
@@ -49,7 +49,7 @@ public class InformedSearch extends Search {
                 getPrev().put(node, cur_node);
             }
 
-            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
+            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
             check_failure(goal);
             // keep track of states explored
             if (!cur_node.equals(initial_node)) {

@@ -29,7 +29,7 @@ public class UninformedSearch extends Search {
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
         Node cur_node = initial_node;
-        Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
+        Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
 
         // Perform search
         while (!frontier.isEmpty()) {
@@ -57,7 +57,7 @@ public class UninformedSearch extends Search {
                 }
 
             }
-            Printer.printStatus(cur_node, explored, get_map(), frontier.contains(cur_node));
+            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
             check_failure(goal);
 
             // keep track of states explored

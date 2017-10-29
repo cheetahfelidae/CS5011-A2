@@ -164,6 +164,7 @@ public class Search {
             set_explored_state(get_explored_state() + 1);
             save_objective_path(goal);
             print_objective_completed(goal);
+            
             return true;
         }
 
