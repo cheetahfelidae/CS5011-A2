@@ -9,26 +9,25 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.logging.Logger;
 
+import static search.Printer.print_status;
+import static search.Printer.print_summary;
+
 public class UninformedSearch extends Search {
     private Deque<Node> frontier = new ArrayDeque<>();
 
-    public UninformedSearch(String algorithm, char[][] map, int mapNumber) {
-        super(algorithm, map, mapNumber);
+    public UninformedSearch(String algorithm, char[][] map, int mapNumber, char initial_position, char dest_position) {
+        super(algorithm, map, mapNumber, initial_position, dest_position);
     }
 
-    public void search(char goal) {
-        clear_data();
-
+    public ArrayList<Node> search() {
         ArrayList<Node> explored = get_explored();
-        Node initial_node = get_initial_node();
-        set_dest_node(goal);
 
         System.out.println("START NODE: " + initial_node);
 
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
         Node cur_node = initial_node;
-        Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
+        print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
 
         // Perform search
         while (!frontier.isEmpty()) {
@@ -36,7 +35,7 @@ public class UninformedSearch extends Search {
             cur_node = frontier.poll();
             explored.add(cur_node);
 
-            if (reach_goal(cur_node, goal)) {
+            if (reach_dest(cur_node)) {
                 break;
             }
 
@@ -56,29 +55,21 @@ public class UninformedSearch extends Search {
                 }
 
             }
-            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
-            check_failure(goal);
+            print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
+            check_failure();
 
             // keep track of states explored
             if (!cur_node.equals(initial_node)) {
                 set_explored_state(get_explored_state() + 1);
             }
         }
+
+        return path_to_dest;
     }
 
-    protected void check_failure(char dest) {
-        // if there's no more nodes to be explored, the search is failed
+    protected void check_failure() {
         if (frontier.isEmpty()) {
-            switch (Position.convert(dest)) {
-                case BOB_POSITION:
-                    Logger.getLogger(UninformedSearch.class.getName()).warning("BOB IS NEVER REACHED");
-                    break;
-                case GOAL_POSITION:
-                    Logger.getLogger(UninformedSearch.class.getName()).warning("SAFETY GOAL IS NEVER REACHED");
-                    break;
-                default:
-                    Logger.getLogger(UninformedSearch.class.getName()).warning("DESTINATION " + dest + " IS UNRECOGNISED");
-            }
+            System.out.println("THERE IS NO MORE NODE TO BE EXPLORED, THE SEARCH IS OVER");
         }
     }
 
@@ -93,16 +84,5 @@ public class UninformedSearch extends Search {
         }
 
         return successors;
-    }
-
-    protected void clear_data() {
-        // clear everything in order to prepare for new search operation
-        frontier.clear();
-        super.clear_data();
-    }
-
-    public void process() {
-        super.process();
-        Printer.print_summary(algorithm, path_to_bob, path_to_goal, get_map(), get_map_no(), get_explored_state(), Heuristic.NONE.value());
     }
 }

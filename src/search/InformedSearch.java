@@ -7,24 +7,21 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
+import static search.Printer.print_summary;
+
 
 public class InformedSearch extends Search {
-    protected PriorityQueue<Node> frontier;
-    protected char heuristicType;
+    protected PriorityQueue<Node> frontier = new PriorityQueue<>(new NodeComparator());
+    protected char heuristic;
 
-    public InformedSearch(String algorithm, char heuristicType, char[][] map, int mapNumber) {
-        super(algorithm, map, mapNumber);
-        this.heuristicType = heuristicType;
-        frontier = new PriorityQueue<>(new NodeComparator());
+    public InformedSearch(String algorithm, char heuristic, char[][] map, int mapNumber, char initial_position, char dest_position) {
+        super(algorithm, map, mapNumber, initial_position, dest_position);
+        this.heuristic = heuristic;
     }
 
-    public void search(char goal) {
-        clear_data();
+    public void search() {
         ArrayList<Node> explored = this.get_explored();
-        Node initial_node = get_initial_node();
-
         initial_node.setPathCost(0);
-        set_dest_node(goal);
 
         System.out.println("START NODE: " + initial_node);
         // BFS uses Deque to store frontier
@@ -37,7 +34,7 @@ public class InformedSearch extends Search {
             Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
             explored.add(cur_node);
 
-            if (reach_goal(cur_node, goal)) {
+            if (reach_dest(cur_node)) {
                 break;
             }
 
@@ -49,7 +46,7 @@ public class InformedSearch extends Search {
             }
 
             Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
-            check_failure(goal);
+            check_failure();
             // keep track of states explored
             if (!cur_node.equals(initial_node)) {
                 set_explored_state(this.get_explored_state() + 1);
@@ -99,7 +96,6 @@ public class InformedSearch extends Search {
     public ArrayList<Node> get_next_states(Node node) {
         int x = node.getX();
         int y = node.getY();
-        Node goal_node = get_dest_node();
         ArrayList<Node> nextStates = new ArrayList<>();
 
         /**
@@ -113,7 +109,7 @@ public class InformedSearch extends Search {
         if (is_valid_child(x - 1, y)) {
             Node up = new Node(x - 1, y);
             up.setPathCost(node.getPathCost() + 1);
-            up.setHeuristic(heuristicType, goal_node);
+            up.setHeuristic(heuristic, dest_node);
             if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 up.setScore(up.getHeuristic());
             } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
@@ -128,7 +124,7 @@ public class InformedSearch extends Search {
         if (is_valid_child(x + 1, y)) {
             Node down = new Node(x + 1, y);
             down.setPathCost(node.getPathCost() + 1);
-            down.setHeuristic(heuristicType, goal_node);
+            down.setHeuristic(heuristic, dest_node);
             if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 down.setScore(down.getHeuristic());
             } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
@@ -143,7 +139,7 @@ public class InformedSearch extends Search {
         if (is_valid_child(x, y - 1)) {
             Node left = new Node(x, y - 1);
             left.setPathCost(node.getPathCost() + 1);
-            left.setHeuristic(heuristicType, goal_node);
+            left.setHeuristic(heuristic, dest_node);
             if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 left.setScore(left.getHeuristic());
             } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
@@ -158,7 +154,7 @@ public class InformedSearch extends Search {
         if (is_valid_child(x, y + 1)) {
             Node right = new Node(x, y + 1);
             right.setPathCost(node.getPathCost() + 1);
-            right.setHeuristic(heuristicType, goal_node);
+            right.setHeuristic(heuristic, dest_node);
             if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
                 right.setScore(right.getHeuristic());
             } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
@@ -186,16 +182,5 @@ public class InformedSearch extends Search {
                     Logger.getLogger(InformedSearch.class.getName()).warning("DESTINATION " + dest + " IS UNRECOGNISED");
             }
         }
-    }
-
-    protected void clear_data() {
-        // clear everything in order to prepare for new search operation
-        frontier.clear();
-        super.clear_data();
-    }
-
-    public void process() {
-        super.process();
-        Printer.print_summary(algorithm, path_to_bob, path_to_goal, get_map(), get_map_no(), get_explored_state(), heuristicType);
     }
 }

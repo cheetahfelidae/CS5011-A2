@@ -1,7 +1,15 @@
+import search.Node;
 import search.UninformedSearch;
+import search.constantVariable.Heuristic;
 import search.constantVariable.Map;
 
+import java.util.ArrayList;
 import java.util.logging.Logger;
+
+import static search.Printer.print_summary;
+import static search.constantVariable.Position.BOB_POSITION;
+import static search.constantVariable.Position.GOAL_POSITION;
+import static search.constantVariable.Position.ROBOT_POSITION;
 
 /**
  * To run Uninformed search, three command-line arguments are required.
@@ -18,7 +26,15 @@ public class Part1 {
             System.out.println("Map: " + map_no);
             System.out.println("Algorithm: " + algorithm);
 
-            new UninformedSearch(algorithm, Map.getMap(map_no), map_no).process();
+            UninformedSearch bob_search = new UninformedSearch(algorithm, Map.getMap(map_no), map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
+            ArrayList<Node> path_to_bob = bob_search.search();
+            print_summary(algorithm, Map.getMap(map_no), map_no, path_to_bob, bob_search.get_explored_state(), Heuristic.NONE.value());
+
+            if (!path_to_bob.isEmpty()) {
+                UninformedSearch goal_search = new UninformedSearch(algorithm, Map.getMap(map_no), map_no, BOB_POSITION.value(), GOAL_POSITION.value());
+                ArrayList<Node> path = goal_search.search();
+                print_summary(algorithm, Map.getMap(map_no), map_no, path, goal_search.get_explored_state(), Heuristic.NONE.value());
+            }
 
         } catch (Exception e) {
             Logger.getLogger(Part1.class.getName()).severe("java part1 <algorithm> <map_no>");

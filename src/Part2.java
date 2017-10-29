@@ -3,6 +3,9 @@ import search.constantVariable.Map;
 
 import java.util.logging.Logger;
 
+import static search.constantVariable.Position.BOB_POSITION;
+import static search.constantVariable.Position.ROBOT_POSITION;
+
 /**
  * To run Informed Search, three command-line arguments are required.
  * - 1st arg : the desired algorithm, "BestFS" for Best First Search algorithm or "A*" for A* algorithm.
@@ -20,7 +23,9 @@ public class Part2 {
             System.out.println("Map: " + map_no);
             System.out.println("Algorithm: " + algorithm);
 
-            new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
+            InformedSearch informedSearch = new InformedSearch(algorithm, heuristic, Map.getMap(map_no), map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
+            informedSearch.search();
+
         } catch (Exception e) {
             Logger.getLogger(Part2.class.getName()).warning("java part2 <algorithm> <heuristic> <map_no>");
         }

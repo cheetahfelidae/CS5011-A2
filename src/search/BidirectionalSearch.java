@@ -1,7 +1,5 @@
 package search;
 
-import search.constantVariable.Position;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,28 +8,24 @@ import java.util.PriorityQueue;
 public class BidirectionalSearch extends InformedSearch {
     private PriorityQueue<Node> frontierEnd;
 
-    public BidirectionalSearch(String algorithm, char heuristicType, char[][] map, int mapNumber) {
-        super(algorithm, heuristicType, map, mapNumber);
+    public BidirectionalSearch(String algorithm, char heuristic, char[][] map, int mapNumber, char initial_position, char dest_position) {
+        super(algorithm, heuristic, map, mapNumber, initial_position, dest_position);
         frontierEnd = new PriorityQueue<>(new NodeComparator());
     }
 
-    public void search(char goal) {
+    public void search() {
         // from start
-        clear_data();
         Map<Node, Node> prev = this.get_prev_path();
         ArrayList<Node> successors;
         ArrayList<Node> explored = this.get_explored();
-        Node startNode = this.get_initial_node();
-        set_dest_node(goal);
-        get_dest_node();
         // BFS uses Deque to store frontier
-        frontier.add(startNode);
+        frontier.add(initial_node);
 
         // from goal
         Map<Node, Node> prevEnd = new HashMap<>();
         ArrayList<Node> successorsEnd;
         ArrayList<Node> exploredEnd = new ArrayList<>();
-        Node startNodeEnd = get_dest_node();
+        Node startNodeEnd = dest_node;
 //		Node goalNodeEnd = new Node(startNode.getX(), startNode.getY());
         frontierEnd.add(startNodeEnd);
 
@@ -57,29 +51,9 @@ public class BidirectionalSearch extends InformedSearch {
                 prevEnd.put(node, currentNode);
             }
             // keep track of states explored
-            if (!currentNode.equals(startNode)) {
+            if (!currentNode.equals(initial_node)) {
                 set_explored_state(get_explored_state() + 1);
             }
         }
-    }
-
-    protected void clear_data() {
-        // clear everything in order to prepare for new search operation
-        frontier.clear();
-        super.clear_data();
-    }
-
-    public void process() {
-        // search for Bob, then search for safe goal position
-        search(Position.BOB_POSITION.value());
-
-        // TODO - to be constructed
-        // only search for goal position if the robot managed to find a way to get to Bob
-//			if (!get_path_to_bob().isEmpty()) {
-//				search(GOAL_POSITION);
-//			}
-//
-//			print_summary();
-
     }
 }

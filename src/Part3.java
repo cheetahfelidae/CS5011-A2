@@ -3,6 +3,9 @@ import search.constantVariable.Map;
 
 import java.util.logging.Logger;
 
+import static search.constantVariable.Position.BOB_POSITION;
+import static search.constantVariable.Position.ROBOT_POSITION;
+
 /**
  * To run Bidirectional Search, three command-line arguments are required.
  * - 1st arg : the desired algorithm, "BestFS" for Best First Search algorithm or "A*" for A* algorithm.
@@ -20,7 +23,8 @@ public class Part3 {
             System.out.println("Map: " + map_no);
             System.out.println("Algorithm: " + algorithm);
 
-            new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
+            BidirectionalSearch bidirectionalSearch = new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
+            bidirectionalSearch.search();
 
         } catch (Exception e) {
             Logger.getLogger(Part1.class.getName()).severe("java part3 <algorithm> <heuristic> <map_no>");

@@ -43,9 +43,7 @@ public class Printer {
         print_hyphens(map.length * 3);
     }
 
-    private static void print_path(String objective, char[][] map, int map_no, ArrayList<Node> directions, String algorithm, char heuristic) {
-        // print path from initial position to goal
-        print_hyphens(map.length * 3);
+    private static void print_full_algo_name(String algorithm) {
         switch (Algorithm.convert(algorithm)) {
             case BREADTH_FIRST_SEARCH:
                 System.out.println("Breadth First Search");
@@ -62,9 +60,39 @@ public class Printer {
             default:
                 Logger.getLogger(Printer.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
         }
+    }
+
+    private static void print_path(char[][] map, ArrayList<Node> path) {
+
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                Node node = new Node(i, j);
+                if (path.contains(node)) {
+
+                    int num = path.indexOf(node);
+                    if (num == 0 || num == path.size() - 1) {
+                        System.out.print(map[i][j] + TWO_SPACES);
+                    } else {
+                        System.out.print(num < 10 ? num + TWO_SPACES : num + " ");
+                    }
+
+                } else if (map[i][j] == AVAILABLE_POSITION.value()) {
+                    System.out.print(UNSELECTED_POSITION.value() + TWO_SPACES);
+                } else {
+                    System.out.print(map[i][j] + TWO_SPACES);
+                }
+            }
+            System.out.println();
+        }
+
+    }
+
+    public static void print_summary(String algorithm, char[][] map, int map_no, ArrayList<Node> path, int explored_state, char heuristic) {
+        print_hyphens(map.length * 3);
+        print_full_algo_name(algorithm);
 
         System.out.println("Map: " + map_no);
-        System.out.println("Objective: " + objective);
+//        System.out.println("Objective: " + objective);
 
         switch (Heuristic.convert(heuristic)) {
             case MANHATTAN:
@@ -84,52 +112,38 @@ public class Printer {
         }
         print_hyphens(map.length * 3);
 
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                Node node = new Node(i, j);
-                if (directions.contains(node)) {
-
-                    int num = directions.indexOf(node);
-                    if (num == 0 || num == directions.size() - 1) {
-                        System.out.print(map[i][j] + TWO_SPACES);
-                    } else {
-                        System.out.print(num < 10 ? num + TWO_SPACES : num + " ");
-                    }
-
-                } else if (map[i][j] == AVAILABLE_POSITION.value()) {
-                    System.out.print(UNSELECTED_POSITION.value() + TWO_SPACES);
-                } else {
-                    System.out.print(map[i][j] + TWO_SPACES);
-                }
-            }
-            System.out.println();
-        }
+        print_path(map, path);
 
         print_hyphens(map.length * 3);
-    }
 
-    public static void print_summary(String algorithm, ArrayList<Node> path_to_bob, ArrayList<Node> path_to_goal, char[][] map, int map_no, int explored_state, char heuristic) {
-        // print the search summary once the robot reached the goal
-        print_hyphens(map.length * 3);
-        System.out.println("Summary");
-
-        if (path_to_bob.isEmpty() || path_to_goal.isEmpty()) {
-            System.out.println("Unsuccessful search operation");
-            System.out.println("Algorithm: " + algorithm);
-            if (path_to_bob.isEmpty()) {
-                System.out.println("Cannot get to Bob");
-            } else {
-                print_path("Find Bob", map, map_no, path_to_bob, algorithm, heuristic);
-                System.out.println("Cannot get Bob to safety");
-            }
-        } else {
-            print_path("Find Bob", map, map_no, path_to_bob, algorithm, heuristic);
-            print_path("Find safe zone", map, map_no, path_to_goal, algorithm, heuristic);
-            System.out.println("Path cost: " + ((path_to_bob.size() + path_to_goal.size()) - 2));
-        }
-
+        System.out.println("Path cost: " + ((path.size() + path.size()) - 2));
         System.out.println("State explored: " + explored_state);
         print_hyphens(map.length * 3);
     }
+
+
+//    public static void print_summary(String algorithm, ArrayList<Node> path_to_bob, ArrayList<Node> path_to_goal, char[][] map, int map_no, int explored_state, char heuristic) {
+//        // print the search summary once the robot reached the goal
+//        print_hyphens(map.length * 3);
+//        System.out.println("Summary");
+//
+//        if (path_to_bob.isEmpty() || path_to_goal.isEmpty()) {
+//            System.out.println("Unsuccessful search operation");
+//            System.out.println("Algorithm: " + algorithm);
+//            if (path_to_bob.isEmpty()) {
+//                System.out.println("Cannot get to Bob");
+//            } else {
+//                print_path("Find Bob", map, map_no, path_to_bob, algorithm, heuristic);
+//                System.out.println("Cannot get Bob to safety");
+//            }
+//        } else {
+//            print_path("Find Bob", map, map_no, path_to_bob, algorithm, heuristic);
+//            print_path("Find safe zone", map, map_no, path_to_goal, algorithm, heuristic);
+//            System.out.println("Path cost: " + ((path_to_bob.size() + path_to_goal.size()) - 2));
+//        }
+//
+//        System.out.println("State explored: " + explored_state);
+//        print_hyphens(map.length * 3);
+//    }
 
 }
