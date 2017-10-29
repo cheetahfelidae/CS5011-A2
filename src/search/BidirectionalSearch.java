@@ -18,7 +18,7 @@ public class BidirectionalSearch extends InformedSearch {
     public void search(char goal) {
         // from start
         clear_data();
-        Map<Node, Node> prev = this.getPrev();
+        Map<Node, Node> prev = this.get_prev_path();
         ArrayList<Node> successors;
         ArrayList<Node> explored = this.get_explored();
         Node startNode = this.get_initial_node();

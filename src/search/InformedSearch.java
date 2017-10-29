@@ -27,7 +27,6 @@ public class InformedSearch extends Search {
         set_dest_node(goal);
 
         System.out.println("START NODE: " + initial_node);
-        System.out.println();
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
 
@@ -46,7 +45,7 @@ public class InformedSearch extends Search {
             ArrayList<Node> successors = expand(cur_node, frontier, explored);
             frontier.addAll(successors);
             for (Node node : successors) {
-                getPrev().put(node, cur_node);
+                get_prev_path().put(node, cur_node);
             }
 
             Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
@@ -197,6 +196,6 @@ public class InformedSearch extends Search {
 
     public void process() {
         super.process();
-        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), heuristicType);
+        Printer.print_summary(algorithm, path_to_bob, path_to_goal, get_map(), get_map_no(), get_explored_state(), heuristicType);
     }
 }

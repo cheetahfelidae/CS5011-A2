@@ -17,8 +17,8 @@ public class Part3 {
             char heuristic = args[1].charAt(0);
             int map_no = Integer.parseInt(args[2]);
 
-            System.out.println("search.constantVariable.Map " + map_no);
-            System.out.println("search.constantVariable.Algorithm: " + algorithm);
+            System.out.println("Map: " + map_no);
+            System.out.println("Algorithm: " + algorithm);
 
             new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no).process();
 

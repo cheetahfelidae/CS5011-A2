@@ -6,8 +6,7 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class Search {
-    private Map<Node, Node> prev = new HashMap<>();
-    private ArrayList<Node> path_to_goal = new ArrayList<>();
+    private Map<Node, Node> prev_path = new HashMap<>();
     private ArrayList<Node> explored = new ArrayList<>();
     private Node initial_node;
     private Node dest_node;
@@ -15,7 +14,7 @@ public class Search {
     private int map_no, explored_state;
 
     protected ArrayList<Node> path_to_bob = new ArrayList<>();
-    protected ArrayList<Node> directionGoal = new ArrayList<>();
+    protected ArrayList<Node> path_to_goal = new ArrayList<>();
     protected String algorithm;
 
     public Search(String algorithm, char[][] map, int map_no) {
@@ -58,28 +57,28 @@ public class Search {
         return map;
     }
 
-    public void create_path_to_goal(Node currentNode) {
+    public ArrayList<Node> create_path_to_dest(Node node) {
         // construct path to goal by backtracking from goal to initial position
-        Node node = currentNode;
-        while (node != null) {
-            path_to_goal.add(node);
-            node = prev.get(node);
+        ArrayList<Node> path = new ArrayList<>();
+
+        Node n = node;
+        while (n != null) {
+            path.add(n);
+            n = prev_path.get(n);
         }
 
-        Collections.reverse(path_to_goal);
-    }
+        Collections.reverse(path);
 
-    public ArrayList<Node> get_path_to_goal() {
-        return path_to_goal;
+        return path;
     }
 
     public ArrayList<Node> get_explored() {
         return explored;
     }
 
-    public Map<Node, Node> getPrev() {
+    public Map<Node, Node> get_prev_path() {
         // get parent node of current node
-        return prev;
+        return prev_path;
     }
 
     public Node get_dest_node() {
@@ -151,8 +150,7 @@ public class Search {
 
     protected void clear_data() {
         get_explored().clear();
-        get_path_to_goal().clear();
-        getPrev().clear();
+        get_prev_path().clear();
     }
 
     protected boolean reach_goal(Node node, char goal) {
@@ -160,9 +158,9 @@ public class Search {
         if (node.equals(get_dest_node())) {
             // assign new initial state
             set_initial_node(node);
-            create_path_to_goal(node);
             set_explored_state(get_explored_state() + 1);
-            save_objective_path(goal);
+            ArrayList<Node> path = create_path_to_dest(node);
+            save_objective_path(path, goal);
             print_objective_completed(goal);
 
             return true;
@@ -171,15 +169,15 @@ public class Search {
         return false;
     }
 
-    private void save_objective_path(char dest) {
+    private void save_objective_path(ArrayList<Node> path, char dest) {
         // save path to Bob or path to goal
-        for (Node node : get_path_to_goal()) {
+        for (Node node : path) {
             switch (Position.convert(dest)) {
                 case BOB_POSITION:
                     path_to_bob.add(node);
                     break;
                 case GOAL_POSITION:
-                    directionGoal.add(node);
+                    path_to_goal.add(node);
                     break;
                 default:
                     Logger.getLogger(Search.class.getName()).severe("DESTINATION " + dest + " IS UNRECOGNISED");
@@ -201,10 +199,6 @@ public class Search {
         }
     }
 
-    protected ArrayList<Node> get_path_to_bob() {
-        return this.path_to_bob;
-    }
-
     protected void check_failure(char dest) {
     }
 
@@ -213,7 +207,7 @@ public class Search {
         search(Position.BOB_POSITION.value());
 
         // only search for goal position if the robot managed to find a way to get to Bob
-        if (!get_path_to_bob().isEmpty()) {
+        if (!path_to_bob.isEmpty()) {
             search(Position.GOAL_POSITION.value());
         }
     }

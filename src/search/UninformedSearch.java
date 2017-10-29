@@ -24,7 +24,6 @@ public class UninformedSearch extends Search {
         set_dest_node(goal);
 
         System.out.println("START NODE: " + initial_node);
-        System.out.println();
 
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
@@ -43,7 +42,7 @@ public class UninformedSearch extends Search {
 
             // expand the nodes
             for (Node node : expand(cur_node, frontier, explored)) {
-                getPrev().put(node, cur_node);
+                get_prev_path().put(node, cur_node);
 
                 switch (Algorithm.convert(algorithm)) {
                     case BREADTH_FIRST_SEARCH:
@@ -104,6 +103,6 @@ public class UninformedSearch extends Search {
 
     public void process() {
         super.process();
-        Printer.print_summary(algorithm, path_to_bob, directionGoal, get_map(), get_map_no(), get_explored_state(), Heuristic.NONE.value());
+        Printer.print_summary(algorithm, path_to_bob, path_to_goal, get_map(), get_map_no(), get_explored_state(), Heuristic.NONE.value());
     }
 }

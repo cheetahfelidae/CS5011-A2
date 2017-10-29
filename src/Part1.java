@@ -15,8 +15,8 @@ public class Part1 {
             String algorithm = args[0];
             int map_no = Integer.parseInt(args[1]);
 
-            System.out.println("search.constantVariable.Map " + map_no);
-            System.out.println("search.constantVariable.Algorithm: " + algorithm);
+            System.out.println("Map: " + map_no);
+            System.out.println("Algorithm: " + algorithm);
 
             new UninformedSearch(algorithm, Map.getMap(map_no), map_no).process();
 
