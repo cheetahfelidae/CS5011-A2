@@ -22,18 +22,21 @@ public class Part1 {
         try {
             String algorithm = args[0];
             int map_no = Integer.parseInt(args[1]);
+            char[][] map = Map.getMap(map_no);
 
-            System.out.println("Map: " + map_no);
-            System.out.println("Algorithm: " + algorithm);
+            System.out.println("MAP: " + map_no);
+            System.out.println("ALGORITHM: " + algorithm);
 
-            UninformedSearch bob_search = new UninformedSearch(algorithm, Map.getMap(map_no), map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
+            // FIND PATH TO BOB
+            UninformedSearch bob_search = new UninformedSearch(algorithm, map, map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
-            print_summary(algorithm, Map.getMap(map_no), map_no, path_to_bob, bob_search.get_explored_state(), Heuristic.NONE.value());
+            print_summary(algorithm, map, map_no, path_to_bob, bob_search.get_explored_state(), Heuristic.NONE.value());
 
+            // FIND PATH FROM BOB TO GOAL
             if (!path_to_bob.isEmpty()) {
-                UninformedSearch goal_search = new UninformedSearch(algorithm, Map.getMap(map_no), map_no, BOB_POSITION.value(), GOAL_POSITION.value());
+                UninformedSearch goal_search = new UninformedSearch(algorithm, map, map_no, BOB_POSITION.value(), GOAL_POSITION.value());
                 ArrayList<Node> path = goal_search.search();
-                print_summary(algorithm, Map.getMap(map_no), map_no, path, goal_search.get_explored_state(), Heuristic.NONE.value());
+                print_summary(algorithm, map, map_no, path, goal_search.get_explored_state(), Heuristic.NONE.value());
             }
 
         } catch (Exception e) {

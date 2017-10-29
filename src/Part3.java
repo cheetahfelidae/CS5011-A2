@@ -20,8 +20,8 @@ public class Part3 {
             char heuristic = args[1].charAt(0);
             int map_no = Integer.parseInt(args[2]);
 
-            System.out.println("Map: " + map_no);
-            System.out.println("Algorithm: " + algorithm);
+            System.out.println("MAP: " + map_no);
+            System.out.println("ALGORITHM: " + algorithm);
 
             BidirectionalSearch bidirectionalSearch = new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
             bidirectionalSearch.search();

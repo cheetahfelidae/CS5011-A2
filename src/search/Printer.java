@@ -91,7 +91,7 @@ public class Printer {
         print_hyphens(map.length * 3);
         print_full_algo_name(algorithm);
 
-        System.out.println("Map: " + map_no);
+        System.out.println("MAP: " + map_no);
 //        System.out.println("Objective: " + objective);
 
         switch (Heuristic.convert(heuristic)) {
@@ -116,8 +116,8 @@ public class Printer {
 
         print_hyphens(map.length * 3);
 
-        System.out.println("Path cost: " + ((path.size() + path.size()) - 2));
-        System.out.println("State explored: " + explored_state);
+        System.out.println("PATH COST: " + ((path.size() + path.size()) - 2));
+        System.out.println("NUMBER OF EXPLORED NODES: " + explored_state);
         print_hyphens(map.length * 3);
     }
 
@@ -129,7 +129,7 @@ public class Printer {
 //
 //        if (path_to_bob.isEmpty() || path_to_goal.isEmpty()) {
 //            System.out.println("Unsuccessful search operation");
-//            System.out.println("Algorithm: " + algorithm);
+//            System.out.println("ALGORITHM: " + algorithm);
 //            if (path_to_bob.isEmpty()) {
 //                System.out.println("Cannot get to Bob");
 //            } else {
