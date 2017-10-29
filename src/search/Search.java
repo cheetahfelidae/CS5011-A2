@@ -20,7 +20,7 @@ public class Search {
     public Search(String algorithm, char[][] map, int map_no) {
         this.algorithm = algorithm;
         this.map = map;
-        this.initial_node = find_node(Position.BOB_POSITION.value());
+        this.initial_node = find_node(Position.ROBOT_POSITION.value());
         this.set_map_no(map_no);
         this.set_explored_state(0);
     }
