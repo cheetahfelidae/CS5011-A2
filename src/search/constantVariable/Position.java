@@ -9,7 +9,7 @@ public enum Position {
     UNSELECTED_POSITION('-'),
     CURRENT_POSITION('C'),
     FRONTIER_POSITION('F'),
-    EXPLORED_POSITION('E');
+    EXPLORED_POSITION('.');
 
     private char position;
 

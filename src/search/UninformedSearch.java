@@ -2,12 +2,11 @@ package search;
 
 import search.constantVariable.Algorithm;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
+import java.util.*;
 import java.util.logging.Logger;
 
-import static search.Printer.print_status;
+import static search.Printer.print_animate_search;
+import static search.Printer.print_hyphens;
 
 public class UninformedSearch extends Search {
     private Deque<Node> frontier = new ArrayDeque<>();
@@ -16,29 +15,35 @@ public class UninformedSearch extends Search {
         super(algorithm, map, initial_position, dest_position);
     }
 
+    /**
+     * Breadth first search: explores the nodes at the same level first then next level.
+     * Depth first search: explores as far as possible the nodes along a branch.
+     *
+     * @return
+     */
     public ArrayList<Node> search() {
-        ArrayList<Node> explored = get_explored();
+        Map<Node, Node> ancestors = new HashMap<>();
+        ArrayList<Node> path_to_dest = new ArrayList<>();
+        ArrayList<Node> explored = new ArrayList<>();
 
-        System.out.println("INITIAL POSITION: " + initial_node);
-
-        // BFS uses Deque to store frontier
         frontier.add(initial_node);
-        Node cur_node = initial_node;
-        print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
 
-        // Perform search
+        int round = 1;
         while (!frontier.isEmpty()) {
-            // remove the the first node from the frontier
-            cur_node = frontier.poll();
+            Node cur_node = frontier.poll();
             explored.add(cur_node);
 
-            if (reach_dest(cur_node)) {
+            if (cur_node.equals(dest_node)) {// GOAL-TEST
+                num_explored_nodes++;
+
+                path_to_dest = create_path_to_dest(ancestors, cur_node);
+
+                System.out.println("DESTINATION IS FOUND");
                 break;
             }
 
-            // expand the nodes
             for (Node node : expand(cur_node, frontier, explored)) {
-                get_prev_path().put(node, cur_node);
+                ancestors.put(node, cur_node);
 
                 switch (Algorithm.convert(algorithm)) {
                     case BREADTH_FIRST_SEARCH:
@@ -52,31 +57,64 @@ public class UninformedSearch extends Search {
                 }
 
             }
-            print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
-            check_failure();
 
-            // keep track of states explored
+            print_animate_search(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
+
             if (!cur_node.equals(initial_node)) {
-                set_explored_state(get_num_explored_nodes() + 1);
+                num_explored_nodes++;
             }
         }
 
         return path_to_dest;
     }
 
-    protected void check_failure() {
-        if (frontier.isEmpty()) {
-            System.out.println("THERE IS NO MORE NODE TO BE EXPLORED, THE SEARCH IS OVER");
+    /**
+     * Gets neighbor nodes (Up, Down, Left and Right) of the node.
+     *
+     * @param node
+     * @return
+     */
+    protected ArrayList<Node> get_neighbors(Node node) {
+        ArrayList<Node> neighbors = new ArrayList<>();
+        int x = node.getX(), y = node.getY();
+
+        // Up
+        if (is_legal_move(x - 1, y)) {
+            neighbors.add(new Node(x - 1, y));
         }
+
+        // Left
+        if (is_legal_move(x, y - 1)) {
+            neighbors.add(new Node(x, y - 1));
+        }
+
+        // Right
+        if (is_legal_move(x, y + 1)) {
+            neighbors.add(new Node(x, y + 1));
+        }
+
+        // Down
+        if (is_legal_move(x + 1, y)) {
+            neighbors.add(new Node(x + 1, y));
+        }
+
+        return neighbors;
     }
 
+    /**
+     * Expand nodes as long as they are  to be explored next.
+     *
+     * @param node
+     * @param frontier
+     * @param explored
+     * @return
+     */
     private ArrayList<Node> expand(Node node, Deque<Node> frontier, ArrayList<Node> explored) {
-        // expand the nodes and return list of successor nodes
         ArrayList<Node> successors = new ArrayList<>();
 
-        for (Node state : get_next_states(node)) {
-            if (!explored.contains(state) && !frontier.contains(state)) {
-                successors.add(state);
+        for (Node n : get_neighbors(node)) {
+            if (!(explored.contains(n) || frontier.contains(n))) {
+                successors.add(n);
             }
         }
 

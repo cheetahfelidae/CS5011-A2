@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public class Node {
     private int x, y;
-    private double heuristic, score, pathCost;
+    private double heuristic, score, pathCost = 0;
 
     public Node(int x, int y) {
         this.x = x;

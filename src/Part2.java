@@ -6,9 +6,7 @@ import search.constantVariable.Map;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static search.Printer.print_full_algo_name;
-import static search.Printer.print_hyphens;
-import static search.Printer.print_summary;
+import static search.Printer.*;
 import static search.constantVariable.Position.BOB_POSITION;
 import static search.constantVariable.Position.GOAL_POSITION;
 import static search.constantVariable.Position.ROBOT_POSITION;
@@ -33,22 +31,19 @@ public class Part2 {
             int map_no = Integer.parseInt(args[2]);
             char[][] map = Map.getMap(map_no);
 
-            print_hyphens(map.length * 3);
-            System.out.println("MAP: " + map_no);
-            print_full_algo_name(algorithm);
-            print_hyphens(map.length * 3);
-
-            System.out.println("A PATH FROM INITIAL TO BOB..");
             InformedSearch bob_search = new InformedSearch(algorithm, heuristic, map, ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
-            print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
+            print_sub_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 
-            System.out.println("A PATH FROM BOB TO GOAL..");
+            InformedSearch goal_search = new InformedSearch(algorithm, heuristic, map, BOB_POSITION.value(), GOAL_POSITION.value());
+            ArrayList<Node> path_to_goal = null;
             if (!path_to_bob.isEmpty()) {
-                InformedSearch goal_search = new InformedSearch(algorithm, heuristic, map, BOB_POSITION.value(), GOAL_POSITION.value());
-                ArrayList<Node> path = goal_search.search();
-                print_summary(map, path, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
+                path_to_goal = goal_search.search();
+                print_sub_summary(map, path_to_goal, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
             }
+
+            System.out.println();
+            print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), path_to_goal, goal_search.get_num_explored_nodes());
 
         } catch (Exception e) {
             Logger.getLogger(Part2.class.getName()).warning("java part2 <algorithm> <heuristic> <map_no>");

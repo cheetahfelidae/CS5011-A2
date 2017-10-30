@@ -1,5 +1,4 @@
 import search.BidirectionalSearch;
-import search.InformedSearch;
 import search.Node;
 import search.constantVariable.Heuristic;
 import search.constantVariable.Map;
@@ -7,11 +6,8 @@ import search.constantVariable.Map;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import static search.Printer.print_full_algo_name;
-import static search.Printer.print_hyphens;
-import static search.Printer.print_summary;
+import static search.Printer.*;
 import static search.constantVariable.Position.BOB_POSITION;
-import static search.constantVariable.Position.GOAL_POSITION;
 import static search.constantVariable.Position.ROBOT_POSITION;
 
 /**
@@ -34,21 +30,18 @@ public class Part3 {
             int map_no = Integer.parseInt(args[2]);
             char[][] map = Map.getMap(map_no);
 
-            print_hyphens(map.length * 3);
-            System.out.println("MAP: " + map_no);
-            print_full_algo_name(algorithm);
-            print_hyphens(map.length * 3);
 
+            print_hyphens(map.length * 3);
             System.out.println("A PATH FROM INITIAL TO BOB..");
             BidirectionalSearch bob_search = new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
-            print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
+            print_sub_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 
 //            System.out.println("A PATH FROM BOB TO GOAL..");
 //            if (!path_to_bob.isEmpty()) {
 //                BidirectionalSearch goal_search = new BidirectionalSearch(algorithm, heuristic, map, BOB_POSITION.value(), GOAL_POSITION.value());
 //                ArrayList<Node> path = goal_search.search();
-//                print_summary(map, path, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
+//                print_sub_summary(map, path, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
 //            }
 
         } catch (Exception e) {

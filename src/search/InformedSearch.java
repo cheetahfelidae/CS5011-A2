@@ -1,11 +1,14 @@
 package search;
 
 import search.constantVariable.Algorithm;
-import search.constantVariable.Position;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
+
+import static search.Printer.print_animate_search;
 
 
 public class InformedSearch extends Search {
@@ -18,36 +21,36 @@ public class InformedSearch extends Search {
     }
 
     public ArrayList<Node> search() {
-        ArrayList<Node> explored = this.get_explored();
-        initial_node.setPathCost(0);
+        Map<Node, Node> ancestors = new HashMap<>();
+        ArrayList<Node> path_to_dest = new ArrayList<>();
+        ArrayList<Node> explored = new ArrayList<>();
 
-        System.out.println("INITIAL POSITION: " + initial_node);
-        // BFS uses Deque to store frontier
         frontier.add(initial_node);
 
-        // Perform search
+        int round = 1;
         while (!frontier.isEmpty()) {
-            // remove the the first node from the frontier
             Node cur_node = frontier.poll();
-            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
             explored.add(cur_node);
 
-            if (reach_dest(cur_node)) {
+            if (cur_node.equals(dest_node)) {// GOAL-TEST
+                num_explored_nodes++;
+
+                path_to_dest = create_path_to_dest(ancestors, cur_node);
+
+                System.out.println("DESTINATION IS FOUND");
                 break;
             }
 
-            // expand the nodes
             ArrayList<Node> successors = expand(cur_node, frontier, explored);
             frontier.addAll(successors);
             for (Node node : successors) {
-                get_prev_path().put(node, cur_node);
+                ancestors.put(node, cur_node);
             }
 
-            Printer.print_status(cur_node, explored, get_map(), frontier.contains(cur_node));
-            check_failure();
-            // keep track of states explored
+            print_animate_search(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
+
             if (!cur_node.equals(initial_node)) {
-                set_explored_state(this.get_num_explored_nodes() + 1);
+                num_explored_nodes++;
             }
         }
 
@@ -56,7 +59,7 @@ public class InformedSearch extends Search {
 
     protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored) {
         // retrieve successors nodes
-        ArrayList<Node> next_states = get_next_states(node);
+        ArrayList<Node> next_states = get_neighbors(node);
         ArrayList<Node> successors = new ArrayList<>();
 
         for (Node state : next_states) {
@@ -93,20 +96,24 @@ public class InformedSearch extends Search {
         return successors;
     }
 
-    public ArrayList<Node> get_next_states(Node node) {
+    /**
+     * Gets all neighbor nodes (North, South, East, West) of the node.
+     * BestFS score f(n) = h(n)
+     * A* score f(n) = g(n) + h(n)
+     * <p>
+     * h(n) = estimated cost of the path from the state at node n to the goal
+     * g(n) = the cost of the path from the start to the node n
+     *
+     * @param node
+     * @return
+     */
+    public ArrayList<Node> get_neighbors(Node node) {
         int x = node.getX();
         int y = node.getY();
         ArrayList<Node> nextStates = new ArrayList<>();
 
-        /**
-         * BestFS score f(n) = h(n)
-         * A* score f(n) = g(n) + h(n)
-         *
-         * h(n) = estimated cost of the path from the state at node n to the goal
-         * g(n) = the cost of the path from the start to the node n
-         */
         // Up
-        if (is_valid_child(x - 1, y)) {
+        if (is_legal_move(x - 1, y)) {
             Node up = new Node(x - 1, y);
             up.setPathCost(node.getPathCost() + 1);
             up.setHeuristic(heuristic, dest_node);
@@ -121,7 +128,7 @@ public class InformedSearch extends Search {
         }
 
         // Down
-        if (is_valid_child(x + 1, y)) {
+        if (is_legal_move(x + 1, y)) {
             Node down = new Node(x + 1, y);
             down.setPathCost(node.getPathCost() + 1);
             down.setHeuristic(heuristic, dest_node);
@@ -136,7 +143,7 @@ public class InformedSearch extends Search {
         }
 
         // Left
-        if (is_valid_child(x, y - 1)) {
+        if (is_legal_move(x, y - 1)) {
             Node left = new Node(x, y - 1);
             left.setPathCost(node.getPathCost() + 1);
             left.setHeuristic(heuristic, dest_node);
@@ -151,7 +158,7 @@ public class InformedSearch extends Search {
         }
 
         // Right
-        if (is_valid_child(x, y + 1)) {
+        if (is_legal_move(x, y + 1)) {
             Node right = new Node(x, y + 1);
             right.setPathCost(node.getPathCost() + 1);
             right.setHeuristic(heuristic, dest_node);
@@ -169,18 +176,8 @@ public class InformedSearch extends Search {
     }
 
     protected void check_failure(char dest) {
-        // if there's no more nodes to be explored, the search is failed
         if (frontier.isEmpty()) {
-            switch (Position.convert(dest)) {
-                case BOB_POSITION:
-                    Logger.getLogger(InformedSearch.class.getName()).warning("BOB IS NEVER REACHED");
-                    break;
-                case GOAL_POSITION:
-                    Logger.getLogger(InformedSearch.class.getName()).warning("SAFETY GOAL IS NEVER REACHED");
-                    break;
-                default:
-                    Logger.getLogger(InformedSearch.class.getName()).warning("DESTINATION " + dest + " IS UNRECOGNISED");
-            }
+            System.out.println("THERE IS NO MORE NODE TO BE EXPLORED, THE SEARCH IS OVER");
         }
     }
 }
