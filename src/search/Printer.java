@@ -174,10 +174,12 @@ public class Printer {
         print_path(map, path);
         print_hyphens(map.length * 3);
 
-        print_hyphens(map.length * 6);
-        System.out.printf("PATH COST (excluding initial && destination nodes): %d - 2 = %d\n", path.size(), path.size() - 2);
-        System.out.println("#VISITED SEARCH STATES: " + num_explored_nodes);
-        print_hyphens(map.length * 6);
+        if (path.size() > 0 && num_explored_nodes > 0) {
+            print_hyphens(map.length * 6);
+            System.out.printf("PATH COST (excluding initial && destination nodes): %d - 2 = %d\n", path.size(), path.size() - 2);
+            System.out.println("#VISITED SEARCH STATES: " + num_explored_nodes);
+            print_hyphens(map.length * 6);
+        }
     }
 
     public static void print_summary(char[][] map, ArrayList<Node> path_to_bob, int num_explored_nodes_to_bob, ArrayList<Node> path_to_goal, int num_explored_nodes_to_goal) {
@@ -194,9 +196,13 @@ public class Printer {
             System.out.println("SUMMARY - ROBOT -> BOB -> GOAL");
             System.out.printf("PATH COST (excluding initial && goal nodes): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
             System.out.printf("#VISITED SEARCH STATES: %d + %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
+        } else {
+            System.out.println("THE SEARCH IS FAILED..");
         }
-
         print_hyphens(map.length * 6);
+
+        System.out.println();
+        System.out.println("BYE..");
     }
 
 }
