@@ -13,7 +13,7 @@ import static search.constantVariable.Position.*;
  * This class is responsible for printing a result of the programme to the commandline terminal.
  */
 public class Printer {
-    private static final int ONE_SECOND = 1000;
+    public static final int ONE_SECOND = 1000;
     private static final String TWO_SPACES = "  ";
 
     public static void print_hyphens(int num) {
@@ -23,10 +23,19 @@ public class Printer {
         System.out.println();
     }
 
+    public static void print_timer(String prefix_text, int seconds) {
+        for (int i = seconds; i > 0; i--) {
+            System.out.print(prefix_text + " " + i + " SECONDS..");
+            sleep(ONE_SECOND);
+            clear_screen();
+        }
+        System.out.println();
+    }
+
     /**
      * This method is used to clean screen to be able to render a motion.
      */
-    private static void clear_screen() {
+    public static void clear_screen() {
         System.out.print("\033[H\033[2J");
         System.out.flush();
     }
@@ -36,7 +45,7 @@ public class Printer {
      *
      * @param millis the number of milli seconds of the thread sleep.
      */
-    private static void sleep(int millis) {
+    public static void sleep(int millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {
@@ -47,23 +56,24 @@ public class Printer {
     // TODO - to be improved
     public static void print_animate_search(int round, Node currentNode, ArrayList<Node> explored, char[][] map, boolean frontier_contains_node, String algorithm, Node initial_node, Node dest_node) {
         if (round == 1) {
-            System.out.println("THE SEARCH STARTS IN 3 SEC...");
-            sleep(ONE_SECOND * 3);
+            clear_screen();
+            print_timer("THE SEARCH STARTS IN", 5);
         } else {
-            sleep(ONE_SECOND);
+            sleep(ONE_SECOND / 4);
         }
         clear_screen();
 
         print_hyphens(map.length * 3);
         System.out.println("INITIAL POSITION: " + initial_node);
+        System.out.println("OBJECTIVE: ");
         print_full_algo_name(algorithm);
         int x = dest_node.getX(), y = dest_node.getY();
         switch (Position.convert(map[x][y])) {
             case BOB_POSITION:
-                System.out.println("ROBOT(" + ROBOT_POSITION.value() + ") FINDING BOB(" + BOB_POSITION.value() + ")..");
+                System.out.println("Robot(" + ROBOT_POSITION.value() + ") Finding Bob(" + BOB_POSITION.value() + ")..");
                 break;
             case GOAL_POSITION:
-                System.out.println("ROBOT TAKING BOB(" + BOB_POSITION.value() + ") TO GOAL(" + GOAL_POSITION.value() + ")..");
+                System.out.println("Robot taking Bob(" + BOB_POSITION.value() + ") to Goal(" + GOAL_POSITION.value() + ")..");
                 break;
             default:
                 Logger.getLogger(Printer.class.getName()).warning("FIND WHOM (" + x + "," + y + ") IS UNRECOGNISED");
@@ -158,14 +168,15 @@ public class Printer {
                 Logger.getLogger(Printer.class.getName()).severe("HEURISTIC " + heuristic + " IS UNRECOGNISED");
 
         }
+
+        System.out.println("SUMMARY - INITIAL -> DESTINATION");
         print_hyphens(map.length * 3);
         print_path(map, path);
         print_hyphens(map.length * 3);
 
         print_hyphens(map.length * 6);
-        System.out.println("SUMMARY - INITIAL -> DESTINATION");
-        System.out.println("PATH COST (EXCLUDING INITIAL AND DESTINATION NODES): " + (path.size() - 2));
-        System.out.println("NUMBER OF VISITED SEARCH STATES: " + num_explored_nodes);
+        System.out.printf("PATH COST (excluding initial && destination nodes): %d - 2 = %d\n", path.size(), path.size() - 2);
+        System.out.println("#VISITED SEARCH STATES: " + num_explored_nodes);
         print_hyphens(map.length * 6);
     }
 
@@ -181,8 +192,8 @@ public class Printer {
 
         if (!(path_to_bob.isEmpty() || path_to_goal.isEmpty())) {
             System.out.println("SUMMARY - ROBOT -> BOB -> GOAL");
-            System.out.printf("PATH COST (EXCLUDING INITIAL AND GOAL NODES): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
-            System.out.printf("NUMBER OF VISITED SEARCH STATES: %d %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
+            System.out.printf("PATH COST (excluding initial && goal nodes): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
+            System.out.printf("#VISITED SEARCH STATES: %d + %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
         }
 
         print_hyphens(map.length * 6);

@@ -39,6 +39,7 @@ public class UninformedSearch extends Search {
                 path_to_dest = create_path_to_dest(ancestors, cur_node);
 
                 System.out.println("DESTINATION IS FOUND");
+                print_hyphens(map.length * 3);
                 break;
             }
 

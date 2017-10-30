@@ -35,6 +35,9 @@ public class Part2 {
             ArrayList<Node> path_to_bob = bob_search.search();
             print_sub_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 
+            System.out.println("CLEAR SCREEN IN 15 SECONDS");
+            sleep(ONE_SECOND * 15);
+
             InformedSearch goal_search = new InformedSearch(algorithm, heuristic, map, BOB_POSITION.value(), GOAL_POSITION.value());
             ArrayList<Node> path_to_goal = null;
             if (!path_to_bob.isEmpty()) {
@@ -42,7 +45,7 @@ public class Part2 {
                 print_sub_summary(map, path_to_goal, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
             }
 
-            System.out.println();
+            System.out.println("\n\n\n");
             print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), path_to_goal, goal_search.get_num_explored_nodes());
 
         } catch (Exception e) {
