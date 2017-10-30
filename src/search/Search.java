@@ -6,32 +6,27 @@ public class Search {
     private Map<Node, Node> prev_path = new HashMap<>();
     private ArrayList<Node> explored = new ArrayList<>();
     private char[][] map;
-    private int map_no, explored_state;
+    private int num_explored_nodes;
 
     protected String algorithm;
     protected Node initial_node;
     protected Node dest_node;
     protected ArrayList<Node> path_to_dest = new ArrayList<>();
 
-    public Search(String algorithm, char[][] map, int map_no, char initial_position, char dest_position) {
+    public Search(String algorithm, char[][] map, char initial_position, char dest_position) {
         this.algorithm = algorithm;
         this.map = map;
         this.initial_node = find_node(initial_position);
         this.dest_node = find_node(dest_position);
-        this.set_map_no(map_no);
         this.set_explored_state(0);
     }
 
     public void set_explored_state(int explored_state) {
-        this.explored_state = explored_state;
+        this.num_explored_nodes = explored_state;
     }
 
     public void set_initial_node(Node initial_node) {
         this.initial_node = initial_node;
-    }
-
-    public void set_map_no(int map_no) {
-        this.map_no = map_no;
     }
 
     public char[][] get_map() {
@@ -62,9 +57,9 @@ public class Search {
         return prev_path;
     }
 
-    public int get_explored_state() {
+    public int get_num_explored_nodes() {
         // count how many states have been explored
-        return explored_state;
+        return num_explored_nodes;
     }
 
     public void search(char goal) {
@@ -125,7 +120,7 @@ public class Search {
         if (node.equals(dest_node)) {
             // assign new initial state
             set_initial_node(node);
-            set_explored_state(get_explored_state() + 1);
+            set_explored_state(get_num_explored_nodes() + 1);
             ArrayList<Node> path = create_path_to_dest(node);
             save_objective_path(path);
 

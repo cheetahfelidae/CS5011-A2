@@ -7,15 +7,13 @@ import java.util.ArrayList;
 import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
-import static search.Printer.print_summary;
-
 
 public class InformedSearch extends Search {
     protected PriorityQueue<Node> frontier = new PriorityQueue<>(new NodeComparator());
     protected char heuristic;
 
-    public InformedSearch(String algorithm, char heuristic, char[][] map, int mapNumber, char initial_position, char dest_position) {
-        super(algorithm, map, mapNumber, initial_position, dest_position);
+    public InformedSearch(String algorithm, char heuristic, char[][] map, char initial_position, char dest_position) {
+        super(algorithm, map, initial_position, dest_position);
         this.heuristic = heuristic;
     }
 
@@ -23,7 +21,7 @@ public class InformedSearch extends Search {
         ArrayList<Node> explored = this.get_explored();
         initial_node.setPathCost(0);
 
-        System.out.println("START NODE: " + initial_node);
+        System.out.println("INITIAL POSITION: " + initial_node);
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
 
@@ -49,7 +47,7 @@ public class InformedSearch extends Search {
             check_failure();
             // keep track of states explored
             if (!cur_node.equals(initial_node)) {
-                set_explored_state(this.get_explored_state() + 1);
+                set_explored_state(this.get_num_explored_nodes() + 1);
             }
         }
 

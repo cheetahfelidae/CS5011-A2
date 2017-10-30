@@ -6,6 +6,8 @@ import search.constantVariable.Map;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
+import static search.Printer.print_full_algo_name;
+import static search.Printer.print_hyphens;
 import static search.Printer.print_summary;
 import static search.constantVariable.Position.BOB_POSITION;
 import static search.constantVariable.Position.GOAL_POSITION;
@@ -18,25 +20,32 @@ import static search.constantVariable.Position.ROBOT_POSITION;
  */
 public class Part1 {
 
+    /**
+     * The programme is designed to search for Bob first, if Bob is found and can be reached, then it will search for the safety goal position from the Bob's position.
+     *
+     * @param args two arguments are required.
+     */
     public static void main(String[] args) {
         try {
             String algorithm = args[0];
             int map_no = Integer.parseInt(args[1]);
             char[][] map = Map.getMap(map_no);
 
+            print_hyphens(map.length * 3);
             System.out.println("MAP: " + map_no);
-            System.out.println("ALGORITHM: " + algorithm);
+            print_full_algo_name(algorithm);
+            print_hyphens(map.length * 3);
 
-            // FIND PATH TO BOB
-            UninformedSearch bob_search = new UninformedSearch(algorithm, map, map_no, ROBOT_POSITION.value(), BOB_POSITION.value());
+            System.out.println("A PATH FROM INITIAL TO BOB..");
+            UninformedSearch bob_search = new UninformedSearch(algorithm, map, ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
-            print_summary(algorithm, map, map_no, path_to_bob, bob_search.get_explored_state(), Heuristic.NONE.value());
+            print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 
-            // FIND PATH FROM BOB TO GOAL
+            System.out.println("A PATH FROM BOB TO GOAL..");
             if (!path_to_bob.isEmpty()) {
-                UninformedSearch goal_search = new UninformedSearch(algorithm, map, map_no, BOB_POSITION.value(), GOAL_POSITION.value());
+                UninformedSearch goal_search = new UninformedSearch(algorithm, map, BOB_POSITION.value(), GOAL_POSITION.value());
                 ArrayList<Node> path = goal_search.search();
-                print_summary(algorithm, map, map_no, path, goal_search.get_explored_state(), Heuristic.NONE.value());
+                print_summary(map, path, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
             }
 
         } catch (Exception e) {

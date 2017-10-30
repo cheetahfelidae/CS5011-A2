@@ -12,7 +12,7 @@ import static search.constantVariable.Position.*;
 public class Printer {
     private static final String TWO_SPACES = "  ";
 
-    private static void print_hyphens(int num) {
+    public static void print_hyphens(int num) {
         for (int i = 0; i < num; i++) {
             System.out.print("-");
         }
@@ -43,7 +43,8 @@ public class Printer {
         print_hyphens(map.length * 3);
     }
 
-    private static void print_full_algo_name(String algorithm) {
+    public static void print_full_algo_name(String algorithm) {
+        System.out.print("ALGORITHM: ");
         switch (Algorithm.convert(algorithm)) {
             case BREADTH_FIRST_SEARCH:
                 System.out.println("Breadth First Search");
@@ -87,22 +88,18 @@ public class Printer {
 
     }
 
-    public static void print_summary(String algorithm, char[][] map, int map_no, ArrayList<Node> path, int explored_state, char heuristic) {
+    public static void print_summary(char[][] map, ArrayList<Node> path, int num_explored_nodes, char heuristic) {
         print_hyphens(map.length * 3);
-        print_full_algo_name(algorithm);
-
-        System.out.println("MAP: " + map_no);
-//        System.out.println("Objective: " + objective);
 
         switch (Heuristic.convert(heuristic)) {
             case MANHATTAN:
-                System.out.println("Heuristic: Manhattan distance");
+                System.out.println("HEURISTIC: Manhattan Distance");
                 break;
             case EUCLIDEAN:
-                System.out.println("Heuristic: Euclidean distance");
+                System.out.println("HEURISTIC: Euclidean Distance");
                 break;
             case COMBINATION:
-                System.out.println("Heuristic: Combination");
+                System.out.println("HEURISTIC: Combination of Manhattan and Euclidean Distance");
                 break;
             case NONE:
                 break;
@@ -116,8 +113,9 @@ public class Printer {
 
         print_hyphens(map.length * 3);
 
-        System.out.println("PATH COST: " + ((path.size() + path.size()) - 2));
-        System.out.println("NUMBER OF EXPLORED NODES: " + explored_state);
+        System.out.println("PATH COST: " + (path.size() - 2));
+        System.out.println("NUMBER OF VISITED SEARCH STATES: " + num_explored_nodes);
+
         print_hyphens(map.length * 3);
     }
 

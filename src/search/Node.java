@@ -75,7 +75,7 @@ public class Node {
     public String toString() {
         // print Node in the form: Node(row, column)
         String output;
-        output = "Node(" + Integer.toString(this.x) + ", " + Integer.toString(this.y) + ")";
+        output = "(" + Integer.toString(this.x) + ", " + Integer.toString(this.y) + ")";
 
         return output;
     }

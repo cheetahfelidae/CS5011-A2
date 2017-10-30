@@ -8,8 +8,8 @@ import java.util.PriorityQueue;
 public class BidirectionalSearch extends InformedSearch {
     private PriorityQueue<Node> frontierEnd;
 
-    public BidirectionalSearch(String algorithm, char heuristic, char[][] map, int mapNumber, char initial_position, char dest_position) {
-        super(algorithm, heuristic, map, mapNumber, initial_position, dest_position);
+    public BidirectionalSearch(String algorithm, char heuristic, char[][] map, char initial_position, char dest_position) {
+        super(algorithm, heuristic, map, initial_position, dest_position);
         frontierEnd = new PriorityQueue<>(new NodeComparator());
     }
 
@@ -52,7 +52,7 @@ public class BidirectionalSearch extends InformedSearch {
             }
             // keep track of states explored
             if (!currentNode.equals(initial_node)) {
-                set_explored_state(get_explored_state() + 1);
+                set_explored_state(get_num_explored_nodes() + 1);
             }
         }
 

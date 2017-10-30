@@ -1,8 +1,6 @@
 package search;
 
 import search.constantVariable.Algorithm;
-import search.constantVariable.Heuristic;
-import search.constantVariable.Position;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -10,19 +8,18 @@ import java.util.Deque;
 import java.util.logging.Logger;
 
 import static search.Printer.print_status;
-import static search.Printer.print_summary;
 
 public class UninformedSearch extends Search {
     private Deque<Node> frontier = new ArrayDeque<>();
 
-    public UninformedSearch(String algorithm, char[][] map, int mapNumber, char initial_position, char dest_position) {
-        super(algorithm, map, mapNumber, initial_position, dest_position);
+    public UninformedSearch(String algorithm, char[][] map, char initial_position, char dest_position) {
+        super(algorithm, map, initial_position, dest_position);
     }
 
     public ArrayList<Node> search() {
         ArrayList<Node> explored = get_explored();
 
-        System.out.println("START NODE: " + initial_node);
+        System.out.println("INITIAL POSITION: " + initial_node);
 
         // BFS uses Deque to store frontier
         frontier.add(initial_node);
@@ -60,7 +57,7 @@ public class UninformedSearch extends Search {
 
             // keep track of states explored
             if (!cur_node.equals(initial_node)) {
-                set_explored_state(get_explored_state() + 1);
+                set_explored_state(get_num_explored_nodes() + 1);
             }
         }
 
