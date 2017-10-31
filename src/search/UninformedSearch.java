@@ -15,8 +15,13 @@ public class UninformedSearch extends Search {
     }
 
     /**
-     * Breadth first search: explores the nodes at the same level first then next level.
-     * Depth first search: explores as far as possible the nodes along a branch.
+     * 1. Initiate Frontier container with initial state.
+     * 2. Loop Until Frontier is empty.
+     * - Remove the first node X from Frontier
+     * - If X is the destination, we have succeeded, otherwise find all X-neighbor nodes
+     * - Merge*** the set of new nodes into Frontier (if node is not explored, and not in Frontier)
+     * *** Breadth first search, new nodes will be inserted into Frontier with LIFO approach.
+     * *** While Depth first search, it will be done with FIFO approach.
      *
      * @return
      */
@@ -44,15 +49,15 @@ public class UninformedSearch extends Search {
                 break;
             }
 
-            for (Node node : expand(cur_node, frontier, explored_nodes)) {
-                ancestors.put(node, cur_node);
+            for (Node successor : expand(cur_node, frontier, explored_nodes)) {
+                ancestors.put(successor, cur_node);
 
                 switch (Algorithm.convert(algorithm)) {
                     case BREADTH_FIRST_SEARCH:
-                        frontier.addLast(node);
+                        frontier.addLast(successor);
                         break;
                     case DEPTH_FIRST_SEARCH:
-                        frontier.addFirst(node);
+                        frontier.addFirst(successor);
                         break;
                     default:
                         Logger.getLogger(UninformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");

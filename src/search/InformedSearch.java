@@ -13,13 +13,23 @@ import static search.Printer.print_hyphens;
 
 
 public class InformedSearch extends Search {
-    protected char heuristic;
+    protected char heuristic_method;
 
-    public InformedSearch(String algorithm, char heuristic, char[][] map, char initial_position, char dest_position) {
+    public InformedSearch(String algorithm, char heuristic_method, char[][] map, char initial_position, char dest_position) {
         super(algorithm, map, initial_position, dest_position);
-        this.heuristic = heuristic;
+        this.heuristic_method = heuristic_method;
     }
 
+    /**
+     * 1. Initiate Frontier container with initial state.
+     * 2. Loop Until Frontier is empty.
+     * - Remove the first node X from Frontier
+     * - If X is the destination, we have succeeded, otherwise find all X-neighbor nodes
+     * - Score each node n with h(n)
+     * - Merge the set of new states into Frontier(priority queue) using scores as the priority
+     *
+     * @return
+     */
     public ArrayList<Node> search() {
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> path_to_dest = new ArrayList<>();
@@ -45,8 +55,8 @@ public class InformedSearch extends Search {
 
             ArrayList<Node> successors = expand(cur_node, frontier, explored_nodes);
             frontier.addAll(successors);
-            for (Node node : successors) {
-                ancestors.put(node, cur_node);
+            for (Node successor : successors) {
+                ancestors.put(successor, cur_node);
             }
 
             print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
@@ -60,82 +70,119 @@ public class InformedSearch extends Search {
     }
 
     /**
-     * Gets all neighbor nodes (North, South, East, West) of the node.
-     * BestFS score f(n) = h(n)
-     * A* score f(n) = g(n) + h(n)
-     *
-     * h(n) = estimated cost of the path from the state at node n to the goal
+     * Gets all neighbor nodes (North, South, East, West) of the node and score each node n
+     * with either h(n) <Best First Search> or g(n) + h(n) <A*>
+     * <p>
+     * h(n) = the cost of the path from the node n to the goal
      * g(n) = the cost of the path from the start to the node n
      *
      * @param node
      * @return
      */
     protected ArrayList<Node> get_neighbors(Node node) {
+        ArrayList<Node> neighbors = new ArrayList<>();
         int x = node.getX();
         int y = node.getY();
-        ArrayList<Node> nextStates = new ArrayList<>();
-
-        // Up
-        if (is_legal_move(x - 1, y)) {
-            Node up = new Node(x - 1, y);
-            up.set_path_cost(node.get_path_cost() + 1);
-            up.set_heuristic_value(heuristic, dest_node);
-            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
-                up.set_score(up.get_heuristic_value());
-            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
-                up.set_score(up.get_heuristic_value() + up.get_path_cost());
-            } else {
-                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
-            }
-            nextStates.add(up);
-        }
-
-        // Down
-        if (is_legal_move(x + 1, y)) {
-            Node down = new Node(x + 1, y);
-            down.set_path_cost(node.get_path_cost() + 1);
-            down.set_heuristic_value(heuristic, dest_node);
-            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
-                down.set_score(down.get_heuristic_value());
-            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
-                down.set_score(down.get_heuristic_value() + down.get_path_cost());
-            } else {
-                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
-            }
-            nextStates.add(down);
-        }
 
         // Left
         if (is_legal_move(x, y - 1)) {
             Node left = new Node(x, y - 1);
             left.set_path_cost(node.get_path_cost() + 1);
-            left.set_heuristic_value(heuristic, dest_node);
-            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
-                left.set_score(left.get_heuristic_value());
-            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
-                left.set_score(left.get_heuristic_value() + left.get_path_cost());
-            } else {
-                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
+            left.set_heuristic_value(heuristic_method, dest_node);
+
+            switch (Algorithm.convert(algorithm)) {
+                case BEST_FIRST_SEARCH:
+                    left.set_score(left.get_heuristic_value());
+                    break;
+                case A_STAR:
+                    left.set_score(left.get_heuristic_value() + left.get_path_cost());
+                    break;
+                default:
+                    Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
-            nextStates.add(left);
+
+            neighbors.add(left);
         }
 
         // Right
         if (is_legal_move(x, y + 1)) {
             Node right = new Node(x, y + 1);
             right.set_path_cost(node.get_path_cost() + 1);
-            right.set_heuristic_value(heuristic, dest_node);
-            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
-                right.set_score(right.get_heuristic_value());
-            } else if (algorithm.equals(Algorithm.A_STAR.toString())) {
-                right.set_score(right.get_heuristic_value() + right.get_path_cost());
-            } else {
-                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
+            right.set_heuristic_value(heuristic_method, dest_node);
+
+            switch (Algorithm.convert(algorithm)) {
+                case BEST_FIRST_SEARCH:
+                    right.set_score(right.get_heuristic_value());
+                    break;
+                case A_STAR:
+                    right.set_score(right.get_heuristic_value() + right.get_path_cost());
+                    break;
+                default:
+                    Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
-            nextStates.add(right);
+
+            neighbors.add(right);
         }
 
-        return nextStates;
+        // Up
+        if (is_legal_move(x - 1, y)) {
+            Node up = new Node(x - 1, y);
+            up.set_path_cost(node.get_path_cost() + 1);
+            up.set_heuristic_value(heuristic_method, dest_node);
+
+            switch (Algorithm.convert(algorithm)) {
+                case BEST_FIRST_SEARCH:
+                    up.set_score(up.get_heuristic_value());
+                    break;
+                case A_STAR:
+                    up.set_score(up.get_heuristic_value() + up.get_path_cost());
+                    break;
+                default:
+                    Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
+            }
+
+            neighbors.add(up);
+        }
+
+        // Down
+        if (is_legal_move(x + 1, y)) {
+            Node down = new Node(x + 1, y);
+            down.set_path_cost(node.get_path_cost() + 1);
+            down.set_heuristic_value(heuristic_method, dest_node);
+
+            switch (Algorithm.convert(algorithm)) {
+                case BEST_FIRST_SEARCH:
+                    down.set_score(down.get_heuristic_value());
+                    break;
+                case A_STAR:
+                    down.set_score(down.get_heuristic_value() + down.get_path_cost());
+                    break;
+                default:
+                    Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
+            }
+
+            neighbors.add(down);
+        }
+
+        return neighbors;
+    }
+
+    /**
+     * It is used by expand() to find the node with the same coordinate (and different score).
+     *
+     * @param frontier
+     * @param node
+     * @return
+     */
+    private Node find_node(PriorityQueue<Node> frontier, Node node) {
+        for (int i = 0; i < frontier.size(); i++) {
+            Node n = frontier.peek();
+            if (n.equals(node)) {
+                return n;
+            }
+        }
+
+        return null;
     }
 
     protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored) {
@@ -143,34 +190,30 @@ public class InformedSearch extends Search {
         ArrayList<Node> successors = new ArrayList<>();
 
         for (Node neighbor : neighbors) {
-            if (algorithm.equals(Algorithm.BEST_FIRST_SEARCH.toString())) {
-                if (!explored.contains(neighbor) && !frontier.contains(neighbor)) {
-                    successors.add(neighbor);
-                }
+
+            if (!explored.contains(neighbor) && !frontier.contains(neighbor)) {
+                successors.add(neighbor);
             }
+
             /**
-             * if state is in a node in frontier but with higher PATH-COST then replace old node with new node (A*)
+             * For A*, if the node is in Frontier but with higher PATH-COST then replace old node with new node
              */
-            else if (algorithm.equals(Algorithm.A_STAR.toString())) {
-                if (!explored.contains(neighbor) && !frontier.contains(neighbor)) {
-                    successors.add(neighbor);
-                } else if (frontier.contains(neighbor)) {
-                    Node oldNode = new Node(0, 0);
-                    for (int i = 0; i < frontier.size(); i++) {
-                        Node n = frontier.peek();
-                        if (n.equals(neighbor)) {
-                            oldNode = n;
-                            break;
+            if (algorithm.equals(Algorithm.A_STAR.toString())) {
+
+                if (frontier.contains(neighbor)) {
+                    Node old_node = find_node(frontier, neighbor);
+                    if (old_node != null) {
+                        if (old_node.get_path_cost() > neighbor.get_path_cost()) {
+                            frontier.remove(old_node);
+                            frontier.add(neighbor);
                         }
                     }
-                    if (oldNode.get_path_cost() > neighbor.get_path_cost()) {
-                        frontier.remove(oldNode);
-                        frontier.add(neighbor);
-                    }
                 }
+
             } else {
                 Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
+
         }
 
         return successors;

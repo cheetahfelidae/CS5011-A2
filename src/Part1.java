@@ -43,7 +43,7 @@ public class Part1 {
                 print_sub_summary(map, path_to_goal, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
             }
 
-            System.out.println("\n\n\n");
+            System.out.println("\n\n");
             print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), path_to_goal, goal_search.get_num_explored_nodes());
 
         } catch (Exception e) {

@@ -66,7 +66,7 @@ public class Printer {
             clear_screen();
             print_timer("THE SEARCH STARTS IN", 5);
         } else {
-            sleep(ONE_SECOND / 4);
+            sleep(ONE_SECOND / 2);
         }
         clear_screen();
 
