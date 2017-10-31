@@ -23,6 +23,13 @@ public class Printer {
         System.out.println();
     }
 
+    public static void print_asteristics(int num) {
+        for (int i = 0; i < num; i++) {
+            System.out.print("*");
+        }
+        System.out.println();
+    }
+
     public static void print_timer(String prefix_text, int seconds) {
         for (int i = seconds; i > 0; i--) {
             System.out.print(prefix_text + " " + i + " SECONDS..");
@@ -54,7 +61,7 @@ public class Printer {
     }
 
     // TODO - to be improved
-    public static void print_animate_search(int round, Node currentNode, ArrayList<Node> explored, char[][] map, boolean frontier_contains_node, String algorithm, Node initial_node, Node dest_node) {
+    public static void print_animate_result(int round, Node currentNode, ArrayList<Node> explored, char[][] map, boolean frontier_contains_node, String algorithm, Node initial_node, Node dest_node) {
         if (round == 1) {
             clear_screen();
             print_timer("THE SEARCH STARTS IN", 5);
@@ -87,9 +94,6 @@ public class Printer {
 
                 if (node.equals(currentNode)) {
                     System.out.print(CURRENT_POSITION.value() + TWO_SPACES);
-
-                } else if (frontier_contains_node) {
-                    System.out.print(FRONTIER_POSITION.value() + TWO_SPACES);
 
                 } else if (explored.contains(node) && map[i][j] != ROBOT_POSITION.value() && map[i][j] != BOB_POSITION.value() && map[i][j] != GOAL_POSITION.value()) {
                     System.out.print(EXPLORED_POSITION.value() + TWO_SPACES);
@@ -183,7 +187,7 @@ public class Printer {
     }
 
     public static void print_summary(char[][] map, ArrayList<Node> path_to_bob, int num_explored_nodes_to_bob, ArrayList<Node> path_to_goal, int num_explored_nodes_to_goal) {
-        print_hyphens(map.length * 6);
+        print_asteristics(map.length * 6);
 
         if (path_to_bob == null || path_to_bob.isEmpty()) {
             System.out.println("UNABLE TO FIND A PATH TO BOB");
@@ -199,10 +203,7 @@ public class Printer {
         } else {
             System.out.println("THE SEARCH IS FAILED..");
         }
-        print_hyphens(map.length * 6);
-
-        System.out.println();
-        System.out.println("BYE..");
+        print_asteristics(map.length * 6);
     }
 
 }

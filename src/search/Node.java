@@ -5,12 +5,38 @@ import search.constantVariable.Heuristic;
 import java.util.logging.Logger;
 
 public class Node {
-    private int x, y;
-    private double heuristic, score, pathCost = 0;
+    private int x, y, heuristic_value, score, path_cost = 0;
 
     public Node(int x, int y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void set_path_cost(int path_cost) {
+        this.path_cost = path_cost;
+    }
+
+    public void set_score(int score) {
+        this.score = score;
+    }
+
+    public void set_heuristic_value(char heuristic, Node dest_node) {
+        int man_dist = Math.abs(dest_node.getX() - getX()) + Math.abs(dest_node.getY() - getY()),
+                euc_dist = (int) Math.sqrt(Math.pow(dest_node.getX() - getX(), 2) + Math.pow(dest_node.getY() - getY(), 2));
+
+        switch (Heuristic.convert(heuristic)) {
+            case MANHATTAN:
+                this.heuristic_value = man_dist;
+                break;
+            case EUCLIDEAN:
+                this.heuristic_value = euc_dist;
+                break;
+            case COMBINATION:
+                this.heuristic_value = Math.max(man_dist, euc_dist);
+                break;
+            default:
+                Logger.getLogger(Node.class.getName()).severe("HEURISTIC " + heuristic + " IS UNRECOGNISED");
+        }
     }
 
     public int getX() {
@@ -21,75 +47,49 @@ public class Node {
         return this.y;
     }
 
-    // estimated cost to goal h(n)
-    public double getHeuristic() {
-        return this.heuristic;
+    /**
+     * Gets cost to a destination node.
+     *
+     * @return
+     */
+    public int get_heuristic_value() {
+        return this.heuristic_value;
     }
 
-    // cost from initial node to current node g(n)
-    public double getPathCost() {
-        return this.pathCost;
+    /**
+     * Gets cost from initial node to this node.
+     *
+     * @return
+     */
+    public int get_path_cost() {
+        return this.path_cost;
     }
 
     // score f(n) determines the order of node expansion for BestFS and A*
-    public double getScore() {
+    public int get_score() {
         return this.score;
-    }
-
-    public void setPathCost(double pathCost) {
-        this.pathCost = pathCost;
-    }
-
-    public void setScore(double score) {
-        this.score = score;
-    }
-
-    public void setHeuristic(char heuristic, Node goalNode) {
-        double man_dist = Math.abs(goalNode.getX() - getX()) + Math.abs(goalNode.getY() - getY());
-        double euc_dist = Math.sqrt(Math.pow(goalNode.getX() - getX(), 2) + Math.pow(goalNode.getY() - getY(), 2));
-
-        switch (Heuristic.convert(heuristic)) {
-            case MANHATTAN:
-                this.heuristic = man_dist;
-                break;
-            case EUCLIDEAN:
-                this.heuristic = euc_dist;
-                break;
-            case COMBINATION:
-                this.heuristic = Math.max(man_dist, euc_dist);
-                break;
-            default:
-                Logger.getLogger(Node.class.getName()).severe("HEURISTIC " + heuristic + " IS UNRECOGNISED");
-        }
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
     }
 
     @Override
     public String toString() {
-        // print Node in the form: Node(row, column)
-        String output;
-        output = "(" + Integer.toString(this.x) + ", " + Integer.toString(this.y) + ")";
-
-        return output;
+        return "(" + Integer.toString(this.x) + ", " + Integer.toString(this.y) + ")";
     }
 
+    /**
+     * Checks if two nodes are equal (x1 == x2 and y1 == y2)
+     *
+     * @param obj
+     * @return
+     */
     @Override
-    public boolean equals(Object node) {
-        // this will be used to check if particular node is in frontier/explored or not
-        if (!(node instanceof Node)) {
+    public boolean equals(Object obj) {
+
+        if (!(obj instanceof Node)) {
             return false;
         }
 
-        Node n2 = (Node) node;
+        Node node = (Node) obj;
 
-        // custom equality check here.
-        return (this.x == n2.x) && (this.y == n2.y);
+        return (this.x == node.x) && (this.y == node.y);
     }
 }

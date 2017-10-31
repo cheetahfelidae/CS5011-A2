@@ -5,11 +5,10 @@ import search.constantVariable.Algorithm;
 import java.util.*;
 import java.util.logging.Logger;
 
-import static search.Printer.print_animate_search;
+import static search.Printer.print_animate_result;
 import static search.Printer.print_hyphens;
 
 public class UninformedSearch extends Search {
-    private Deque<Node> frontier = new ArrayDeque<>();
 
     public UninformedSearch(String algorithm, char[][] map, char initial_position, char dest_position) {
         super(algorithm, map, initial_position, dest_position);
@@ -24,6 +23,7 @@ public class UninformedSearch extends Search {
     public ArrayList<Node> search() {
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> path_to_dest = new ArrayList<>();
+        Deque<Node> frontier = new ArrayDeque<>();
         ArrayList<Node> explored = new ArrayList<>();
 
         frontier.add(initial_node);
@@ -59,7 +59,7 @@ public class UninformedSearch extends Search {
 
             }
 
-            print_animate_search(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
+            print_animate_result(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
 
             if (!cur_node.equals(initial_node)) {
                 num_explored_nodes++;
@@ -70,7 +70,7 @@ public class UninformedSearch extends Search {
     }
 
     /**
-     * Gets neighbor nodes (Up, Down, Left and Right) of the node.
+     * Gets the node's neighbors (Up, Down, Left and Right).
      *
      * @param node
      * @return
@@ -103,7 +103,7 @@ public class UninformedSearch extends Search {
     }
 
     /**
-     * Expand nodes as long as they are  to be explored next.
+     * Gets successor nodes (as long as they are NOT explored and in frontier) to be explored next.
      *
      * @param node
      * @param frontier

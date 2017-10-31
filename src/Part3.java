@@ -19,7 +19,6 @@ import static search.constantVariable.Position.ROBOT_POSITION;
 public class Part3 {
 
     /**
-     * The programme is designed to search for Bob first, if Bob is found and can be reached, then it will search for the safety goal position from the Bob's position.
      *
      * @param args three arguments are required.
      */
@@ -28,12 +27,12 @@ public class Part3 {
             String algorithm = args[0];
             char heuristic = args[1].charAt(0);
             int map_no = Integer.parseInt(args[2]);
-            char[][] map = Map.getMap(map_no);
+            char[][] map = Map.get_map(map_no);
 
 
             print_hyphens(map.length * 3);
             System.out.println("A PATH FROM INITIAL TO BOB..");
-            BidirectionalSearch bob_search = new BidirectionalSearch(algorithm, heuristic, Map.getMap(map_no), ROBOT_POSITION.value(), BOB_POSITION.value());
+            BidirectionalSearch bob_search = new BidirectionalSearch(algorithm, heuristic, Map.get_map(map_no), ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
             print_sub_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 

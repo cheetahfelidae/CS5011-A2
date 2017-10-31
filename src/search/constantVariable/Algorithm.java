@@ -18,6 +18,7 @@ public enum Algorithm {
 
     /**
      * To handle with switch case
+     *
      * @param name
      * @return
      */

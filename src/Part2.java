@@ -20,7 +20,7 @@ import static search.constantVariable.Position.ROBOT_POSITION;
 public class Part2 {
 
     /**
-     * The programme is designed to search for Bob first, if Bob is found and can be reached, then it will search for the safety goal position from the Bob's position.
+     * The programme is designed to search for Bob first and if Bob is found and can be reached, then it will search for the safety goal position from the Bob's position.
      *
      * @param args three arguments are required.
      */
@@ -29,7 +29,7 @@ public class Part2 {
             String algorithm = args[0];
             char heuristic = args[1].charAt(0);
             int map_no = Integer.parseInt(args[2]);
-            char[][] map = Map.getMap(map_no);
+            char[][] map = Map.get_map(map_no);
 
             InformedSearch bob_search = new InformedSearch(algorithm, heuristic, map, ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();

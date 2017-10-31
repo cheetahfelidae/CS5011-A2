@@ -6,11 +6,8 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class BidirectionalSearch extends InformedSearch {
-    private PriorityQueue<Node> frontierEnd;
-
     public BidirectionalSearch(String algorithm, char heuristic, char[][] map, char initial_position, char dest_position) {
         super(algorithm, heuristic, map, initial_position, dest_position);
-        frontierEnd = new PriorityQueue<>(new NodeComparator());
     }
 
     public ArrayList<Node> search() {
@@ -18,6 +15,8 @@ public class BidirectionalSearch extends InformedSearch {
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> successors;
         ArrayList<Node> explored = new ArrayList<>();
+        PriorityQueue<Node> frontier = new PriorityQueue<>(new NodeComparator());
+        PriorityQueue<Node> frontierEnd = new PriorityQueue<>(new NodeComparator());
 
         frontier.add(initial_node);
 

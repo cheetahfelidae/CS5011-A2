@@ -1,6 +1,7 @@
 package search;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 public class Search {
     protected String algorithm;
@@ -12,12 +13,12 @@ public class Search {
     public Search(String algorithm, char[][] map, char initial_position, char dest_position) {
         this.algorithm = algorithm;
         this.map = map;
-        this.initial_node = find_node(initial_position);
-        this.dest_node = find_node(dest_position);
+        this.initial_node = make_node(initial_position);
+        this.dest_node = make_node(dest_position);
     }
 
     /**
-     * counts the number of visited nodes.
+     * Counts the number of visited nodes.
      *
      * @return
      */
@@ -35,26 +36,24 @@ public class Search {
     }
 
     /**
-     * Creates node using coordinates
+     * This is used to create an initial, Bob and Goal nodes.
+     * It finds their coordinate (x,y) which will be used to create a node.
      *
-     * @param name
+     * @param position
      * @return
      */
-    private Node find_node(char name) {
-        Node node = new Node(0, 0);
+    private Node make_node(char position) {
 
-        outer_loop:
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] == name) {
-                    node.setX(i);
-                    node.setY(j);
-                    break outer_loop;
+                if (map[i][j] == position) {
+                    return new Node(i, j);
                 }
             }
         }
 
-        return node;
+        Logger.getLogger(Search.class.getName()).severe("POSITION " + position + " IS NOT FOUND IN THE MAP");
+        return null;
     }
 
     /**
@@ -68,7 +67,7 @@ public class Search {
     }
 
     /**
-     * Checks if the move is legal (i.e. array out of bound, blocked position)
+     * Checks if the moving to a particular node (or cell in the map) is legal (i.e. array out of bound, blocked position)
      *
      * @param x
      * @param y
@@ -79,17 +78,17 @@ public class Search {
     }
 
     /**
-     * Constructs a path from a initial node to a destination node by backtracking from the destination to the start.
+     * Constructs a path from a initial node to a destination node by backtracking from the destination to the start point.
      *
-     * @param node
+     * @param dest_node
      */
-    public ArrayList<Node> create_path_to_dest(Map<Node, Node> ancestors, Node node) {
+    public ArrayList<Node> create_path_to_dest(Map<Node, Node> ancestors, Node dest_node) {
         ArrayList<Node> path_to_dest = new ArrayList<>();
 
-        Node n = node;
-        while (n != null) {
-            path_to_dest.add(n);
-            n = ancestors.get(n);
+        Node node = dest_node;
+        while (node != null) {
+            path_to_dest.add(node);
+            node = ancestors.get(node);
         }
 
         Collections.reverse(path_to_dest);

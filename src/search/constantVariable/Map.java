@@ -81,7 +81,7 @@ public class Map {
             {'O', 'O', 'O', 'O', 'O', 'O', 'O', 'X', 'O', 'O'}
     };
 
-    public static char[][] getMap(int num) {
+    public static char[][] get_map(int num) {
 
         switch (num) {
             case 1:
