@@ -2,7 +2,7 @@ package search.constantVariable;
 
 public enum Algorithm {
     BREADTH_FIRST_SEARCH("BFS"),
-    DEPT_FIRST_SEARCH("DFS"),
+    DEPTH_FIRST_SEARCH("DFS"),
     BEST_FIRST_SEARCH("BestFS"),
     A_STAR("A*");
 

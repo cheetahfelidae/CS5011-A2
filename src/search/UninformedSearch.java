@@ -24,14 +24,14 @@ public class UninformedSearch extends Search {
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> path_to_dest = new ArrayList<>();
         Deque<Node> frontier = new ArrayDeque<>();
-        ArrayList<Node> explored = new ArrayList<>();
+        ArrayList<Node> explored_nodes = new ArrayList<>();
 
         frontier.add(initial_node);
 
         int round = 1;
         while (!frontier.isEmpty()) {
             Node cur_node = frontier.poll();
-            explored.add(cur_node);
+            explored_nodes.add(cur_node);
 
             if (cur_node.equals(dest_node)) {// GOAL-TEST
                 num_explored_nodes++;
@@ -40,17 +40,18 @@ public class UninformedSearch extends Search {
 
                 System.out.println("DESTINATION IS FOUND");
                 print_hyphens(map.length * 3);
+
                 break;
             }
 
-            for (Node node : expand(cur_node, frontier, explored)) {
+            for (Node node : expand(cur_node, frontier, explored_nodes)) {
                 ancestors.put(node, cur_node);
 
                 switch (Algorithm.convert(algorithm)) {
                     case BREADTH_FIRST_SEARCH:
                         frontier.addLast(node);
                         break;
-                    case DEPT_FIRST_SEARCH:
+                    case DEPTH_FIRST_SEARCH:
                         frontier.addFirst(node);
                         break;
                     default:
@@ -59,7 +60,7 @@ public class UninformedSearch extends Search {
 
             }
 
-            print_animate_result(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
+            print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
 
             if (!cur_node.equals(initial_node)) {
                 num_explored_nodes++;

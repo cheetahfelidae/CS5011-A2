@@ -14,7 +14,7 @@ public class BidirectionalSearch extends InformedSearch {
         ArrayList<Node> path_to_dest = new ArrayList<>();
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> successors;
-        ArrayList<Node> explored = new ArrayList<>();
+        ArrayList<Node> explored_nodes = new ArrayList<>();
         PriorityQueue<Node> frontier = new PriorityQueue<>(new NodeComparator());
         PriorityQueue<Node> frontierEnd = new PriorityQueue<>(new NodeComparator());
 
@@ -30,7 +30,7 @@ public class BidirectionalSearch extends InformedSearch {
         // perform search
         while (!frontier.isEmpty() && !frontierEnd.isEmpty()) {
             Node currentNode = frontier.poll();
-            explored.add(currentNode);
+            explored_nodes.add(currentNode);
             Node currentNodeEnd = frontierEnd.poll();
             exploredEnd.add(currentNode);
 
@@ -39,7 +39,7 @@ public class BidirectionalSearch extends InformedSearch {
                 break;
             }
 
-            successors = expand(currentNode, frontier, explored);
+            successors = expand(currentNode, frontier, explored_nodes);
             successorsEnd = expand(currentNodeEnd, frontierEnd, exploredEnd);
             frontier.addAll(successors);
             frontierEnd.addAll(successorsEnd);

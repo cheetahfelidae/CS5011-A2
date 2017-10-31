@@ -23,7 +23,7 @@ public class Printer {
         System.out.println();
     }
 
-    public static void print_asteristics(int num) {
+    private static void print_asterisks(int num) {
         for (int i = 0; i < num; i++) {
             System.out.print("*");
         }
@@ -61,7 +61,7 @@ public class Printer {
     }
 
     // TODO - to be improved
-    public static void print_animate_result(int round, Node currentNode, ArrayList<Node> explored, char[][] map, boolean frontier_contains_node, String algorithm, Node initial_node, Node dest_node) {
+    public static void print_animate_result(int round, Node cur_node, ArrayList<Node> explored, char[][] map, String algorithm, Node initial_node, Node dest_node) {
         if (round == 1) {
             clear_screen();
             print_timer("THE SEARCH STARTS IN", 5);
@@ -92,7 +92,7 @@ public class Printer {
             for (int j = 0; j < map[i].length; j++) {
                 Node node = new Node(i, j);
 
-                if (node.equals(currentNode)) {
+                if (node.equals(cur_node)) {
                     System.out.print(CURRENT_POSITION.value() + TWO_SPACES);
 
                 } else if (explored.contains(node) && map[i][j] != ROBOT_POSITION.value() && map[i][j] != BOB_POSITION.value() && map[i][j] != GOAL_POSITION.value()) {
@@ -116,7 +116,7 @@ public class Printer {
             case BREADTH_FIRST_SEARCH:
                 System.out.println("Breadth First Search");
                 break;
-            case DEPT_FIRST_SEARCH:
+            case DEPTH_FIRST_SEARCH:
                 System.out.println("Depth First Search");
                 break;
             case BEST_FIRST_SEARCH:
@@ -180,6 +180,7 @@ public class Printer {
 
         if (path.size() > 0 && num_explored_nodes > 0) {
             print_hyphens(map.length * 6);
+            // TODO - PATH COST SHOULD BE DECREMENTED BY TWO ?
             System.out.printf("PATH COST (excluding initial && destination nodes): %d - 2 = %d\n", path.size(), path.size() - 2);
             System.out.println("#VISITED SEARCH STATES: " + num_explored_nodes);
             print_hyphens(map.length * 6);
@@ -187,7 +188,7 @@ public class Printer {
     }
 
     public static void print_summary(char[][] map, ArrayList<Node> path_to_bob, int num_explored_nodes_to_bob, ArrayList<Node> path_to_goal, int num_explored_nodes_to_goal) {
-        print_asteristics(map.length * 6);
+        print_asterisks(map.length * 6);
 
         if (path_to_bob == null || path_to_bob.isEmpty()) {
             System.out.println("UNABLE TO FIND A PATH TO BOB");
@@ -198,12 +199,13 @@ public class Printer {
 
         if (!(path_to_bob.isEmpty() || path_to_goal.isEmpty())) {
             System.out.println("SUMMARY - ROBOT -> BOB -> GOAL");
+            // TODO - PATH COST SHOULD BE DECREMENTED BY TWO ?
             System.out.printf("PATH COST (excluding initial && goal nodes): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
             System.out.printf("#VISITED SEARCH STATES: %d + %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
         } else {
             System.out.println("THE SEARCH IS FAILED..");
         }
-        print_asteristics(map.length * 6);
+        print_asterisks(map.length * 6);
     }
 
 }

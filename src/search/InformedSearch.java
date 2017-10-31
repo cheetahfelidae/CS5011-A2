@@ -24,14 +24,14 @@ public class InformedSearch extends Search {
         Map<Node, Node> ancestors = new HashMap<>();
         ArrayList<Node> path_to_dest = new ArrayList<>();
         PriorityQueue<Node> frontier = new PriorityQueue<>(new NodeComparator());
-        ArrayList<Node> explored = new ArrayList<>();
+        ArrayList<Node> explored_nodes = new ArrayList<>();
 
         frontier.add(initial_node);
 
         int round = 1;
         while (!frontier.isEmpty()) {
             Node cur_node = frontier.poll();
-            explored.add(cur_node);
+            explored_nodes.add(cur_node);
 
             if (cur_node.equals(dest_node)) {// GOAL-TEST
                 num_explored_nodes++;
@@ -43,13 +43,13 @@ public class InformedSearch extends Search {
                 break;
             }
 
-            ArrayList<Node> successors = expand(cur_node, frontier, explored);
+            ArrayList<Node> successors = expand(cur_node, frontier, explored_nodes);
             frontier.addAll(successors);
             for (Node node : successors) {
                 ancestors.put(node, cur_node);
             }
 
-            print_animate_result(round++, cur_node, explored, map, frontier.contains(cur_node), algorithm, initial_node, dest_node);
+            print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
 
             if (!cur_node.equals(initial_node)) {
                 num_explored_nodes++;
