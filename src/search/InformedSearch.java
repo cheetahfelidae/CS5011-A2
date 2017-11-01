@@ -69,7 +69,7 @@ public class InformedSearch extends GeneralSearch {
 
     /**
      * Gets all neighbor nodes (North, South, East, West) of the node and score each node n
-     * with either h(n) <Best First GeneralSearch> or g(n) + h(n) <A*>
+     * with either h(n) <Best First Search> or g(n) + h(n) <A*>
      * <p>
      * h(n) = the cost of the path from the node n to the destination node.
      * g(n) = the cost of the path from the initial node to the node n.

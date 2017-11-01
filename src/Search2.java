@@ -12,8 +12,8 @@ import static search.constantVariable.Position.GOAL_POSITION;
 import static search.constantVariable.Position.ROBOT_POSITION;
 
 /**
- * To run Informed GeneralSearch, three command-line arguments are required.
- * - 1st arg : the desired algorithm, "BestFS" for Best First GeneralSearch algorithm or "A*" for A* algorithm.
+ * To be able to run Informed Search programme, three command-line arguments are required.
+ * - 1st arg : the desired algorithm, "BestFS" for Best First Search algorithm or "A*" for A* algorithm.
  * - 2nd arg : the desired heuristic_method, 'M' for Manhattan Distance, 'E' for Euclidian distance or 'C' for the combination of Manhattan and Euclidian distance.
  * - 3rd arg : the desired map number, any number from 1 - 6 only.
  */
@@ -49,7 +49,7 @@ public class Search2 {
             print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), path_to_goal, goal_search.get_num_explored_nodes());
 
         } catch (Exception e) {
-            Logger.getLogger(Search2.class.getName()).warning("java part2 <algorithm> <heuristic_method> <map_no>");
+            Logger.getLogger(Search2.class.getName()).warning("java Search2 <algorithm> <heuristic_method> <map_no>");
         }
     }
 
