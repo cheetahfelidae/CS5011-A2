@@ -4,17 +4,26 @@ import java.util.*;
 import java.util.logging.Logger;
 
 public class Search {
+    private int num_explored_nodes;
+
     protected String algorithm;
     protected char[][] map;
     protected Node initial_node;
     protected Node dest_node;
-    protected int num_explored_nodes = 0;
 
     public Search(String algorithm, char[][] map, char initial_position, char dest_position) {
         this.algorithm = algorithm;
         this.map = map;
         this.initial_node = make_node(initial_position);
         this.dest_node = make_node(dest_position);
+    }
+
+    /**
+     * Set the number of visitted nodes.
+     * @param num_explored_nodes
+     */
+    protected void set_num_explored_nodes(int num_explored_nodes) {
+        this.num_explored_nodes = num_explored_nodes;
     }
 
     /**
@@ -78,7 +87,7 @@ public class Search {
     }
 
     /**
-     * Constructs a path from a initial node to a destination node by backtracking from the destination to the start point.
+     * Constructs a path from an initial node to a destination node by backtracking from the destination to the initial node.
      *
      * @param dest_node
      */

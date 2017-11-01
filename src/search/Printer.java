@@ -13,7 +13,7 @@ import static search.constantVariable.Position.*;
  * This class is responsible for printing a result of the programme to the commandline terminal.
  */
 public class Printer {
-    public static final int ONE_SECOND = 1000;
+    public static final int ONE_SECOND = 0;
     private static final String TWO_SPACES = "  ";
 
     public static void print_hyphens(int num) {
@@ -60,7 +60,18 @@ public class Printer {
         }
     }
 
-    // TODO - to be improved
+    /**
+     * This is used to render a motion search.
+     * It prints the current node, the list of nodes (states) expanded.
+     *
+     * @param round
+     * @param cur_node
+     * @param explored
+     * @param map
+     * @param algorithm
+     * @param initial_node
+     * @param dest_node
+     */
     public static void print_animate_result(int round, Node cur_node, ArrayList<Node> explored, char[][] map, String algorithm, Node initial_node, Node dest_node) {
         if (round == 1) {
             clear_screen();
@@ -72,6 +83,7 @@ public class Printer {
 
         print_hyphens(map.length * 3);
         System.out.println("INITIAL POSITION: " + initial_node);
+
         System.out.println("OBJECTIVE: ");
         print_full_algo_name(algorithm);
         int x = dest_node.getX(), y = dest_node.getY();
@@ -85,6 +97,7 @@ public class Printer {
             default:
                 Logger.getLogger(Printer.class.getName()).warning("FIND WHOM (" + x + "," + y + ") IS UNRECOGNISED");
         }
+
         System.out.println("ROUND: " + round);
         print_hyphens(map.length * 3);
 
@@ -153,6 +166,16 @@ public class Printer {
         }
     }
 
+    /**
+     * Print the main summary of the path (if found) from either the robot to Bob or Bob to the goal.
+     * the quality of the solution (i.e. the cost/length of the robot route),
+     * and efficiency indicated by the number of nodes explored by the selected algorithm.
+     *
+     * @param map
+     * @param path
+     * @param num_explored_nodes
+     * @param heuristic
+     */
     public static void print_sub_summary(char[][] map, ArrayList<Node> path, int num_explored_nodes, char heuristic) {
         print_hyphens(map.length * 3);
 
@@ -180,13 +203,22 @@ public class Printer {
 
         if (path.size() > 0 && num_explored_nodes > 0) {
             print_hyphens(map.length * 6);
-            // TODO - PATH COST SHOULD BE DECREMENTED BY TWO ?
-            System.out.printf("PATH COST (excluding initial && destination nodes): %d - 2 = %d\n", path.size(), path.size() - 2);
-            System.out.println("#VISITED SEARCH STATES: " + num_explored_nodes);
+            System.out.printf("PATH COST (excluding the initial node): %d - 1 = %d\n", path.size(), path.size() - 1);
+            System.out.println("#EXPLORED NODES: " + num_explored_nodes);
             print_hyphens(map.length * 6);
         }
     }
 
+    /**
+     * Similar to print_sub_summary() but it prints summary of the two paths, i.e. the path from the initial node to the goal node,
+     * and shows the total cost/length of the robot route and the total number of explored nodes of the two paths.
+     *
+     * @param map
+     * @param path_to_bob
+     * @param num_explored_nodes_to_bob
+     * @param path_to_goal
+     * @param num_explored_nodes_to_goal
+     */
     public static void print_summary(char[][] map, ArrayList<Node> path_to_bob, int num_explored_nodes_to_bob, ArrayList<Node> path_to_goal, int num_explored_nodes_to_goal) {
         print_asterisks(map.length * 6);
 
@@ -199,9 +231,18 @@ public class Printer {
 
         if (!(path_to_bob.isEmpty() || path_to_goal.isEmpty())) {
             System.out.println("SUMMARY - ROBOT -> BOB -> GOAL");
-            // TODO - PATH COST SHOULD BE DECREMENTED BY TWO ?
-            System.out.printf("PATH COST (excluding initial && goal nodes): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
-            System.out.printf("#VISITED SEARCH STATES: %d + %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
+
+            ArrayList<Node> init_to_goal_path = new ArrayList<>();
+            init_to_goal_path.addAll(path_to_bob);
+            init_to_goal_path.remove(init_to_goal_path.size() - 1);
+            init_to_goal_path.addAll(path_to_goal);
+
+            print_hyphens(map.length * 3);
+            print_path(map, init_to_goal_path);
+            print_hyphens(map.length * 3);
+
+            System.out.printf("PATH COST (excluding the initial and Bob node): %d + %d - 2 = %d\n", path_to_bob.size(), path_to_goal.size(), path_to_bob.size() + path_to_goal.size() - 2);
+            System.out.printf("#EXPLORED NODES: %d + %d = %d\n", num_explored_nodes_to_bob, num_explored_nodes_to_goal, num_explored_nodes_to_bob + num_explored_nodes_to_goal);
         } else {
             System.out.println("THE SEARCH IS FAILED..");
         }

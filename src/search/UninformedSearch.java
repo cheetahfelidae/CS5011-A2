@@ -15,18 +15,18 @@ public class UninformedSearch extends Search {
     }
 
     /**
-     * 1. Initiate Frontier container with initial state.
+     * 1. Initiate Frontier container with initial node.
      * 2. Loop Until Frontier is empty.
-     * - Remove the first node X from Frontier
-     * - If X is the destination, we have succeeded, otherwise find all X-neighbor nodes
-     * - Merge*** the set of new nodes into Frontier (if node is not explored, and not in Frontier)
-     * *** Breadth first search, new nodes will be inserted into Frontier with LIFO approach.
-     * *** While Depth first search, it will be done with FIFO approach.
+     * - Remove the first node X from Frontier.
+     * - If X is the destination, the search have succeeded, otherwise find all X-neighbor nodes.
+     * - Merge*** the set of new nodes into Frontier (if node is not explored, and not in Frontier).
+     * *** If Breadth first search is requested, new nodes will be inserted into at the end of Frontier (FIFO)
+     * while if Depth first search is requested, they will be inserted at the head of the queue (LIFO).
      *
      * @return
      */
     public ArrayList<Node> search() {
-        Map<Node, Node> ancestors = new HashMap<>();
+        Map<Node, Node> ancestors = new HashMap<>();// used in create_path_to_dest() to track from destination to the starting node.
         ArrayList<Node> path_to_dest = new ArrayList<>();
         Deque<Node> frontier = new ArrayDeque<>();
         ArrayList<Node> explored_nodes = new ArrayList<>();
@@ -36,14 +36,14 @@ public class UninformedSearch extends Search {
         int round = 1;
         while (!frontier.isEmpty()) {
             Node cur_node = frontier.poll();
+
             explored_nodes.add(cur_node);
 
             if (cur_node.equals(dest_node)) {// GOAL-TEST
-                num_explored_nodes++;
 
                 path_to_dest = create_path_to_dest(ancestors, cur_node);
 
-                print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
+                print_animate_result(round, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
 
                 System.out.println("DESTINATION IS FOUND");
                 print_hyphens(map.length * 3);
@@ -68,17 +68,16 @@ public class UninformedSearch extends Search {
             }
 
             print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
-
-            if (!cur_node.equals(initial_node)) {
-                num_explored_nodes++;
-            }
         }
+
+        // the number of explored nodes excludes the initial node.
+        set_num_explored_nodes(explored_nodes.size() - 1);
 
         return path_to_dest;
     }
 
     /**
-     * Gets the node's neighbors (Up, Down, Left and Right).
+     * Get the node's neighbors (North, South, West and East nodes).
      *
      * @param node
      * @return
@@ -87,22 +86,22 @@ public class UninformedSearch extends Search {
         ArrayList<Node> neighbors = new ArrayList<>();
         int x = node.getX(), y = node.getY();
 
-        // Up
+        // North
         if (is_legal_move(x - 1, y)) {
             neighbors.add(new Node(x - 1, y));
         }
 
-        // Left
+        // West
         if (is_legal_move(x, y - 1)) {
             neighbors.add(new Node(x, y - 1));
         }
 
-        // Right
+        // East
         if (is_legal_move(x, y + 1)) {
             neighbors.add(new Node(x, y + 1));
         }
 
-        // Down
+        // South
         if (is_legal_move(x + 1, y)) {
             neighbors.add(new Node(x + 1, y));
         }
@@ -111,19 +110,19 @@ public class UninformedSearch extends Search {
     }
 
     /**
-     * Gets successor nodes (as long as they are NOT explored and in frontier) to be explored next.
+     * Get successor nodes (as long as they are NOT explored and in Frontier to avoid the infinite loop) to be explored next.
      *
      * @param node
      * @param frontier
-     * @param explored
+     * @param explored_nodes
      * @return
      */
-    private ArrayList<Node> expand(Node node, Deque<Node> frontier, ArrayList<Node> explored) {
+    private ArrayList<Node> expand(Node node, Deque<Node> frontier, ArrayList<Node> explored_nodes) {
         ArrayList<Node> successors = new ArrayList<>();
 
-        for (Node n : get_neighbors(node)) {
-            if (!(explored.contains(n) || frontier.contains(n))) {
-                successors.add(n);
+        for (Node neighbor : get_neighbors(node)) {
+            if (!explored_nodes.contains(neighbor) && !frontier.contains(neighbor)) {
+                successors.add(neighbor);
             }
         }
 

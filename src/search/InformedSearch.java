@@ -21,10 +21,10 @@ public class InformedSearch extends Search {
     }
 
     /**
-     * 1. Initiate Frontier container with initial state.
+     * 1. Initiate Frontier container with initial node.
      * 2. Loop Until Frontier is empty.
      * - Remove the first node X from Frontier
-     * - If X is the destination, we have succeeded, otherwise find all X-neighbor nodes
+     * - If X is the destination, the search have succeeded, otherwise find all X-neighbor nodes
      * - Score each node n with h(n)
      * - Merge the set of new states into Frontier(priority queue) using scores as the priority
      *
@@ -44,11 +44,10 @@ public class InformedSearch extends Search {
             explored_nodes.add(cur_node);
 
             if (cur_node.equals(dest_node)) {// GOAL-TEST
-                num_explored_nodes++;
 
                 path_to_dest = create_path_to_dest(ancestors, cur_node);
 
-                print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
+                print_animate_result(round, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
 
                 System.out.println("DESTINATION IS FOUND");
                 print_hyphens(map.length * 3);
@@ -62,11 +61,10 @@ public class InformedSearch extends Search {
             }
 
             print_animate_result(round++, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
-
-            if (!cur_node.equals(initial_node)) {
-                num_explored_nodes++;
-            }
         }
+
+        // the number of explored nodes excludes the initial node.
+        set_num_explored_nodes(explored_nodes.size() - 1);
 
         return path_to_dest;
     }
@@ -75,8 +73,8 @@ public class InformedSearch extends Search {
      * Gets all neighbor nodes (North, South, East, West) of the node and score each node n
      * with either h(n) <Best First Search> or g(n) + h(n) <A*>
      * <p>
-     * h(n) = the cost of the path from the node n to the goal
-     * g(n) = the cost of the path from the start to the node n
+     * h(n) = the cost of the path from the node n to the destination node.
+     * g(n) = the cost of the path from the initial node to the node n.
      *
      * @param node
      * @return
@@ -187,13 +185,13 @@ public class InformedSearch extends Search {
         return null;
     }
 
-    protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored) {
+    protected ArrayList<Node> expand(Node node, PriorityQueue<Node> frontier, ArrayList<Node> explored_nodes) {
         ArrayList<Node> neighbors = get_neighbors(node);
         ArrayList<Node> successors = new ArrayList<>();
 
         for (Node neighbor : neighbors) {
 
-            if (!explored.contains(neighbor) && !frontier.contains(neighbor)) {
+            if (!explored_nodes.contains(neighbor) && !frontier.contains(neighbor)) {
                 successors.add(neighbor);
             }
 
