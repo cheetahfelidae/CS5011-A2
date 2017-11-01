@@ -6,13 +6,9 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import static search.Printer.print_animate_result;
-import static search.Printer.print_hyphens;
 import static search.Printer.print_search_result;
-import static search.constantVariable.Position.BOB_POSITION;
-import static search.constantVariable.Position.GOAL_POSITION;
-import static search.constantVariable.Position.ROBOT_POSITION;
 
-public class UninformedSearch extends Search {
+public class UninformedSearch extends GeneralSearch {
 
     public UninformedSearch(String algorithm, char[][] map, char initial_position, char dest_position) {
         super(algorithm, map, initial_position, dest_position);

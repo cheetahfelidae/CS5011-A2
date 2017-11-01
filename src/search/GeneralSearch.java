@@ -3,7 +3,7 @@ package search;
 import java.util.*;
 import java.util.logging.Logger;
 
-public class Search {
+public class GeneralSearch {
     private int num_explored_nodes;
 
     protected String algorithm;
@@ -11,7 +11,7 @@ public class Search {
     protected char initial_position, dest_position;
     protected Node initial_node, dest_node;
 
-    public Search(String algorithm, char[][] map, char initial_position, char dest_position) {
+    public GeneralSearch(String algorithm, char[][] map, char initial_position, char dest_position) {
         this.algorithm = algorithm;
         this.map = map;
         this.initial_position = initial_position;
@@ -64,7 +64,7 @@ public class Search {
             }
         }
 
-        Logger.getLogger(Search.class.getName()).severe("POSITION " + position + " IS NOT FOUND IN THE MAP");
+        Logger.getLogger(GeneralSearch.class.getName()).severe("POSITION " + position + " IS NOT FOUND IN THE MAP");
         return null;
     }
 

@@ -9,14 +9,10 @@ import java.util.PriorityQueue;
 import java.util.logging.Logger;
 
 import static search.Printer.print_animate_result;
-import static search.Printer.print_hyphens;
 import static search.Printer.print_search_result;
-import static search.constantVariable.Position.BOB_POSITION;
-import static search.constantVariable.Position.GOAL_POSITION;
-import static search.constantVariable.Position.ROBOT_POSITION;
 
 
-public class InformedSearch extends Search {
+public class InformedSearch extends GeneralSearch {
     protected char heuristic_method;
 
     public InformedSearch(String algorithm, char heuristic_method, char[][] map, char initial_position, char dest_position) {
@@ -73,7 +69,7 @@ public class InformedSearch extends Search {
 
     /**
      * Gets all neighbor nodes (North, South, East, West) of the node and score each node n
-     * with either h(n) <Best First Search> or g(n) + h(n) <A*>
+     * with either h(n) <Best First GeneralSearch> or g(n) + h(n) <A*>
      * <p>
      * h(n) = the cost of the path from the node n to the destination node.
      * g(n) = the cost of the path from the initial node to the node n.

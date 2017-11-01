@@ -138,13 +138,13 @@ public class Printer {
         System.out.print("ALGORITHM: ");
         switch (Algorithm.convert(algorithm)) {
             case BREADTH_FIRST_SEARCH:
-                System.out.println("Breadth First Search");
+                System.out.println("Breadth First GeneralSearch");
                 break;
             case DEPTH_FIRST_SEARCH:
-                System.out.println("Depth First Search");
+                System.out.println("Depth First GeneralSearch");
                 break;
             case BEST_FIRST_SEARCH:
-                System.out.println("Best First Search");
+                System.out.println("Best First GeneralSearch");
                 break;
             case A_STAR:
                 System.out.println("A*");

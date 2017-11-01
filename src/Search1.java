@@ -13,10 +13,10 @@ import static search.constantVariable.Position.ROBOT_POSITION;
 
 /**
  * To run Uninformed search, three command-line arguments are required.
- * - 1st arg : the desired algorithm, "BFS" for Best First Search algorithm or "DFS" Depth First Search algorithm.
+ * - 1st arg : the desired algorithm, "BFS" for Best First GeneralSearch algorithm or "DFS" Depth First GeneralSearch algorithm.
  * - 2nd arg : the desired map number, any number from 1 - 6 only.
  */
-public class Part1 {
+public class Search1 {
 
     /**
      * The programme is designed to search for Bob first and if Bob is found and can be reached, then it will search for the safety goal position from the Bob's position.
@@ -47,7 +47,7 @@ public class Part1 {
             print_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), path_to_goal, goal_search.get_num_explored_nodes());
 
         } catch (Exception e) {
-            Logger.getLogger(Part1.class.getName()).severe("java part1 <algorithm> <map_no>");
+            Logger.getLogger(Search1.class.getName()).severe("java part1 <algorithm> <map_no>");
         }
     }
 }
