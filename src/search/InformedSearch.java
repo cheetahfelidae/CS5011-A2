@@ -10,6 +10,10 @@ import java.util.logging.Logger;
 
 import static search.Printer.print_animate_result;
 import static search.Printer.print_hyphens;
+import static search.Printer.print_search_result;
+import static search.constantVariable.Position.BOB_POSITION;
+import static search.constantVariable.Position.GOAL_POSITION;
+import static search.constantVariable.Position.ROBOT_POSITION;
 
 
 public class InformedSearch extends Search {
@@ -44,13 +48,9 @@ public class InformedSearch extends Search {
             explored_nodes.add(cur_node);
 
             if (cur_node.equals(dest_node)) {// GOAL-TEST
-
                 path_to_dest = create_path_to_dest(ancestors, cur_node);
 
                 print_animate_result(round, cur_node, explored_nodes, map, algorithm, initial_node, dest_node);
-
-                System.out.println("DESTINATION IS FOUND");
-                print_hyphens(map.length * 3);
                 break;
             }
 
@@ -65,6 +65,8 @@ public class InformedSearch extends Search {
 
         // the number of explored nodes excludes the initial node.
         set_num_explored_nodes(explored_nodes.size() - 1);
+
+        print_search_result(path_to_dest, initial_position,  dest_position);
 
         return path_to_dest;
     }
@@ -168,7 +170,7 @@ public class InformedSearch extends Search {
     }
 
     /**
-     * It is used by expand() to find the node with the same coordinate (and different score).
+     * It is used by expand() to find the node with the same coordinate (but maybe different score).
      *
      * @param frontier
      * @param node
@@ -210,8 +212,6 @@ public class InformedSearch extends Search {
                     }
                 }
 
-            } else {
-                Logger.getLogger(InformedSearch.class.getName()).severe("ALGORITHM " + algorithm + " IS UNRECOGNISED");
             }
 
         }

@@ -31,7 +31,7 @@ public class Part1 {
 
             UninformedSearch bob_search = new UninformedSearch(algorithm, map, ROBOT_POSITION.value(), BOB_POSITION.value());
             ArrayList<Node> path_to_bob = bob_search.search();
-            print_sub_summary(map, path_to_bob, bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
+            print_sub_summary(map, path_to_bob, ROBOT_POSITION.value(), BOB_POSITION.value(), bob_search.get_num_explored_nodes(), Heuristic.NONE.value());
 
             UninformedSearch goal_search = new UninformedSearch(algorithm, map, BOB_POSITION.value(), GOAL_POSITION.value());
             ArrayList<Node> path_to_goal = null;
@@ -40,7 +40,7 @@ public class Part1 {
                 sleep(ONE_SECOND * 15);
 
                 path_to_goal = goal_search.search();
-                print_sub_summary(map, path_to_goal, goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
+                print_sub_summary(map, path_to_goal, BOB_POSITION.value(), GOAL_POSITION.value(), goal_search.get_num_explored_nodes(), Heuristic.NONE.value());
             }
 
             System.out.println("\n\n");

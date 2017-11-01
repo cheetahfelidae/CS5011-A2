@@ -60,6 +60,17 @@ public class Printer {
         }
     }
 
+    public static void print_search_result(ArrayList path_to_dest, char initial_pos, char dest_pos) {
+        System.out.print(path_to_dest.isEmpty() ? "UNABLE TO FIND A PATH " : "FOUND A PATH ");
+        if (initial_pos == ROBOT_POSITION.value() && dest_pos == BOB_POSITION.value()) {
+            System.out.println("FROM ROBOT TO BOB");
+        } else if (initial_pos == BOB_POSITION.value() && dest_pos == GOAL_POSITION.value()) {
+            System.out.println("FROM BOB TO GOAL");
+        } else {
+            Logger.getLogger(Printer.class.getName()).severe("START NODE TO DESTINATION IS UNRECOGNISED");
+        }
+    }
+
     /**
      * This is used to render a motion search.
      * It prints the current node, the list of nodes (states) expanded.
@@ -176,36 +187,41 @@ public class Printer {
      * @param num_explored_nodes
      * @param heuristic
      */
-    public static void print_sub_summary(char[][] map, ArrayList<Node> path, int num_explored_nodes, char heuristic) {
-        print_hyphens(map.length * 3);
+    public static void print_sub_summary(char[][] map, ArrayList<Node> path, char initial_pos, char dest_pos, int num_explored_nodes, char heuristic) {
+        if (!path.isEmpty()) {
+            print_asterisks(map.length * 6);
 
-        switch (Heuristic.convert(heuristic)) {
-            case MANHATTAN:
-                System.out.println("HEURISTIC: Manhattan Distance");
-                break;
-            case EUCLIDEAN:
-                System.out.println("HEURISTIC: Euclidean Distance");
-                break;
-            case COMBINATION:
-                System.out.println("HEURISTIC: Combination of Manhattan and Euclidean Distance");
-                break;
-            case NONE:
-                break;
-            default:
-                Logger.getLogger(Printer.class.getName()).severe("HEURISTIC " + heuristic + " IS UNRECOGNISED");
+            if (initial_pos == ROBOT_POSITION.value() && dest_pos == BOB_POSITION.value()) {
+                System.out.println("SUB SUMMARY - ROBOT -> BOB");
+            } else if (initial_pos == BOB_POSITION.value() && dest_pos == GOAL_POSITION.value()) {
+                System.out.println("SUB SUMMARY - BOB -> GOAL");
+            } else {
+                Logger.getLogger(Printer.class.getName()).severe("START NODE TO DESTINATION IS UNRECOGNISED");
+            }
 
-        }
+            switch (Heuristic.convert(heuristic)) {
+                case MANHATTAN:
+                    System.out.println("HEURISTIC: Manhattan Distance");
+                    break;
+                case EUCLIDEAN:
+                    System.out.println("HEURISTIC: Euclidean Distance");
+                    break;
+                case COMBINATION:
+                    System.out.println("HEURISTIC: Combination of Manhattan and Euclidean Distance");
+                    break;
+                case NONE:
+                    break;
+                default:
+                    Logger.getLogger(Printer.class.getName()).severe("HEURISTIC " + heuristic + " IS UNRECOGNISED");
 
-        System.out.println("SUMMARY - INITIAL -> DESTINATION");
-        print_hyphens(map.length * 3);
-        print_path(map, path);
-        print_hyphens(map.length * 3);
+            }
 
-        if (path.size() > 0 && num_explored_nodes > 0) {
-            print_hyphens(map.length * 6);
+            print_hyphens(map.length * 3);
+            print_path(map, path);
+            print_hyphens(map.length * 3);
             System.out.printf("PATH COST (excluding the initial node): %d - 1 = %d\n", path.size(), path.size() - 1);
             System.out.println("#EXPLORED NODES: " + num_explored_nodes);
-            print_hyphens(map.length * 6);
+            print_asterisks(map.length * 6);
         }
     }
 
@@ -230,7 +246,7 @@ public class Printer {
         }
 
         if (!(path_to_bob.isEmpty() || path_to_goal.isEmpty())) {
-            System.out.println("SUMMARY - ROBOT -> BOB -> GOAL");
+            System.out.println("MAIN SUMMARY - ROBOT -> BOB -> GOAL");
 
             ArrayList<Node> init_to_goal_path = new ArrayList<>();
             init_to_goal_path.addAll(path_to_bob);

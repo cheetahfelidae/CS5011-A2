@@ -8,18 +8,21 @@ public class Search {
 
     protected String algorithm;
     protected char[][] map;
-    protected Node initial_node;
-    protected Node dest_node;
+    protected char initial_position, dest_position;
+    protected Node initial_node, dest_node;
 
     public Search(String algorithm, char[][] map, char initial_position, char dest_position) {
         this.algorithm = algorithm;
         this.map = map;
-        this.initial_node = make_node(initial_position);
-        this.dest_node = make_node(dest_position);
+        this.initial_position = initial_position;
+        this.dest_position = dest_position;
+        this.initial_node = make_node(this.initial_position);
+        this.dest_node = make_node(this.dest_position);
     }
 
     /**
-     * Set the number of visitted nodes.
+     * Set the number of visited nodes.
+     *
      * @param num_explored_nodes
      */
     protected void set_num_explored_nodes(int num_explored_nodes) {
