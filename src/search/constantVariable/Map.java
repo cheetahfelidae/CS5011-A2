@@ -2,6 +2,9 @@ package search.constantVariable;
 
 import java.util.logging.Logger;
 
+/**
+ * This is used to store predefined constant variables of maps provided.
+ */
 public class Map {
     private static final char[][] MAP1 = new char[][]{
             {'I', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'},

@@ -11,7 +11,10 @@ import java.util.logging.Logger;
 import static search.Printer.print_animate_result;
 import static search.Printer.print_search_result;
 
-
+/**
+ * This is instantiated in Search2 class.
+ * To meet the part-2 requirements, it is designed to be implemented using Best First Search and A* Search algorithms.
+ */
 public class InformedSearch extends GeneralSearch {
     protected char heuristic_method;
 

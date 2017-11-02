@@ -4,6 +4,9 @@ import search.constantVariable.Heuristic;
 
 import java.util.logging.Logger;
 
+/**
+ * This class represents a cell in a map and each contains its coordinates and other important variables used in the search.
+ */
 public class Node {
     private int x, y, heuristic_value, score, path_cost = 0;
 

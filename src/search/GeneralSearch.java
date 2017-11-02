@@ -3,6 +3,9 @@ package search;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * This class provides general methods which are used and overridden by Uniformed and Informed Search classes.
+ */
 public class GeneralSearch {
     private int num_explored_nodes;
 

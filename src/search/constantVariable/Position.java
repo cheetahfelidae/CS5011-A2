@@ -1,5 +1,8 @@
 package search.constantVariable;
 
+/**
+ * This is used to store predefined constant variables of Chars of positions in the maps provided.
+ */
 public enum Position {
     ROBOT_POSITION('I'),
     BOB_POSITION('B'),

@@ -1,5 +1,8 @@
 package search.constantVariable;
 
+/**
+ * This is used to store predefined constant variables of the name of the three heuristic methods.
+ */
 public enum Heuristic {
     MANHATTAN('M'),
     EUCLIDEAN('E'),

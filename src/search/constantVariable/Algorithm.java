@@ -1,5 +1,8 @@
 package search.constantVariable;
 
+/**
+ * This is used to store predefined constant variables of the name of the four algorithms.
+ */
 public enum Algorithm {
     BREADTH_FIRST_SEARCH("BFS"),
     DEPTH_FIRST_SEARCH("DFS"),

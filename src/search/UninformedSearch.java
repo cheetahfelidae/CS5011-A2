@@ -8,6 +8,10 @@ import java.util.logging.Logger;
 import static search.Printer.print_animate_result;
 import static search.Printer.print_search_result;
 
+/**
+ * This is instantiated in Search1 class.
+ * To meet the part-1 requirements, it is designed to be implemented using Breadth First Search and Depth First Search algorithms.
+ */
 public class UninformedSearch extends GeneralSearch {
 
     public UninformedSearch(String algorithm, char[][] map, char initial_position, char dest_position) {

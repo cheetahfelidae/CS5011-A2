@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import static search.constantVariable.Position.*;
 
 /**
- * This class is responsible for printing a result of the programme to the commandline terminal.
+ * This class is responsible for printing a result of the search process to the commandline terminal.
  */
 public class Printer {
     public static final int ONE_SECOND = 0;
