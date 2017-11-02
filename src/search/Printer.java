@@ -60,7 +60,7 @@ public class Printer {
         }
     }
 
-    public static void print_search_result(ArrayList path_to_dest, char initial_pos, char dest_pos) {
+    public static void print_search_result(char[][] map, ArrayList path_to_dest, char initial_pos, char dest_pos) {
         System.out.print(path_to_dest.isEmpty() ? "UNABLE TO FIND A PATH " : "FOUND A PATH ");
         if (initial_pos == ROBOT_POSITION.value() && dest_pos == BOB_POSITION.value()) {
             System.out.println("FROM ROBOT TO BOB");
@@ -69,6 +69,7 @@ public class Printer {
         } else {
             Logger.getLogger(Printer.class.getName()).severe("START NODE TO DESTINATION IS UNRECOGNISED");
         }
+        print_hyphens(map.length * 3);
     }
 
     /**
@@ -227,7 +228,7 @@ public class Printer {
 
     /**
      * Similar to print_sub_summary() but it prints summary of the two paths, i.e. the path from the initial node to the goal node,
-     * and shows the total cost/length of the robot route and the total number of explored nodes of the two paths.
+     * and shows the total cost/length of the robot route and the total number of explored nodes after the search.
      *
      * @param map
      * @param path_to_bob
@@ -239,10 +240,10 @@ public class Printer {
         print_asterisks(map.length * 6);
 
         if (path_to_bob == null || path_to_bob.isEmpty()) {
-            System.out.println("UNABLE TO FIND A PATH TO BOB");
+            System.out.println("UNABLE TO FIND A PATH FROM ROBOT TO BOB");
         }
         if (path_to_goal == null || path_to_goal.isEmpty()) {
-            System.out.println("UNABLE TO FIND A PATH TO GOAL");
+            System.out.println("UNABLE TO FIND A PATH FROM BOB TO GOAL");
         }
 
         if (!(path_to_bob.isEmpty() || path_to_goal.isEmpty())) {

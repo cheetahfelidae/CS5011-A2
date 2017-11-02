@@ -68,7 +68,7 @@ public class UninformedSearch extends GeneralSearch {
         // the number of explored nodes excludes the initial node.
         set_num_explored_nodes(explored_nodes.size() - 1);
 
-        print_search_result(path_to_dest, initial_position,  dest_position);
+        print_search_result(map, path_to_dest, initial_position,  dest_position);
 
         return path_to_dest;
     }
