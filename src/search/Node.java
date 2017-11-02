@@ -24,7 +24,7 @@ public class Node {
         int man_dist = Math.abs(dest_node.getX() - getX()) + Math.abs(dest_node.getY() - getY()),
                 euc_dist = (int) Math.sqrt(Math.pow(dest_node.getX() - getX(), 2) + Math.pow(dest_node.getY() - getY(), 2));
 
-        switch (Heuristic.convert(heuristic)) {
+        switch (Heuristic.convert(Character.toUpperCase(heuristic))) {
             case MANHATTAN:
                 this.heuristic_value = man_dist;
                 break;
